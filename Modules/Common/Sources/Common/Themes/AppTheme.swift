@@ -6,11 +6,30 @@
 //
 
 import Foundation
+import SwiftUI
 
 public enum AppTheme{
     
     public enum Colors {
-   
+        public static var primaryColor : Color {
+            Color("#4B4DED")
+        }
+        public static var backGround : Color{
+            Color("#F9F9FF")
+        }
+        public static var primaryText : Color{
+            Color("#111827")
+        }
+        public static var secondoryText : Color{
+            Color("#6B7280")
+        }
+      
+        public static var BtnText : Color{
+            Color(.white)
+        }
+        public static func changeOpacity (color : Color,opacity:Double)->Color{
+            return color.opacity(opacity)
+        }
     }
     public enum Typography{
         
