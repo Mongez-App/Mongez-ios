@@ -5,6 +5,24 @@
       location = "group:Modules/Common">
    </FileRef>
    <FileRef
+      location = "group:Modules/Common/Package.swift">
+   </FileRef>
+   <Group
+      location = "group:Modules/Common/Sources"
+      name = "Sources">
+      <Group
+         location = "group:Common"
+         name = "Common">
+         <Group
+            location = "group:Themes"
+            name = "Themes">
+            <FileRef
+               location = "group:AppTheme.swift">
+            </FileRef>
+         </Group>
+      </Group>
+   </Group>
+   <FileRef
       location = "container:Mongez.xcodeproj">
    </FileRef>
 </Workspace>
