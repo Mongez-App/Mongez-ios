@@ -31,17 +31,19 @@ public enum AppTheme{
             return color.opacity(opacity)
         }
     }
-    public enum Typography{
-        
+    
+    public static func textStyle(size: CGFloat, weight: Font.Weight = .regular) -> Font{
+        Font.custom("Georgia", size: size).weight(weight)
     }
+    
     public enum Spacing{
-        public static let xxSmall: CGFloat = 2
-        public static let xSmall: CGFloat  = 4
-        public static let small: CGFloat   = 8
-        public static let medium: CGFloat  = 16
+        public static let xxSmall: CGFloat = 8
+        public static let xSmall: CGFloat  = 12
+        public static let small: CGFloat   = 16
+        public static let medium: CGFloat  = 20
         public static let large: CGFloat   = 24
         public static let xLarge: CGFloat  = 32
-        public static let xxLarge: CGFloat = 48
+        public static let xxLarge: CGFloat = 40
     }
     
 }
