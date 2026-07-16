@@ -16,6 +16,7 @@
 		5ABEF5DE3007A98900B1ACEF /* MongezTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5DD3007A98900B1ACEF /* MongezTests.swift */; };
 		5ABEF5E83007A98900B1ACEF /* MongezUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5E73007A98900B1ACEF /* MongezUITests.swift */; };
 		5ABEF5EA3007A98900B1ACEF /* MongezUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5E93007A98900B1ACEF /* MongezUITestsLaunchTests.swift */; };
+		9F9361E2300856C500FC34D5 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 9F9361E1300856C500FC34D5 /* Common */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F9361E2300856C500FC34D5 /* Common in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +83,7 @@
 				5ABEF5C63007A98600B1ACEF /* Mongez */,
 				5ABEF5DC3007A98900B1ACEF /* MongezTests */,
 				5ABEF5E63007A98900B1ACEF /* MongezUITests */,
+				9F9361E0300856C500FC34D5 /* Frameworks */,
 				5ABEF5C53007A98600B1ACEF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -131,6 +134,13 @@
 				5ABEF5E93007A98900B1ACEF /* MongezUITestsLaunchTests.swift */,
 			);
 			path = MongezUITests;
+			sourceTree = "<group>";
+		};
+		9F9361E0300856C500FC34D5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -585,6 +595,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9F9361E1300856C500FC34D5 /* Common */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Common;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		5ABEF5D23007A98800B1ACEF /* Mongez.xcdatamodeld */ = {
