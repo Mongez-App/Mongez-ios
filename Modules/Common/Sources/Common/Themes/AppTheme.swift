@@ -11,20 +11,20 @@ import SwiftUI
 public enum AppTheme{
     
     public enum Colors {
-        public static var primaryColor : Color {
-            Color(hex: "#4B4DED")
+        public static var primaryColor  : Color {
+            Color(hex: "#5A67D8")
         }
-        public static var backGround : Color{
+        public static var backGround    : Color{
             Color(hex: "#F9F9FF")
         }
-        public static var primaryText : Color{
+        public static var primaryText   : Color{
             Color(hex: "#111827")
         }
         public static var secondoryText : Color{
             Color(hex: "#6B7280")
         }
       
-        public static var BtnText : Color{
+        public static var BtnText       : Color{
             Color(.white)
         }
         public static func changeOpacity (color : Color,opacity:Double)->Color{
@@ -33,19 +33,22 @@ public enum AppTheme{
     }
     
     public static func textStyle(size: CGFloat, weight: Font.Weight = .regular) -> Font{
-        Font.custom("Georgia", size: size).weight(weight)
+        Font.custom("Arial", size: size).weight(weight)
     }
     
     public enum Spacing{
-        public static let xxSmall: CGFloat = 8
-        public static let xSmall: CGFloat  = 12
-        public static let small: CGFloat   = 16
-        public static let medium: CGFloat  = 20
-        public static let large: CGFloat   = 24
-        public static let xLarge: CGFloat  = 32
-        public static let xxLarge: CGFloat = 40
+        public static let xxSmall : CGFloat  = 8
+        public static let xSmall  : CGFloat  = 12
+        public static let small   : CGFloat  = 16
+        public static let medium  : CGFloat  = 20
+        public static let large   : CGFloat  = 24
+        public static let xLarge  : CGFloat  = 32
+        public static let xxLarge : CGFloat  = 40
     }
-    
+    public enum radius {
+        public static let small  :  CGFloat = 16
+        public static let meduim :  CGFloat = 24
+    }
 }
 extension Color {
     init(hex: String) {
@@ -63,10 +66,11 @@ extension Color {
         }
         self.init(
             .sRGB,
-            red: Double(r) / 255,
+            red: Double(r)   / 255,
             green: Double(g) / 255,
             blue:  Double(b) / 255,
             opacity: 1
         )
     }
 }
+
