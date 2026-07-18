@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		03C4C2A2300A8FFD00031E11 /* OnBoarding in Frameworks */ = {isa = PBXBuildFile; productRef = 03C4C2A1300A8FFD00031E11 /* OnBoarding */; };
-		098B44AF300A8BEB0019EBF9 /* Dashboard in Frameworks */ = {isa = PBXBuildFile; productRef = 098B44AE300A8BEB0019EBF9 /* Dashboard */; };
+		31A2F377300BF7A70014E39A /* Dashboard in Frameworks */ = {isa = PBXBuildFile; productRef = 31A2F376300BF7A70014E39A /* Dashboard */; };
 		5ABEF5C83007A98600B1ACEF /* MongezApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5C73007A98600B1ACEF /* MongezApp.swift */; };
 		5ABEF5CA3007A98600B1ACEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5C93007A98600B1ACEF /* ContentView.swift */; };
 		5ABEF5CC3007A98800B1ACEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5ABEF5CB3007A98800B1ACEF /* Assets.xcassets */; };
@@ -60,7 +60,7 @@
 			files = (
 				9F9361E2300856C500FC34D5 /* Common in Frameworks */,
 				03C4C2A2300A8FFD00031E11 /* OnBoarding in Frameworks */,
-				098B44AF300A8BEB0019EBF9 /* Dashboard in Frameworks */,
+				31A2F377300BF7A70014E39A /* Dashboard in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,7 +165,7 @@
 			name = Mongez;
 			packageProductDependencies = (
 				03C4C2A1300A8FFD00031E11 /* OnBoarding */,
-				098B44AE300A8BEB0019EBF9 /* Dashboard */,
+				31A2F376300BF7A70014E39A /* Dashboard */,
 			);
 			productName = Mongez;
 			productReference = 5ABEF5C43007A98600B1ACEF /* Mongez.app */;
@@ -608,7 +608,8 @@
 		03C4C2A1300A8FFD00031E11 /* OnBoarding */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OnBoarding;
-		098B44AE300A8BEB0019EBF9 /* Dashboard */ = {
+		};
+		31A2F376300BF7A70014E39A /* Dashboard */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Dashboard;
 		};
