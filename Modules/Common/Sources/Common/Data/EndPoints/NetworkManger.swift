@@ -20,10 +20,10 @@ public class NetworkManger {
         request.httpBody = endpoint.body
         let (data,response) = try await URLSession.shared.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
-              (200..299).contains(httpResponse.statusCode) else{
+              (200...300).contains(httpResponse.statusCode) else{
             throw URLError(.badServerResponse)
         }
-        return try JSONDecoder().decode(T, from: data)
+        return try JSONDecoder().decode(T.self, from: data)
     }
     
 }

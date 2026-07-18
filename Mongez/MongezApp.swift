@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Authntication
 
 @main
 struct MongezApp: App {
@@ -13,7 +14,7 @@ struct MongezApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AuthView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

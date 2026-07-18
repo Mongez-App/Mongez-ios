@@ -13,7 +13,7 @@ public enum HTTPMethod : String {
     case patch  = "PATCH"
     case delete = "DELETE"
 }
-public Protocol EndPoint {
+public protocol EndPoint {
     var baseURL : String { get }
     var path    : String { get }
     var method  : HTTPMethod { get }

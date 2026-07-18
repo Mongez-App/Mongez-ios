@@ -6,7 +6,7 @@
 //
 import Common
 import Foundation
-public enum AuthEndpoint: Endpoint {
+public enum AuthEndpoint:EndPoint {
     case login(email: String, password: String)
     case register(name: String, email: String, password: String)
     case guestLogin

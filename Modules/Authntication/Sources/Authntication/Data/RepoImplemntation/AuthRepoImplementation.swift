@@ -18,7 +18,7 @@ public class AuthRepository: AuthRepositoryProtocol {
     public func login(email: String, password: String) async throws -> User {
         let dto = try await remote.login(email: email, password: password)
         keychain.saveToken(dto.token)
-        return dto.toDomain()
+        return dto.mapToUserEntity()
     }
     
     public func register(name: String, email: String, password: String) async throws -> User {
