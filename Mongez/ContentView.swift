@@ -18,9 +18,9 @@ struct ContentView: View {
     
     var body: some View {
         ZStack{
-            AppTheme.Colors.primaryColor.ignoresSafeArea()
+            AppTheme.Colors.purple100.ignoresSafeArea()
             Text("Shady")
-                .foregroundColor(AppTheme.Colors.primaryText)
+                .foregroundColor(AppTheme.Colors.gray100)
         }
     }
 }
