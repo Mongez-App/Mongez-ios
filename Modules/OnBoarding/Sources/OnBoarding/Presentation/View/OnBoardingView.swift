@@ -1,0 +1,122 @@
+//
+//  SwiftUIView.swift
+//  
+//
+//  Created by Shady Eldakrory on 17/07/2026.
+//
+
+import SwiftUI
+import Common
+
+public struct OnBoardingView: View {
+    @StateObject private var viewModel = OnboardingViewModel()
+    
+    public init() {}
+    
+    public var body: some View {
+        VStack {
+            HStack {
+                Spacer()
+                Button(action: {
+                    viewModel.skip()
+                }) {
+                    Text("Skip")
+                        .font(AppTheme.textStyle(size: 18, weight: .semibold))
+                        .foregroundColor(AppTheme.Colors.primaryColor)
+                }
+                .padding(.trailing, AppTheme.Spacing.large)
+                .padding(.top, AppTheme.Spacing.medium)
+            }
+            
+            TabView(selection: $viewModel.currentPage) {
+                ForEach(0..<viewModel.steps.count, id: \.self) { index in
+                    OnboardingPageView(step: viewModel.steps[index])
+                        .tag(index)
+                }
+            }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            
+            HStack(spacing: AppTheme.Spacing.small) {
+                ForEach(0..<viewModel.steps.count, id: \.self) { index in
+                    Capsule()
+                        .fill(viewModel.currentPage == index ? AppTheme.Colors.primaryColor : AppTheme.Colors.changeOpacity(color: AppTheme.Colors.primaryColor, opacity: 0.3))
+                        .frame(width: viewModel.currentPage == index ? 24 : 10, height: 10)
+                        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: viewModel.currentPage)
+                }
+            }
+            .padding(.vertical, AppTheme.Spacing.large)
+            
+            HStack {
+                if viewModel.currentPage > 0 {
+                    Button(action: {
+                        withAnimation {
+                            viewModel.previousPage()
+                        }
+                    }) {
+                        Text("Previous")
+                            .font(AppTheme.textStyle(size: 18, weight: .semibold))
+                            .foregroundColor(AppTheme.Colors.primaryText)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: AppTheme.radius.small)
+                                    .stroke(AppTheme.Colors.secondoryText.opacity(0.2), lineWidth: 1)
+                            )
+                    }
+                    
+                    Spacer(minLength: AppTheme.Spacing.medium)
+                }
+                
+                Button(action: {
+                    withAnimation {
+                        viewModel.nextPage()
+                    }
+                }) {
+                    Text(viewModel.isLastPage ? "Get Started" : "Next")
+                        .font(AppTheme.textStyle(size: 18, weight: .semibold))
+                        .foregroundColor(AppTheme.Colors.BtnText)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(AppTheme.Colors.primaryColor)
+                        .cornerRadius(AppTheme.radius.small)
+                }
+            }
+            .padding(.horizontal, AppTheme.Spacing.large)
+            .padding(.bottom, AppTheme.Spacing.xLarge)
+            .animation(.easeInOut, value: viewModel.currentPage)
+        }
+        .background(AppTheme.Colors.backGround.ignoresSafeArea())
+    }
+}
+
+struct OnboardingPageView: View {
+    let step: OnboardingStep
+    
+    var body: some View {
+        VStack(spacing: AppTheme.Spacing.large) {
+            Spacer()
+            
+            Image(step.image)
+                .resizable()
+                .scaledToFit()
+                .frame( height: 250)
+                .padding(.horizontal, AppTheme.Spacing.large)
+            
+            Spacer()
+            
+            VStack(spacing: AppTheme.Spacing.small) {
+                Text(step.title)
+                    .font(AppTheme.textStyle(size: 24, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.primaryText)
+                    .multilineTextAlignment(.center)
+                
+                Text(step.descreption)
+                    .font(AppTheme.textStyle(size: 18, weight: .regular))
+                    .foregroundColor(AppTheme.Colors.secondoryText)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, AppTheme.Spacing.large)
+            }
+            Spacer()
+        }
+    }
+}
