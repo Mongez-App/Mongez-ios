@@ -22,7 +22,7 @@ public struct OnBoardingView: View {
                 }) {
                     Text("Skip")
                         .font(AppTheme.textStyle(size: 18, weight: .semibold))
-                        .foregroundColor(AppTheme.Colors.primaryColor)
+                        .foregroundColor(AppTheme.Colors.purple200)
                 }
                 .padding(.trailing, AppTheme.Spacing.large)
                 .padding(.top, AppTheme.Spacing.medium)
@@ -39,7 +39,7 @@ public struct OnBoardingView: View {
             HStack(spacing: AppTheme.Spacing.small) {
                 ForEach(0..<viewModel.steps.count, id: \.self) { index in
                     Capsule()
-                        .fill(viewModel.currentPage == index ? AppTheme.Colors.primaryColor : AppTheme.Colors.changeOpacity(color: AppTheme.Colors.primaryColor, opacity: 0.3))
+                        .fill(viewModel.currentPage == index ? AppTheme.Colors.purple200 : AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.3))
                         .frame(width: viewModel.currentPage == index ? 24 : 10, height: 10)
                         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: viewModel.currentPage)
                 }
@@ -55,12 +55,12 @@ public struct OnBoardingView: View {
                     }) {
                         Text("Previous")
                             .font(AppTheme.textStyle(size: 18, weight: .semibold))
-                            .foregroundColor(AppTheme.Colors.primaryText)
+                            .foregroundColor(AppTheme.Colors.black100)
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(
                                 RoundedRectangle(cornerRadius: AppTheme.radius.small)
-                                    .stroke(AppTheme.Colors.secondoryText.opacity(0.2), lineWidth: 1)
+                                    .stroke(AppTheme.Colors.gray200, lineWidth: 1)
                             )
                     }
                     
@@ -74,10 +74,10 @@ public struct OnBoardingView: View {
                 }) {
                     Text(viewModel.isLastPage ? "Get Started" : "Next")
                         .font(AppTheme.textStyle(size: 18, weight: .semibold))
-                        .foregroundColor(AppTheme.Colors.BtnText)
+                        .foregroundColor(AppTheme.Colors.white100)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(AppTheme.Colors.primaryColor)
+                        .background(AppTheme.Colors.purple200)
                         .cornerRadius(AppTheme.radius.small)
                 }
             }
@@ -85,7 +85,7 @@ public struct OnBoardingView: View {
             .padding(.bottom, AppTheme.Spacing.xLarge)
             .animation(.easeInOut, value: viewModel.currentPage)
         }
-        .background(AppTheme.Colors.backGround.ignoresSafeArea())
+        .background(AppTheme.Colors.white100.ignoresSafeArea())
     }
 }
 
@@ -107,12 +107,12 @@ struct OnboardingPageView: View {
             VStack(spacing: AppTheme.Spacing.small) {
                 Text(step.title)
                     .font(AppTheme.textStyle(size: 24, weight: .bold))
-                    .foregroundColor(AppTheme.Colors.primaryText)
+                    .foregroundColor(AppTheme.Colors.black100)
                     .multilineTextAlignment(.center)
                 
                 Text(step.descreption)
                     .font(AppTheme.textStyle(size: 18, weight: .regular))
-                    .foregroundColor(AppTheme.Colors.secondoryText)
+                    .foregroundColor(AppTheme.Colors.gray200)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, AppTheme.Spacing.large)
             }
