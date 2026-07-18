@@ -4,7 +4,7 @@
    <FileRef
       location = "group:Modules/OnBoarding">
    </FileRef>
-  <FileRef
+   <FileRef
       location = "group:Modules/Dashboard">
    </FileRef>
    <FileRef
