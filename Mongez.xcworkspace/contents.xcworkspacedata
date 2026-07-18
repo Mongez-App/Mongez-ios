@@ -8,6 +8,9 @@
       location = "group:Modules/Common">
    </FileRef>
    <FileRef
+      location = "group:Modules/Preferences">
+   </FileRef>
+   <FileRef
       location = "container:Mongez.xcodeproj">
    </FileRef>
 </Workspace>

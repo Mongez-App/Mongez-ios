@@ -118,7 +118,7 @@ extension Color {
     }
 }
 
-extension View {
+public extension View {
     func appShadow(opacity: Double, radius: CGFloat, y: CGFloat) -> some View {
         self.shadow(
             color: AppTheme.Colors.purple200.opacity(opacity),

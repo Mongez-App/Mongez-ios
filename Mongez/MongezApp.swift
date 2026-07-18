@@ -5,7 +5,7 @@
 //  Created by mohamed sharaf on 15/07/2026.
 //
 import SwiftUI
-import OnBoarding
+import Preferences
 
 
 @main
@@ -14,7 +14,7 @@ struct MongezApp: App {
 
     var body: some Scene {
         WindowGroup {
-            OnBoardingView()
+            PreferencesView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
