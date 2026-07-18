@@ -4,8 +4,9 @@
 //
 //  Created by mohamed sharaf on 15/07/2026.
 //
-
 import SwiftUI
+import OnBoarding
+
 
 @main
 struct MongezApp: App {
@@ -13,7 +14,7 @@ struct MongezApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            OnBoardingView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
