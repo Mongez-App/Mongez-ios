@@ -75,22 +75,6 @@ public enum AppTheme{
         public static let small  :  CGFloat = 12
         public static let meduim :  CGFloat = 16
     }
-    
-    public enum Shadow {
-        static let card = ShadowStyle(
-            color: Color.black.opacity(0.08),
-            radius: 8,
-            x: 0,
-            y: 4
-        )
-    }
-    
-    public struct ShadowStyle {
-        let color: Color
-        let radius: CGFloat
-        let x: CGFloat
-        let y: CGFloat
-    }
 }
 
 
@@ -119,7 +103,7 @@ extension Color {
 }
 
 extension View {
-    func appShadow(opacity: Double, radius: CGFloat, y: CGFloat) -> some View {
+    func appShadow(opacity: Double, radius: CGFloat, y: CGFloat = 0) -> some View {
         self.shadow(
             color: AppTheme.Colors.purple200.opacity(opacity),
             radius: radius,
