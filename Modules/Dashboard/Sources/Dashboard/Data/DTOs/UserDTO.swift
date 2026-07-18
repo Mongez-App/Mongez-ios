@@ -21,6 +21,14 @@ struct UserDTO : Codable {
         case avatarUrl = "avatar_url"
         case stats
     }
+    
+   static func mapToEntity(user: UserDTO) -> User {
+        let user = User(name: user.name,
+                        avatarUrl: user.avatarUrl,
+                        streakCount: user.stats.streakCount)
+        
+        return user
+    }
 }
 
 struct Stats : Codable {
@@ -35,12 +43,6 @@ struct Stats : Codable {
     }
 }
 
-//
-//    func mapToEntity(userDTO: UserDTO) -> User {
-//        let user = User(name: userDTO.name,
-//            avatarUrl: userDTO.avatar_url,
-//            streakCount: userDTO.stats.current_streak_days)
-//        
-//        return user
-//    }
+
+
 

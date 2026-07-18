@@ -7,6 +7,13 @@
 
 import Foundation
 
+struct Dashboard {
+    var todayFocus: TodayFocus
+    var progressMetrics: ProgressMetrics
+    var todayTasks: [Task]
+    var upcomingDeadlines: [UpcomingDeadline]
+}
+    
 struct TodayFocus {
     var courseId: String
     var courseName: String
@@ -14,7 +21,15 @@ struct TodayFocus {
     var durationMinutes: Float
 }
 
-struct TodayTasks {
+struct Task {
+    var taskId: String
+    var title: String
+    var durationMinutes: Float
+    var priority: String
+    var isCompleted: Bool
+}
+
+struct ProgressMetrics {
     var todayCompletedTasks: Float
     var todayTotalTasks: Float
     var weeklyHoursCompleted: Float
@@ -23,15 +38,7 @@ struct TodayTasks {
     var monthlyHoursGoal: Float
 }
 
-struct ProgressMetrics {
-    var taskId: String
-    var title: String
-    var durationMinutes: Float
-    var priority: String
-    var isCompleted: Bool
-}
-
-struct UpcomingDeadlines {
+struct UpcomingDeadline {
     var deadlineId: String
     var title: String
     var courseName: String
