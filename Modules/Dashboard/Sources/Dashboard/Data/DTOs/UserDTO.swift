@@ -34,7 +34,7 @@ struct UserDTO : Codable {
 struct Stats : Codable {
     var totalStudyHours : Float
     var completedTasksCount : Float
-    var streakCount : Float
+    var streakCount : Int
     
     enum CodingKeys : String, CodingKey {
         case totalStudyHours = "total_study_hours"
