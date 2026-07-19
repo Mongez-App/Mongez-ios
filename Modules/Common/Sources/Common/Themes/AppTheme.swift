@@ -51,6 +51,10 @@ public enum AppTheme{
             Color(hex: "#F97316")
         }
         
+        public static var blue100 : Color{
+            Color(hex: "#3B82F6")
+        }
+        
         public static func changeOpacity (color : Color, opacity:Double)->Color{
             return color.opacity(opacity)
         }

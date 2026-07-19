@@ -45,12 +45,12 @@ struct TodayFocusDTO: Codable {
 }
 
 struct ProgressMetricsDTO: Codable {
-    var todayCompletedTasks: Float
-    var todayTotalTasks: Float
-    var weeklyHoursCompleted: Float
-    var weeklyHoursGoal: Float
-    var monthlyHoursCompleted: Float
-    var monthlyHoursGoal: Float
+    var todayCompletedTasks: Int
+    var todayTotalTasks: Int
+    var weeklyHoursCompleted: Int
+    var weeklyHoursGoal: Int
+    var monthlyHoursCompleted: Int
+    var monthlyHoursGoal: Int
     
     enum CodingKeys: String, CodingKey {
         case todayCompletedTasks = "today_completed_tasks"
@@ -62,12 +62,12 @@ struct ProgressMetricsDTO: Codable {
     }
     
     static func mapToEntity(progressMetrics: ProgressMetricsDTO) -> ProgressMetrics {
-        let progressMetrics = ProgressMetrics(todayCompletedTasks: progressMetrics.todayCompletedTasks,
-                                              todayTotalTasks: progressMetrics.todayTotalTasks,
-                                              weeklyHoursCompleted: progressMetrics.weeklyHoursCompleted,
-                                              weeklyHoursGoal: progressMetrics.weeklyHoursGoal,
-                                              monthlyHoursCompleted: progressMetrics.monthlyHoursCompleted,
-                                              monthlyHoursGoal: progressMetrics.monthlyHoursGoal)
+        let progressMetrics = ProgressMetrics(todayCompletedTasks:Int(progressMetrics.todayCompletedTasks),
+                                              todayTotalTasks: Int(progressMetrics.todayTotalTasks),
+                                              weeklyHoursCompleted: Int(progressMetrics.weeklyHoursCompleted),
+                                              weeklyHoursGoal: Int(progressMetrics.weeklyHoursGoal),
+                                              monthlyHoursCompleted: Int(progressMetrics.monthlyHoursCompleted),
+                                              monthlyHoursGoal: Int(progressMetrics.monthlyHoursGoal))
         
         return progressMetrics
     }

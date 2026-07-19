@@ -30,12 +30,12 @@ struct Task {
 }
 
 struct ProgressMetrics {
-    var todayCompletedTasks: Float
-    var todayTotalTasks: Float
-    var weeklyHoursCompleted: Float
-    var weeklyHoursGoal: Float
-    var monthlyHoursCompleted: Float
-    var monthlyHoursGoal: Float
+    var todayCompletedTasks: Int
+    var todayTotalTasks: Int
+    var weeklyHoursCompleted: Int
+    var weeklyHoursGoal: Int
+    var monthlyHoursCompleted: Int
+    var monthlyHoursGoal: Int
 }
 
 struct UpcomingDeadline {
@@ -57,12 +57,12 @@ extension Dashboard {
                 durationMinutes: 135.0
             ),
             progressMetrics: ProgressMetrics(
-                todayCompletedTasks: 3.0,
-                todayTotalTasks: 5.0,
-                weeklyHoursCompleted: 12.0,
-                weeklyHoursGoal: 20.0,
-                monthlyHoursCompleted: 45.0,
-                monthlyHoursGoal: 80.0
+                todayCompletedTasks: 3,
+                todayTotalTasks: 5,
+                weeklyHoursCompleted: 12,
+                weeklyHoursGoal: 20,
+                monthlyHoursCompleted: 45,
+                monthlyHoursGoal: 80
             ),
             todayTasks: [
                 Task(

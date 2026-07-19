@@ -49,7 +49,7 @@ struct HeaderView: View {
                         .foregroundColor(AppTheme.Colors.black100)
                 }
                 
-                Image("Flame")
+                Image("Flame", bundle: .main)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
@@ -57,7 +57,7 @@ struct HeaderView: View {
             }
         }
         .padding(.horizontal, 16)
-        .padding(.top, 56)
+        .padding(.top, 60)
         .padding(.bottom, 12)
         .frame(maxWidth: .infinity)
         .frame(maxWidth: .infinity)
