@@ -63,7 +63,7 @@ struct HeaderView: View {
         .frame(maxWidth: .infinity)
         .background(
             AppTheme.Colors.white100
-                .appShadow(opacity: 0.20, radius: 3, y: 1) // Move it inside here!
+                .appShadow(opacity: 0.20, radius: 3, y: 1)
         )
         .ignoresSafeArea(edges: .top)
         
