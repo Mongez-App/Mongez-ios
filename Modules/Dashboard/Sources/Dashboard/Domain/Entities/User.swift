@@ -13,3 +13,10 @@ struct User {
     var streakCount : Float
 }
 
+extension User {
+    static func getMockUser() -> User {
+        let user = User(name: "Abdullah", avatarUrl: "", streakCount: 12)
+        
+        return user
+    }
+}
