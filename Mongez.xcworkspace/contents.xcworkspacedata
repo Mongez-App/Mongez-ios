@@ -2,13 +2,22 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Modules/AIStudyRoom">
+   </FileRef>
+   <FileRef
       location = "group:Modules/OnBoarding">
+   </FileRef>
+   <FileRef
+      location = "group:Modules/Dashboard">
    </FileRef>
    <FileRef
       location = "group:Modules/Common">
    </FileRef>
    <FileRef
       location = "group:Modules/Preferences">
+   </FileRef>
+   <FileRef
+      location = "group:Modules/Authntication">
    </FileRef>
    <FileRef
       location = "container:Mongez.xcodeproj">

@@ -9,9 +9,11 @@ import SwiftUI
 import Common
 
 public struct PreferencesView: View {
-    @StateObject private var viewModel = PreferencesViewModel()
+    @ObservedObject public var viewModel: PreferencesViewModel
 
-    public init() {}
+    public init(viewModel: PreferencesViewModel) {
+        self.viewModel = viewModel
+    }
 
     public var body: some View {
         VStack(spacing: 0) {

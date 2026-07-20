@@ -17,6 +17,8 @@ public final class PreferencesViewModel: ObservableObject {
     public let totalSteps = 3
     public let hoursRange = Array(1...12)
 
+    public var onFinish: (() -> Void)?
+
     public init() {}
 
     public var isLastStep: Bool {
@@ -58,6 +60,6 @@ public final class PreferencesViewModel: ObservableObject {
     }
 
     private func finish() {
-        print("Preferences finished")
+        onFinish?()
     }
 }

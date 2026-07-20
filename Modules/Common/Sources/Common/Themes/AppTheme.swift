@@ -27,6 +27,10 @@ public enum AppTheme{
             Color(hex: "#BCBCBE")
         }
         
+        public static var gray300   : Color{
+            Color(hex: "#B0B0B3")
+        }
+        
         public static var white100  : Color{
             Color(hex: "#F9F9FF")
         }
@@ -49,6 +53,10 @@ public enum AppTheme{
         
         public static var orange100 : Color{
             Color(hex: "#F97316")
+        }
+        
+        public static var blue100 : Color{
+            Color(hex: "#3B82F6")
         }
         
         public static func changeOpacity (color : Color, opacity:Double)->Color{
@@ -74,22 +82,7 @@ public enum AppTheme{
     public enum radius {
         public static let small  :  CGFloat = 12
         public static let meduim :  CGFloat = 16
-    }
-    
-    public enum Shadow {
-        static let card = ShadowStyle(
-            color: Color.black.opacity(0.08),
-            radius: 8,
-            x: 0,
-            y: 4
-        )
-    }
-    
-    public struct ShadowStyle {
-        let color: Color
-        let radius: CGFloat
-        let x: CGFloat
-        let y: CGFloat
+        public static let large :  CGFloat = 24
     }
 }
 
@@ -119,7 +112,7 @@ extension Color {
 }
 
 public extension View {
-    func appShadow(opacity: Double, radius: CGFloat, y: CGFloat) -> some View {
+    func appShadow(opacity: Double, radius: CGFloat, y: CGFloat = 0) -> some View {
         self.shadow(
             color: AppTheme.Colors.purple200.opacity(opacity),
             radius: radius,
