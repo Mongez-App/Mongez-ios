@@ -12,6 +12,7 @@
         038C2DD7300E35810046780D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 038C2DD6300E35810046780D /* GoogleService-Info.plist */; };
         03C4C2A2300A8FFD00031E11 /* OnBoarding in Frameworks */ = {isa = PBXBuildFile; productRef = 03C4C2A1300A8FFD00031E11 /* OnBoarding */; };
         31A2F377300BF7A70014E39A /* Dashboard in Frameworks */ = {isa = PBXBuildFile; productRef = 31A2F376300BF7A70014E39A /* Dashboard */; };
+        31F0B54B300C0D0000293455 /* AIStudyRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 31F0B54A300C0D0000293455 /* AIStudyRoom */; };
         5ABEF5C83007A98600B1ACEF /* MongezApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5C73007A98600B1ACEF /* MongezApp.swift */; };
         5ABEF5CA3007A98600B1ACEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5C93007A98600B1ACEF /* ContentView.swift */; };
         5ABEF5CC3007A98800B1ACEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5ABEF5CB3007A98800B1ACEF /* Assets.xcassets */; };
@@ -58,7 +59,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-        5ABEF5C13007A98600B1ACEF /* Frameworks */ = {
+5ABEF5C13007A98600B1ACEF /* Frameworks */ = {
             isa = PBXFrameworksBuildPhase;
             buildActionMask = 2147483647;
             files = (
@@ -66,6 +67,7 @@
                 03224E76300D2D7D007CED78 /* Common in Frameworks */,
                 03C4C2A2300A8FFD00031E11 /* OnBoarding in Frameworks */,
                 31A2F377300BF7A70014E39A /* Dashboard in Frameworks */,
+                31F0B54B300C0D0000293455 /* AIStudyRoom in Frameworks */,
             );
             runOnlyForDeploymentPostprocessing = 0;
         };
@@ -157,7 +159,7 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-        5ABEF5C33007A98600B1ACEF /* Mongez */ = {
+       5ABEF5C33007A98600B1ACEF /* Mongez */ = {
             isa = PBXNativeTarget;
             buildConfigurationList = 5ABEF5ED3007A98900B1ACEF /* Build configuration list for PBXNativeTarget "Mongez" */;
             buildPhases = (
@@ -175,6 +177,7 @@
                 03224E75300D2D7D007CED78 /* Common */,
                 03C4C2A1300A8FFD00031E11 /* OnBoarding */,
                 31A2F376300BF7A70014E39A /* Dashboard */,
+                31F0B54A300C0D0000293455 /* AIStudyRoom */,
             );
             productName = Mongez;
             productReference = 5ABEF5C43007A98600B1ACEF /* Mongez.app */;
@@ -678,6 +681,10 @@
         31A2F376300BF7A70014E39A /* Dashboard */ = {
             isa = XCSwiftPackageProductDependency;
             productName = Dashboard;
+        };
+        31F0B54A300C0D0000293455 /* AIStudyRoom */ = {
+            isa = XCSwiftPackageProductDependency;
+            productName = AIStudyRoom;
         };
 /* End XCSwiftPackageProductDependency section */
 
