@@ -97,10 +97,13 @@ public final class AuthViewModel: ObservableObject {
      
             do {
                 let firebaseIDToken = try await GoogleAuthService.shared.signInAndGetFirebaseIDToken()
-                user = try await useCase.executeGoogleLogin(idToken: firebaseIDToken)
-            } catch {
+              //  user = try await useCase.executeGoogleLogin(idToken: firebaseIDToken)
+            }
+      
+        catch {
                 errorMessage = mapError(error)
             }
+        onAuthSuccess?()
         }
 
     private func mapError(_ error: Error) -> String {
