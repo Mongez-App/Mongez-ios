@@ -7,21 +7,62 @@
 import Common
 import SwiftUI
 import CoreData
+import OnBoarding
+import Authntication
+import Dashboard
+import AIStudyRoom
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
+    @StateObject private var appCoordinator = AppCoordinator()
     
     var body: some View {
-        ZStack{
-            AppTheme.Colors.purple100.ignoresSafeArea()
-            Text("Shady")
-                .foregroundColor(AppTheme.Colors.gray100)
+        Group {
+            switch appCoordinator.state {
+                
+            case .onboarding:
+                if let coordinator = appCoordinator.onboardingCoordinator {
+                    OnboardingCoordinatorView(
+                        coordinator: coordinator,
+                        viewModel: OnboardingViewModel()
+                    )
+                    .transition(.opacity)
+                }
+                
+            case .auth:
+                if let coordinator = appCoordinator.authCoordinator {
+                    AuthCoordinatorView(
+                        coordinator: coordinator,
+                        viewModel: AuthViewModel()
+                    )
+                    .transition(.opacity)
+                }
+                
+            case .dashboard:
+                if let coordinator = appCoordinator.dashboardCoordinator {
+                    DashboardCoordinatorView(
+                        coordinator: coordinator,
+                        viewModel: DashboardViewModel(),
+                        studyRoomFactory: { courseId, taskTitle in
+                            let chatRepository = MockChatRepository()
+                            let studyViewModel = StudyRoomViewModel(
+                                courseId: courseId,
+                                getChatHistoryUseCase: GetChatHistoryUseCase(repository: chatRepository),
+                                sendMessageUseCase: SendMessageUseCase(repository: chatRepository)
+                            )
+                            
+                            return AnyView(
+                                StudyRoomView(
+                                    viewModel: studyViewModel,
+                                    taskTitle: taskTitle
+                                )
+                            )
+                        }
+                    )
+                    .transition(.opacity)
+                }
+            }
         }
+        .animation(.easeInOut, value: appCoordinator.state)
     }
 }
 struct ContentView_Previews: PreviewProvider {
