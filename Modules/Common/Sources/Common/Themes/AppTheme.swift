@@ -27,6 +27,10 @@ public enum AppTheme{
             Color(hex: "#BCBCBE")
         }
         
+        public static var gray300   : Color{
+            Color(hex: "#B0B0B3")
+        }
+        
         public static var white100  : Color{
             Color(hex: "#F9F9FF")
         }
