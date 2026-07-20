@@ -4,17 +4,16 @@
 //
 //  Created by Shady Eldakrory on 19/07/2026.
 //
-
 import Foundation
 import UIKit
 import GoogleSignIn
 import FirebaseAuth
- 
+
 public enum GoogleAuthError: LocalizedError {
     case missingRootViewController
     case missingIDToken
     case cancelled
- 
+
     public var errorDescription: String? {
         switch self {
         case .missingRootViewController:
@@ -26,10 +25,10 @@ public enum GoogleAuthError: LocalizedError {
         }
     }
 }
- 
+
 @MainActor
 public final class GoogleAuthService {
- 
+
     public static let shared = GoogleAuthService()
     private init() {}
 
@@ -37,7 +36,7 @@ public final class GoogleAuthService {
         guard let rootViewController = Self.topViewController() else {
             throw GoogleAuthError.missingRootViewController
         }
- 
+
         let googleResult: GIDSignInResult
         do {
             googleResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
@@ -47,32 +46,35 @@ public final class GoogleAuthService {
             }
             throw error
         }
- 
+
         guard let googleIDToken = googleResult.user.idToken?.tokenString else {
             throw GoogleAuthError.missingIDToken
         }
- 
+
         let accessToken = googleResult.user.accessToken.tokenString
- 
+
         let credential = GoogleAuthProvider.credential(
             withIDToken: googleIDToken,
             accessToken: accessToken
         )
- 
+
         let authResult = try await Auth.auth().signIn(with: credential)
- 
+
         let firebaseIDToken = try await authResult.user.getIDToken()
- 
+
         return firebaseIDToken
     }
- 
+
     public func signOut() {
         GIDSignIn.sharedInstance.signOut()
         try? Auth.auth().signOut()
     }
 
-    private static func topViewController(
-        base: UIViewController? = nil) -> UIViewController? {
+    private static func topViewController(base: UIViewController? = nil) -> UIViewController? {
+        let base = base ?? UIApplication.shared.connectedScenes
+            .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+            .first?.rootViewController
+
         if let nav = base as? UINavigationController {
             return topViewController(base: nav.visibleViewController)
         }
