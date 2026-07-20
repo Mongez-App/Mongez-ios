@@ -21,12 +21,12 @@ public struct AuthView: View {
         case name, email, password, confirmPassword
     }
 
-    @StateObject private var viewModel: AuthViewModel
+    @ObservedObject public var viewModel: AuthViewModel
     @FocusState private var focusedField: Field?
 
     @MainActor
-    public init(viewModel: AuthViewModel? = nil) {
-        _viewModel = StateObject(wrappedValue: viewModel ?? AuthViewModel())
+    public init(viewModel: AuthViewModel) {
+        self.viewModel = viewModel
     }
 
     public var body: some View {
