@@ -18,13 +18,13 @@ struct TodayFocus {
     var courseId: String
     var courseName: String
     var allocatedDuration: String
-    var durationMinutes: Float
+    var durationMinutes: Int
 }
 
 struct Task {
     var taskId: String
     var title: String
-    var durationMinutes: Float
+    var durationMinutes: Int
     var priority: String
     var isCompleted: Bool
 }
@@ -54,7 +54,7 @@ extension Dashboard {
                 courseId: "course_uuid_9982",
                 courseName: "Operating Systems",
                 allocatedDuration: "2h 15m",
-                durationMinutes: 135.0
+                durationMinutes: 135
             ),
             progressMetrics: ProgressMetrics(
                 todayCompletedTasks: 3,
@@ -68,21 +68,21 @@ extension Dashboard {
                 Task(
                     taskId: "task_001",
                     title: "Read Chapter 4",
-                    durationMinutes: 45.0,
+                    durationMinutes: 45,
                     priority: "HIGH",
                     isCompleted: true
                 ),
                 Task(
                     taskId: "task_002",
                     title: "Practice DFS Problems",
-                    durationMinutes: 30.0,
+                    durationMinutes: 30,
                     priority: "MEDIUM",
                     isCompleted: false
                 ),
                 Task(
                     taskId: "task_003",
                     title: "Finish Quiz",
-                    durationMinutes: 20.0,
+                    durationMinutes: 20,
                     priority: "LOW",
                     isCompleted: false
                 )

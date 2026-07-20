@@ -1,6 +1,6 @@
 //
 //  SwiftUIView.swift
-//  
+//
 //
 //  Created by Ahmed Tarek on 19/07/2026.
 //
@@ -31,13 +31,12 @@ struct DeadlineList: View {
     ]
     
     var body: some View {
-            HStack(spacing: 16) {
-                ForEach(upcomingDeadlines.indices, id: \.self) { item in
-                    DeadlineCard(color: colors[item], upcomingDeadline: upcomingDeadlines[item])
-                }
-                .frame(maxWidth: .infinity)
+        HStack(spacing: AppTheme.Spacing.small) {
+            ForEach(upcomingDeadlines.indices, id: \.self) { index in
+                DeadlineCard(color: colors[index], upcomingDeadline: upcomingDeadlines[index])
             }
-        .padding(16)
+            .frame(maxWidth: .infinity)
+        }
     }
 }
 

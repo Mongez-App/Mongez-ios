@@ -107,7 +107,7 @@ struct CircledAsyncImage: View {
                         .frame(width: 56, height: 56)
                         .appShadow(opacity: 0.7, radius: 5)
                     
-                    Text(name.prefix(2).capitalized)
+                    Text(name.prefix(2).uppercased())
                         .font(AppTheme.textStyle(size: 20, weight: .medium))
                         .foregroundColor(AppTheme.Colors.purple200.opacity(0.8))
                 }

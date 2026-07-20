@@ -78,6 +78,7 @@ public enum AppTheme{
     public enum radius {
         public static let small  :  CGFloat = 12
         public static let meduim :  CGFloat = 16
+        public static let large :  CGFloat = 24
     }
 }
 

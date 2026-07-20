@@ -25,7 +25,7 @@ struct TodayFocusDTO: Codable {
     var courseId: String
     var courseName: String
     var allocatedDuration: String
-    var durationMinutes: Float
+    var durationMinutes: Int
     
     enum CodingKeys: String, CodingKey {
         case courseId = "course_id"
@@ -76,7 +76,7 @@ struct ProgressMetricsDTO: Codable {
 struct TaskDTO: Codable {
     var taskId: String
     var title: String
-    var durationMinutes: Float
+    var durationMinutes: Int
     var priority: String
     var isCompleted: Bool
     

@@ -51,14 +51,15 @@ struct ProgressCard: View {
                     ZStack(alignment: .leading) {
                         Capsule()
                             .fill(AppTheme.Colors.gray100.opacity(0.6))
-                            .frame(height: 6)
+                            .frame(height: 6.5)
                         
                         Capsule()
                             .fill(color)
-                            .frame(width: geo.size.width * min(max(progressRatio, 0), 1), height: 6)
+                            .frame(width: geo.size.width * min(max(progressRatio, 0), 1), height: 6.5)
                     }
                 }
-                .frame(height: 8)
+                .frame(height: 6.5)
+                
             }
 
         }
