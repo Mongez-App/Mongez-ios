@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Observation
 import Common
 
 public final class OnboardingCoordinator: ObservableObject, Coordinator {

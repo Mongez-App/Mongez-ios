@@ -49,6 +49,8 @@ struct SuggestionCard: View {
     }
 }
 
-#Preview {
-    SuggestionCard()
+struct SuggestionCard_Previews: PreviewProvider {
+    static var previews: some View {
+        SuggestionCard()
+    }
 }
