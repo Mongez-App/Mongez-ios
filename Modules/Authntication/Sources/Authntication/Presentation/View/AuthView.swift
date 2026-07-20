@@ -28,87 +28,92 @@ public struct AuthView: View {
     public init(viewModel: AuthViewModel? = nil) {
         _viewModel = StateObject(wrappedValue: viewModel ?? AuthViewModel())
     }
- 
+
     public var body: some View {
         ZStack {
-            AppTheme.Colors.backGround
-                .ignoresSafeArea()
+            AppTheme.Colors.white100
+            .ignoresSafeArea()
 
-            ScrollView {
-                VStack(alignment: .leading, spacing: AppTheme.Spacing.medium) {
+            VStack(spacing: 0) {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: AppTheme.Spacing.medium) {
 
-                    header
+                        header
 
-                    if viewModel.mode == .register {
-                        fieldBlock(field: .name, title: "Name", icon: "person", text: $viewModel.name, placeholder: "Jhon Doe")
-                    }
-
-                    fieldBlock(field: .email, title: "Email", icon: "envelope", text: $viewModel.email, placeholder: "JhonDoe@gmail.com", keyboard: .emailAddress)
-
-                    secureFieldBlock(field: .password, title: "Password", text: $viewModel.password, isVisible: $viewModel.isPasswordVisible)
-
-                    if viewModel.mode == .login {
-                        HStack {
-                            Spacer()
-                            Button("Forgot Password?") {
-                            }
-                            .font(AppTheme.textStyle(size: 13, weight: .medium))
-                            .foregroundColor(AppTheme.Colors.primaryColor)
+                        if viewModel.mode == .register {
+                            fieldBlock(field: .name, title: "Name", icon: "name", text: $viewModel.name, placeholder: "Jhon Doe")
                         }
-                    } else {
-                        secureFieldBlock(field: .confirmPassword, title: "Confirm Password", text: $viewModel.confirmPassword, isVisible: $viewModel.isConfirmPasswordVisible)
+
+                        fieldBlock(field: .email, title: "Email", icon: "email", text: $viewModel.email, placeholder: "JhonDoe@gmail.com", keyboard: .emailAddress)
+
+                        secureFieldBlock(field: .password, title: "Password", text: $viewModel.password, isVisible: $viewModel.isPasswordVisible)
+
+                        if viewModel.mode == .login {
+                            HStack {
+                                Spacer()
+                                Button("Forgot Password?") {
+                                }
+                                .font(AppTheme.textStyle(size: 13, weight: .medium))
+                                .foregroundColor(AppTheme.Colors.purple200)
+                            }
+                        } else {
+                            secureFieldBlock(field: .confirmPassword, title: "Confirm Password", text: $viewModel.confirmPassword, isVisible: $viewModel.isConfirmPasswordVisible)
+                        }
+
+                        if let errorMessage = viewModel.errorMessage {
+                            Text(errorMessage)
+                                .font(AppTheme.textStyle(size: 13, weight: .medium))
+                                .foregroundColor(AppTheme.Colors.red100)
+                                .padding(.top, 4)
+                                .transition(.opacity)
+                        }
+
+                        primaryButton
+                            .padding(.top, AppTheme.Spacing.xSmall)
+
+                        orDivider
+                            .padding(.vertical, AppTheme.Spacing.xSmall)
+
+                        VStack(spacing: AppTheme.Spacing.xSmall) {
+                            guestButton
+                            googleButton
+                        }
                     }
-
-                    if let errorMessage = viewModel.errorMessage {
-                        Text(errorMessage)
-                            .font(AppTheme.textStyle(size: 13, weight: .medium))
-                            .foregroundColor(.red)
-                            .padding(.top, 4)
-                            .transition(.opacity)
-                    }
-
-                    primaryButton
-                        .padding(.top, AppTheme.Spacing.xSmall)
-
-                    orDivider
-                        .padding(.vertical, AppTheme.Spacing.xSmall)
-
-                    VStack(spacing: AppTheme.Spacing.xSmall) {
-                        guestButton
-                        googleButton
-                    }
-
-                    switchModeFooter
+                    .padding(AppTheme.Spacing.large)
+                    .animation(.easeInOut(duration: 0.2), value: viewModel.mode)
+                    .animation(.easeInOut(duration: 0.2), value: viewModel.errorMessage)
                 }
-                .padding(AppTheme.Spacing.large)
-                .animation(.easeInOut(duration: 0.2), value: viewModel.mode)
-                .animation(.easeInOut(duration: 0.2), value: viewModel.errorMessage)
+
+                switchModeFooter
+                    .padding(.bottom, 32)
             }
         }
     }
 
+    private var secondaryTextColor: Color {
+        AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.55)
+    }
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(viewModel.mode == .login ? "Welcome back" : "Create account")
                 .font(AppTheme.textStyle(size: 28, weight: .bold))
-                .foregroundColor(AppTheme.Colors.primaryText)
+                .foregroundColor(AppTheme.Colors.black100)
             Text(viewModel.mode == .login ? "Let's continue our study journey" : "Start your smart learning journey")
                 .font(AppTheme.textStyle(size: 14))
-                .foregroundColor(AppTheme.Colors.secondoryText)
+                .foregroundColor(secondaryTextColor)
         }
         .padding(.bottom, AppTheme.Spacing.small)
     }
-
 
     private func fieldBlock(field: Field, title: String, icon: String, text: Binding<String>, placeholder: String, keyboard: UIKeyboardType = .default) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(AppTheme.textStyle(size: 13, weight: .semibold))
-                .foregroundColor(AppTheme.Colors.primaryText)
+                .foregroundColor(AppTheme.Colors.black100)
             HStack {
-                Image(systemName: icon)
-                    .foregroundColor(AppTheme.Colors.secondoryText)
+                Image(icon)
+                    .foregroundColor(AppTheme.Colors.black100)
                 TextField(placeholder, text: text)
                     .keyboardType(keyboard)
                     .autocapitalization(.none)
@@ -117,7 +122,7 @@ public struct AuthView: View {
             }
             .padding(AppTheme.Spacing.small)
             .background(
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: AppTheme.radius.small)
                     .stroke(borderColor(for: field), lineWidth: borderWidth(for: field))
             )
         }
@@ -127,10 +132,10 @@ public struct AuthView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(AppTheme.textStyle(size: 13, weight: .semibold))
-                .foregroundColor(AppTheme.Colors.primaryText)
+                .foregroundColor(AppTheme.Colors.black100)
             HStack {
-                Image(systemName: "lock")
-                    .foregroundColor(AppTheme.Colors.secondoryText)
+                Image("password")
+                    .foregroundColor(AppTheme.Colors.black100)
                 Group {
                     if isVisible.wrappedValue {
                         TextField("••••••••", text: text)
@@ -142,13 +147,13 @@ public struct AuthView: View {
                 Button {
                     isVisible.wrappedValue.toggle()
                 } label: {
-                    Image(systemName: isVisible.wrappedValue ? "eye.slash" : "eye")
-                        .foregroundColor(AppTheme.Colors.secondoryText)
+                    Image(isVisible.wrappedValue ? "eye_shown" : "eye_hidden")
+                        .foregroundColor(secondaryTextColor)
                 }
             }
             .padding(AppTheme.Spacing.small)
             .background(
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: AppTheme.radius.small)
                     .stroke(borderColor(for: field), lineWidth: borderWidth(for: field))
             )
         }
@@ -156,15 +161,14 @@ public struct AuthView: View {
 
     private func borderColor(for field: Field) -> Color {
         if focusedField == field {
-            return Color.black.opacity(0.55)
+            return AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.55)
         }
-        return AppTheme.Colors.primaryColor.opacity(0.4)
+        return AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.4)
     }
 
     private func borderWidth(for field: Field) -> CGFloat {
         focusedField == field ? 1.5 : 1
     }
-
 
     private var primaryButton: some View {
         Button {
@@ -173,7 +177,7 @@ public struct AuthView: View {
             HStack {
                 if viewModel.isLoading {
                     ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.Colors.BtnText))
+                        .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.Colors.white100))
                 } else {
                     Text(viewModel.mode == .login ? "Sign In" : "Sign Up")
                         .font(AppTheme.textStyle(size: 16, weight: .bold))
@@ -181,20 +185,20 @@ public struct AuthView: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, AppTheme.Spacing.xSmall)
-            .background(AppTheme.Colors.primaryColor)
-            .foregroundColor(AppTheme.Colors.BtnText)
-            .cornerRadius(12)
+            .background(AppTheme.Colors.purple200)
+            .foregroundColor(AppTheme.Colors.white100)
+            .cornerRadius(AppTheme.radius.meduim)
         }
         .disabled(viewModel.isLoading)
     }
 
     private var orDivider: some View {
         HStack {
-            Rectangle().frame(height: 1).foregroundColor(AppTheme.Colors.primaryColor.opacity(0.2))
+            Rectangle().frame(height: 1).foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.2))
             Text("or")
                 .font(AppTheme.textStyle(size: 12))
-                .foregroundColor(AppTheme.Colors.secondoryText)
-            Rectangle().frame(height: 1).foregroundColor(AppTheme.Colors.primaryColor.opacity(0.2))
+                .foregroundColor(secondaryTextColor)
+            Rectangle().frame(height: 1).foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.2))
         }
     }
 
@@ -203,17 +207,17 @@ public struct AuthView: View {
             Task { await viewModel.continueAsGuest() }
         } label: {
             HStack {
-                Image(systemName: "person.crop.circle")
+                Image("guest")
                 Text("Continue as guest")
                     .font(AppTheme.textStyle(size: 15, weight: .medium))
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, AppTheme.Spacing.small)
             .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(AppTheme.Colors.primaryColor.opacity(0.4))
+                RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
+                    .stroke(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.4))
             )
-            .foregroundColor(AppTheme.Colors.primaryText)
+            .foregroundColor(AppTheme.Colors.black100)
         }
     }
 
@@ -232,10 +236,10 @@ public struct AuthView: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, AppTheme.Spacing.small)
             .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(AppTheme.Colors.primaryColor.opacity(0.4))
+                RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
+                    .stroke(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.4))
             )
-            .foregroundColor(AppTheme.Colors.primaryText)
+            .foregroundColor(AppTheme.Colors.black100)
         }
     }
 
@@ -244,15 +248,14 @@ public struct AuthView: View {
             Spacer()
             Text(viewModel.mode == .login ? "Don't have an account?" : "Already have an account?")
                 .font(AppTheme.textStyle(size: 13))
-                .foregroundColor(AppTheme.Colors.secondoryText)
+                .foregroundColor(secondaryTextColor)
             Button(viewModel.mode == .login ? "Sign up" : "Sign In") {
                 viewModel.switchMode()
             }
             .font(AppTheme.textStyle(size: 13, weight: .bold))
-            .foregroundColor(AppTheme.Colors.primaryColor)
+            .foregroundColor(AppTheme.Colors.purple200)
             Spacer()
         }
         .padding(.top, AppTheme.Spacing.small)
-        .padding(.bottom, 32)
     }
 }
