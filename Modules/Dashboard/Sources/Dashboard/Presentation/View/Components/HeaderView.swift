@@ -10,17 +10,15 @@ import Foundation
 import Common
 
 struct HeaderView: View {
-    //@Binding Var user: User
-    
-    var user = User.getMockUser()
+    @Binding var user: User?
     
     var body: some View {
         HStack {
-            CircledAsyncImage(urlString: user.avatarUrl, name: user.name)
+            CircledAsyncImage(urlString: user!.avatarUrl, name: user!.name)
                 .padding(.trailing, AppTheme.Spacing.xSmall)
             
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xxxSmall) {
-                Text("Hi, \(user.name)")
+                Text("Hi, \(user!.name)")
                     .font(AppTheme.textStyle(size: 16, weight: .medium))
                     .foregroundColor(AppTheme.Colors.black100)
                 
@@ -35,7 +33,7 @@ struct HeaderView: View {
             HStack {
                 VStack {
                     HStack(spacing: AppTheme.Spacing.xxxSmall){
-                        Text("\(user.streakCount)")
+                        Text("\(user!.streakCount)")
                             .font(AppTheme.textStyle(size: 13, weight: .bold))
                             .foregroundColor(AppTheme.Colors.orange100)
                         
@@ -57,18 +55,14 @@ struct HeaderView: View {
             }
         }
         .padding(.horizontal, 16)
-        .padding(.top, 60)
+        .padding(.top, 8)
         .padding(.bottom, 12)
-        .frame(maxWidth: .infinity)
         .frame(maxWidth: .infinity)
         .background(
             AppTheme.Colors.white100
                 .appShadow(opacity: 0.20, radius: 3, y: 1)
+                .ignoresSafeArea(edges: .top)
         )
-        .ignoresSafeArea(edges: .top)
-        
-        Spacer()
-        
     }
 }
 
@@ -119,6 +113,6 @@ struct CircledAsyncImage: View {
     }
 }
 
-#Preview {
-    HeaderView()
-}
+//#Preview {
+//    HeaderView()
+//}

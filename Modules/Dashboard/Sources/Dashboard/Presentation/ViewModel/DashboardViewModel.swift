@@ -16,16 +16,16 @@ class DashboardViewModel : ObservableObject {
     
     var isEmpty: Bool = false
     
-    let getDashboardDetailsUseCase: GetDashboardDetailsUseCaseProtocol
-    let getUserUseCase: GetUserUseCaseProtocol
+//    let getDashboardDetailsUseCase: GetDashboardDetailsUseCaseProtocol
+//    let getUserUseCase: GetUserUseCaseProtocol
     
-    init(getDashboardDetailsUseCase: GetDashboardDetailsUseCaseProtocol,
-         getUserUseCase: GetUserUseCaseProtocol) {
-        
-        self.getDashboardDetailsUseCase = getDashboardDetailsUseCase
-        
-        self.getUserUseCase = getUserUseCase
-    }
+//    init(getDashboardDetailsUseCase: GetDashboardDetailsUseCaseProtocol,
+//         getUserUseCase: GetUserUseCaseProtocol) {
+//        
+//        self.getDashboardDetailsUseCase = getDashboardDetailsUseCase
+//        
+//        self.getUserUseCase = getUserUseCase
+//    }
     
     func fetchUser() {
         // Mock User

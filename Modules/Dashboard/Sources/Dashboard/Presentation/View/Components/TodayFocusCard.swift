@@ -9,14 +9,7 @@ import SwiftUI
 import Common
 
 struct TodayFocusCard: View {
-    //@Binding var todayFocus: TodayFocus
-    
-    var todayFocus = TodayFocus(
-        courseId: "course_uuid_9982",
-        courseName: "Operating Systems",
-        allocatedDuration: "2h 15m",
-        durationMinutes: 135
-    )
+    @Binding var todayFocus: TodayFocus?
     
     var imageUrl: String = ""
     
@@ -47,7 +40,6 @@ struct TodayFocusCard: View {
             }
             
             Spacer()
-                
             
             VStack(alignment: .leading, spacing: 0) {
                 Text("Today's Focus")
@@ -55,18 +47,21 @@ struct TodayFocusCard: View {
                     .foregroundColor(AppTheme.Colors.white100)
                     .padding(.bottom, 2)
                 
-                Text("\(todayFocus.courseName)")
+                Text("\(todayFocus!.courseName)")
                     .font(AppTheme.textStyle(size: 20, weight: .semibold))
                     .foregroundColor(AppTheme.Colors.white100)
                     .lineLimit(2)
                     .minimumScaleFactor(0.8)
                     
                 Spacer()
-                
+ 
                 HStack(spacing: AppTheme.Spacing.xxSmall) {
-                    Image(systemName: "clock")
-                        .font(.system(size: 14))
-                    Text("\(todayFocus.allocatedDuration)")
+                    Image("clock-white")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 16, height: 16)
+                    
+                    Text("\(todayFocus!.allocatedDuration)")
                         .font(AppTheme.textStyle(size: 13, weight: .regular))
                 }
                 .foregroundColor(AppTheme.Colors.white100)
@@ -74,14 +69,14 @@ struct TodayFocusCard: View {
                 .padding(.vertical, AppTheme.Spacing.xxSmall)
                 .background(AppTheme.Colors.white100.opacity(0.18))
                 .clipShape(RoundedRectangle(cornerRadius: AppTheme.radius.small))
-                .padding(.bottom, AppTheme.Spacing.xSmall)
+                .padding(.bottom, AppTheme.Spacing.xxSmall)
                 
                 
                 Button(action: {
                     print("Let's Start is pressed")
                 }) {
                     Text("Let's Start")
-                        .font(AppTheme.textStyle(size: 13, weight: .medium))
+                        .font(AppTheme.textStyle(size: 13, weight: .semibold))
                         .foregroundColor(AppTheme.Colors.purple200)
                         .frame(width: 120, height: 36)
                         .background(AppTheme.Colors.white100)
@@ -102,6 +97,6 @@ struct TodayFocusCard: View {
     
 }
 
-#Preview {
-    TodayFocusCard()
-}
+//#Preview {
+//    TodayFocusCard()
+//}

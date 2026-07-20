@@ -10,13 +10,7 @@ import Common
 
 struct DeadlineCard: View {
     var color: Color
-    var upcomingDeadline: UpcomingDeadline = UpcomingDeadline(
-        deadlineId: "dl_881",
-        title: "Midterm",
-        courseName: "Operating Systems",
-        dueText: "4 Days left",
-        dueDate: "2026-07-18T23:59:59Z"
-    )
+    var upcomingDeadline: UpcomingDeadline
     
     var body: some View {
         HStack {
@@ -60,7 +54,7 @@ struct DeadlineCard: View {
     }
 }
 
-#Preview {
-    DeadlineCard(color: AppTheme.Colors.red100)
-}
+//#Preview {
+//    DeadlineCard(color: AppTheme.Colors.red100)
+//}
 

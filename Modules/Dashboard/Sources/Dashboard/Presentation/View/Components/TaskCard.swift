@@ -9,16 +9,10 @@ import SwiftUI
 import Common
 
 struct TaskCard: View {
-    var task = Task(
-        taskId: "task_003",
-        title: "Finish Quiz",
-        durationMinutes: 20,
-        priority: "HIGH",
-        isCompleted: true
-    )
+    var task: Task?
     
     private var priorityColor: Color {
-        switch task.priority.uppercased() {
+        switch task!.priority.uppercased() {
         case "HIGH":
             return AppTheme.Colors.red100
         case "MEDIUM":
@@ -33,7 +27,7 @@ struct TaskCard: View {
     var body: some View {
         HStack(spacing: 16) {
             
-            if task.isCompleted {
+            if task!.isCompleted {
                 Image(systemName: "checkmark.circle.fill")
                     .resizable()
                     .frame(width: 24, height: 24)
@@ -45,12 +39,12 @@ struct TaskCard: View {
             }
             
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xxSmall) {
-                Text(task.title)
+                Text(task!.title)
                     .font(AppTheme.textStyle(size: 15, weight: .medium))
                     .foregroundColor(.primary)
                 
                 HStack(spacing: AppTheme.Spacing.xxxSmall) {
-                    Text("\(task.durationMinutes) min")
+                    Text("\(task!.durationMinutes) min")
                         .font(AppTheme.textStyle(size: 11, weight: .regular))
                         .foregroundColor(AppTheme.Colors.gray200)
                     
@@ -58,7 +52,7 @@ struct TaskCard: View {
                         .font(.system(size: 20))
                         .foregroundColor(AppTheme.Colors.gray200)
                     
-                    Text(task.priority.uppercased())
+                    Text(task!.priority.uppercased())
                         .font(AppTheme.textStyle(size: 11, weight: .bold))
                         .foregroundColor(priorityColor)
                 }
@@ -78,6 +72,6 @@ struct TaskCard: View {
 }
 
 
-#Preview {
-    TaskCard()
-}
+//#Preview {
+//    TaskCard()
+//}
