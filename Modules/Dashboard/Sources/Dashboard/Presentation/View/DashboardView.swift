@@ -9,8 +9,12 @@ import SwiftUI
 import Common
 
 struct DashboardView: View {
-    @StateObject private var viewModel: DashboardViewModel = DashboardViewModel()
-    
+    @ObservedObject public var viewModel: DashboardViewModel
+        
+    public init(viewModel: DashboardViewModel) {
+        self.viewModel = viewModel
+    }
+
     var body: some View {
         VStack {
             if viewModel.user != nil {
@@ -45,7 +49,9 @@ struct DashboardView: View {
                                 }
                             }
                             
-                            TasksList(todayTasks: $viewModel.todayTasks)
+                            TasksList(todayTasks: $viewModel.todayTasks) { selectedTask in
+                                viewModel.onTaskSelected?(selectedTask.taskId, selectedTask.title)
+                            }
                         }
                     }
                     
@@ -87,5 +93,5 @@ struct DashboardView: View {
 }
 
 #Preview {
-    DashboardView()
+    DashboardView(viewModel: DashboardViewModel())
 }
