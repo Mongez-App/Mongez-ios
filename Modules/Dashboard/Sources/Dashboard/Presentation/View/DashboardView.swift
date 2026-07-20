@@ -92,6 +92,8 @@ struct DashboardView: View {
     }
 }
 
-#Preview {
-    DashboardView(viewModel: DashboardViewModel())
+struct DashboardView_Previews: PreviewProvider {
+    static var previews: some View {
+        DashboardView(viewModel: DashboardViewModel())
+    }
 }
