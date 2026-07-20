@@ -10,7 +10,7 @@ import Common
 
 struct TaskCard: View {
     var task: Task?
-    
+    var onTaskTap: (() -> Void)?
     private var priorityColor: Color {
         switch task!.priority.uppercased() {
         case "HIGH":
@@ -25,6 +25,9 @@ struct TaskCard: View {
     }
     
     var body: some View {
+        Button(action: {
+                    onTaskTap?()
+        }) {
         HStack(spacing: 16) {
             
             if task!.isCompleted {
@@ -68,6 +71,8 @@ struct TaskCard: View {
             RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
                 .stroke(AppTheme.Colors.gray100, lineWidth: 1)
         )
+            }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 

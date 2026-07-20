@@ -7,13 +7,16 @@
 
 import Foundation
 
-class DashboardViewModel : ObservableObject {
+public class DashboardViewModel : ObservableObject {
     @Published var user: User?
     @Published var todayFocus: TodayFocus?
     @Published var progressMetrics: ProgressMetrics?
     @Published var todayTasks: [Task]?
     @Published var upcomingDeadlines: [UpcomingDeadline]?
     
+    public init() {}
+    
+    public var onTaskSelected: ((String, String) -> Void)?
     var isEmpty: Bool = false
     
 //    let getDashboardDetailsUseCase: GetDashboardDetailsUseCaseProtocol
@@ -42,5 +45,9 @@ class DashboardViewModel : ObservableObject {
         progressMetrics = dashboard.progressMetrics
         todayTasks = dashboard.todayTasks
         upcomingDeadlines = dashboard.upcomingDeadlines
+    }
+    
+    public func selectTask(courseId: String, taskTitle: String) {
+        onTaskSelected?(courseId, taskTitle)
     }
 }
