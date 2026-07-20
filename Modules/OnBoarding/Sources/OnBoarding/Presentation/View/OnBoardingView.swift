@@ -9,9 +9,11 @@ import SwiftUI
 import Common
 
 public struct OnBoardingView: View {
-    @StateObject private var viewModel = OnboardingViewModel()
-    
-    public init() {}
+    @ObservedObject public var viewModel: OnboardingViewModel
+        
+    public init(viewModel: OnboardingViewModel) {
+        self.viewModel = viewModel
+    }
     
     public var body: some View {
         VStack {

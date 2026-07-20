@@ -10,6 +10,8 @@ import Combine
 
 public class OnboardingViewModel : ObservableObject{
     @Published public var currentPage : Int = 0
+    public var onFinishOnboarding: (() -> Void)?
+    
     public let steps : [OnboardingStep] = [
         OnboardingStep(image: "onboarding_img1", title:"Study without the stress" , descreption: "AI creates your perfect study schedule automatically."),
         OnboardingStep(image: "onboarding_img2", title:"Your time, perfetcly optimized" , descreption: "Sync your calender and let AI fit studying into your free time ."),
@@ -18,6 +20,9 @@ public class OnboardingViewModel : ObservableObject{
     public var isLastPage : Bool {
         currentPage == steps.count - 1
     }
+    
+    public init() {}
+    
     public func nextPage(){
         if currentPage < steps.count-1 {
             currentPage+=1
@@ -34,7 +39,7 @@ public class OnboardingViewModel : ObservableObject{
             finishOnboarding()
         }
         private func finishOnboarding(){
-            print("onboarding Finshed")
+            onFinishOnboarding?()
         }
     }
 
