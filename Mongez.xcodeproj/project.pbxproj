@@ -3,11 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		03C9EB5B300B8D3500BE5EA7 /* Authntication in Frameworks */ = {isa = PBXBuildFile; productRef = 03C9EB5A300B8D3500BE5EA7 /* Authntication */; };
+		03224E73300D2D61007CED78 /* Authntication in Frameworks */ = {isa = PBXBuildFile; productRef = 03224E72300D2D61007CED78 /* Authntication */; };
+		03224E76300D2D7D007CED78 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 03224E75300D2D7D007CED78 /* Common */; };
+		038C2DD7300E35810046780D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 038C2DD6300E35810046780D /* GoogleService-Info.plist */; };
 		5ABEF5C83007A98600B1ACEF /* MongezApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5C73007A98600B1ACEF /* MongezApp.swift */; };
 		5ABEF5CA3007A98600B1ACEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5C93007A98600B1ACEF /* ContentView.swift */; };
 		5ABEF5CC3007A98800B1ACEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5ABEF5CB3007A98800B1ACEF /* Assets.xcassets */; };
@@ -17,7 +19,6 @@
 		5ABEF5DE3007A98900B1ACEF /* MongezTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5DD3007A98900B1ACEF /* MongezTests.swift */; };
 		5ABEF5E83007A98900B1ACEF /* MongezUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5E73007A98900B1ACEF /* MongezUITests.swift */; };
 		5ABEF5EA3007A98900B1ACEF /* MongezUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5E93007A98900B1ACEF /* MongezUITestsLaunchTests.swift */; };
-		9F9361E2300856C500FC34D5 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 9F9361E1300856C500FC34D5 /* Common */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		038C2DD6300E35810046780D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		038C2DD8300E37C40046780D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		5ABEF5C43007A98600B1ACEF /* Mongez.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mongez.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5ABEF5C73007A98600B1ACEF /* MongezApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MongezApp.swift; sourceTree = "<group>"; };
 		5ABEF5C93007A98600B1ACEF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -57,8 +60,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03C9EB5B300B8D3500BE5EA7 /* Authntication in Frameworks */,
-				9F9361E2300856C500FC34D5 /* Common in Frameworks */,
+				03224E73300D2D61007CED78 /* Authntication in Frameworks */,
+				03224E76300D2D7D007CED78 /* Common in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +106,8 @@
 		5ABEF5C63007A98600B1ACEF /* Mongez */ = {
 			isa = PBXGroup;
 			children = (
+				038C2DD8300E37C40046780D /* Info.plist */,
+				038C2DD6300E35810046780D /* GoogleService-Info.plist */,
 				5ABEF5C73007A98600B1ACEF /* MongezApp.swift */,
 				5ABEF5C93007A98600B1ACEF /* ContentView.swift */,
 				5ABEF5CB3007A98800B1ACEF /* Assets.xcassets */,
@@ -162,7 +167,8 @@
 			);
 			name = Mongez;
 			packageProductDependencies = (
-				03C9EB5A300B8D3500BE5EA7 /* Authntication */,
+				03224E72300D2D61007CED78 /* Authntication */,
+				03224E75300D2D7D007CED78 /* Common */,
 			);
 			productName = Mongez;
 			productReference = 5ABEF5C43007A98600B1ACEF /* Mongez.app */;
@@ -236,6 +242,12 @@
 				Base,
 			);
 			mainGroup = 5ABEF5BB3007A98600B1ACEF;
+			packageReferences = (
+				038D5376300CE93A00579547 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				038D5377300CEA5200579547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				03224E71300D2D61007CED78 /* XCLocalSwiftPackageReference "Modules/Authntication" */,
+				03224E74300D2D7D007CED78 /* XCLocalSwiftPackageReference "Modules/Common" */,
+			);
 			productRefGroup = 5ABEF5C53007A98600B1ACEF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -254,6 +266,7 @@
 			files = (
 				5ABEF5CF3007A98800B1ACEF /* Preview Assets.xcassets in Resources */,
 				5ABEF5CC3007A98800B1ACEF /* Assets.xcassets in Resources */,
+				038C2DD7300E35810046780D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -442,6 +455,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Mongez/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Mongez/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -470,6 +484,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Mongez/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Mongez/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -601,12 +616,42 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		03224E71300D2D61007CED78 /* XCLocalSwiftPackageReference "Modules/Authntication" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Modules/Authntication;
+		};
+		03224E74300D2D7D007CED78 /* XCLocalSwiftPackageReference "Modules/Common" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Modules/Common;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		038D5376300CE93A00579547 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = exactVersion;
+				version = 10.29.0;
+			};
+		};
+		038D5377300CEA5200579547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = exactVersion;
+				version = 7.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
-		03C9EB5A300B8D3500BE5EA7 /* Authntication */ = {
+		03224E72300D2D61007CED78 /* Authntication */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Authntication;
 		};
-		9F9361E1300856C500FC34D5 /* Common */ = {
+		03224E75300D2D7D007CED78 /* Common */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Common;
 		};

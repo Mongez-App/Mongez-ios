@@ -74,9 +74,11 @@ public final class AuthViewModel: ObservableObject {
         do {
             switch mode {
             case .login:
-                user = try await useCase.executeLogin(email: email, password: password)
+            let idToken = try await FirebaseEmailAuthService.shared.signIn(email: email, password: password)
+                user = try await useCase.executeLogin(email: email, password: password, idToken: idToken)
             case .register:
-                user = try await useCase.executeRegister(name: name, email: email, password: password)
+                let idToken = try await FirebaseEmailAuthService.shared.register(name: name, email: email, password: password)
+                user = try await useCase.executeRegister(name: name, email: email, password: password, idToken: idToken)
             }
         } catch {
             errorMessage = mapError(error)
@@ -86,6 +88,18 @@ public final class AuthViewModel: ObservableObject {
     public func continueAsGuest() async {
         errorMessage = "Guest login is not available yet"
     }
+    public func signInWithGoogle() async {
+            errorMessage = nil
+            isLoading = true
+            defer { isLoading = false }
+     
+            do {
+                let firebaseIDToken = try await GoogleAuthService.shared.signInAndGetFirebaseIDToken()
+                user = try await useCase.executeGoogleLogin(idToken: firebaseIDToken)
+            } catch {
+                errorMessage = mapError(error)
+            }
+        }
 
     private func mapError(_ error: Error) -> String {
         if let urlError = error as? URLError {

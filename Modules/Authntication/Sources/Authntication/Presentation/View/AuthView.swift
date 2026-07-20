@@ -5,6 +5,13 @@
 //  Created by Shady Eldakrory on 18/07/2026.
 //
 
+//
+//  AuthView.swift
+//
+//
+//  Created by Shady Eldakrory on 18/07/2026.
+//
+
 import SwiftUI
 import Common
 
@@ -21,8 +28,7 @@ public struct AuthView: View {
     public init(viewModel: AuthViewModel? = nil) {
         _viewModel = StateObject(wrappedValue: viewModel ?? AuthViewModel())
     }
-
-
+ 
     public var body: some View {
         ZStack {
             AppTheme.Colors.backGround
@@ -45,7 +51,6 @@ public struct AuthView: View {
                         HStack {
                             Spacer()
                             Button("Forgot Password?") {
-                                // TODO: forgot password flow
                             }
                             .font(AppTheme.textStyle(size: 13, weight: .medium))
                             .foregroundColor(AppTheme.Colors.primaryColor)
@@ -82,6 +87,7 @@ public struct AuthView: View {
         }
     }
 
+
     private var header: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(viewModel.mode == .login ? "Welcome back" : "Create account")
@@ -93,7 +99,6 @@ public struct AuthView: View {
         }
         .padding(.bottom, AppTheme.Spacing.small)
     }
-
 
 
     private func fieldBlock(field: Field, title: String, icon: String, text: Binding<String>, placeholder: String, keyboard: UIKeyboardType = .default) -> some View {
@@ -214,6 +219,7 @@ public struct AuthView: View {
 
     private var googleButton: some View {
         Button {
+            Task { await viewModel.signInWithGoogle() }
         } label: {
             HStack {
                 Image("google_logo")
@@ -247,5 +253,6 @@ public struct AuthView: View {
             Spacer()
         }
         .padding(.top, AppTheme.Spacing.small)
+        .padding(.bottom, 32)
     }
 }

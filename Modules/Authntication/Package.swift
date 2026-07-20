@@ -12,14 +12,19 @@ let package = Package(
             name: "Authntication",
             targets: ["Authntication"]),
     ],
-    dependencies: [.package(path: "../Common")],
+    dependencies: [
+        .package(path: "../Common"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.29.0"),
+        .package(url: "https://github.com/google/GoogleSignIn-iOS.git", from: "7.1.0") // ضفنا .git
+    ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "Authntication",
             dependencies: [
-                .product(name: "Common",package: "Common")
+                .product(name: "Common", package: "Common"),
+                .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
+                .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
+                .product(name: "GoogleSignInSwift", package: "GoogleSignIn-iOS")
             ]
         ),
         .testTarget(
