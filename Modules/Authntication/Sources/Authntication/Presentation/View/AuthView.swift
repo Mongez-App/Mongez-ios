@@ -113,14 +113,16 @@ public struct AuthView: View {
                 .foregroundColor(AppTheme.Colors.black100)
             HStack {
                 Image(icon)
-                    .foregroundColor(AppTheme.Colors.black100)
+                    .foregroundColor(AppTheme.Colors.gray300)
                 TextField(placeholder, text: text)
                     .keyboardType(keyboard)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
                     .focused($focusedField, equals: field)
             }
-            .padding(AppTheme.Spacing.small)
+            .frame(maxWidth: .infinity)
+            .frame(height: 48)
+            .padding(.horizontal, AppTheme.Spacing.xSmall)
             .background(
                 RoundedRectangle(cornerRadius: AppTheme.radius.small)
                     .stroke(borderColor(for: field), lineWidth: borderWidth(for: field))
@@ -135,7 +137,7 @@ public struct AuthView: View {
                 .foregroundColor(AppTheme.Colors.black100)
             HStack {
                 Image("password")
-                    .foregroundColor(AppTheme.Colors.black100)
+                    .foregroundColor(AppTheme.Colors.gray300)
                 Group {
                     if isVisible.wrappedValue {
                         TextField("••••••••", text: text)
@@ -151,7 +153,9 @@ public struct AuthView: View {
                         .foregroundColor(secondaryTextColor)
                 }
             }
-            .padding(AppTheme.Spacing.small)
+            .frame(maxWidth: .infinity)
+            .frame(height: 48)
+            .padding(.horizontal, AppTheme.Spacing.xSmall)
             .background(
                 RoundedRectangle(cornerRadius: AppTheme.radius.small)
                     .stroke(borderColor(for: field), lineWidth: borderWidth(for: field))
@@ -184,7 +188,7 @@ public struct AuthView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, AppTheme.Spacing.xSmall)
+            .frame(height: 48)
             .background(AppTheme.Colors.purple200)
             .foregroundColor(AppTheme.Colors.white100)
             .cornerRadius(AppTheme.radius.meduim)
@@ -212,7 +216,7 @@ public struct AuthView: View {
                     .font(AppTheme.textStyle(size: 15, weight: .medium))
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, AppTheme.Spacing.small)
+            .frame(height: 48)
             .background(
                 RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
                     .stroke(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.4))
@@ -230,11 +234,11 @@ public struct AuthView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 18, height: 18)
-                Text("Sign in with Google")
+                Text("Continue with Google")
                     .font(AppTheme.textStyle(size: 15, weight: .medium))
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, AppTheme.Spacing.small)
+            .frame(height: 48)
             .background(
                 RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
                     .stroke(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.4))

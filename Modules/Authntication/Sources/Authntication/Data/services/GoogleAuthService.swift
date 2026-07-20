@@ -72,10 +72,7 @@ public final class GoogleAuthService {
     }
 
     private static func topViewController(
-        base: UIViewController? = UIApplication.shared.connectedScenes
-            .compactMap { ($0 as? UIWindowScene)?.keyWindow }
-            .first?.rootViewController
-    ) -> UIViewController? {
+        base: UIViewController? = nil) -> UIViewController? {
         if let nav = base as? UINavigationController {
             return topViewController(base: nav.visibleViewController)
         }
