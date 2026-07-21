@@ -22,7 +22,7 @@ struct CalendarSyncStepView: View {
                     .font(AppTheme.textStyle(size: 24, weight: .bold))
                     .foregroundColor(AppTheme.Colors.black100)
 
-                Text("Connect your Google Calendar so AI can avoid conflicts and create the best schedule for you.")
+                Text("Connect your Apple Calendar so AI can avoid conflicts and create the best schedule for you.")
                     .font(AppTheme.textStyle(size: 16, weight: .regular))
                     .foregroundColor(AppTheme.Colors.gray200)
                     .multilineTextAlignment(.center)
@@ -35,7 +35,7 @@ struct CalendarSyncStepView: View {
                 Button(action: {
                     viewModel.syncCalendar()
                 }) {
-                    Text("Sync Google Calendar")
+                    Text("Sync Apple Calendar")
                         .font(AppTheme.textStyle(size: 18, weight: .semibold))
                         .foregroundColor(AppTheme.Colors.white100)
                         .frame(maxWidth: .infinity)
