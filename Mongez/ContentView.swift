@@ -69,9 +69,47 @@ struct ContentView: View {
                                 )
                             )
                         },
-                        coursesFactory: {
+                        courseDetailsFactory: { courseId in
+                            let courseDetailsRepository = MockCourseDetailsRepository()
+                            let detailsCoordinator = CourseDetailsCoordinator()
+                            let detailsViewModel = CourseDetailsViewModel(
+                                courseId: courseId,
+                                getMaterialsUseCase: GetCourseMaterialsUseCase(repository: courseDetailsRepository),
+                                getTasksUseCase: GetCourseTasksUseCase(repository: courseDetailsRepository)
+                            )
+                            
                             return AnyView(
-                                CoursesView()
+                                CourseDetailsCoordinatorView(
+                                    coordinator: detailsCoordinator,
+                                    viewModel: detailsViewModel,
+                                    path: Binding(get: { coordinator.path }, set: { coordinator.path = $0 }),
+                                    studyRoomFactory: { roomId, taskTitle in
+                                        let chatRepository = MockChatRepository()
+                                        let studyViewModel = StudyRoomViewModel(
+                                            courseId: roomId,
+                                            getChatHistoryUseCase: GetChatHistoryUseCase(repository: chatRepository),
+                                            sendMessageUseCase: SendMessageUseCase(repository: chatRepository)
+                                        )
+                                        
+                                        return AnyView(
+                                            StudyRoomView(
+                                                viewModel: studyViewModel,
+                                                taskTitle: taskTitle
+                                            )
+                                        )
+                                    }
+                                )
+                            )
+                        },
+                        coursesFactory: {
+                            let coursesViewModel = CoursesViewModel()
+                            return AnyView(
+                                CoursesView(viewModel: coursesViewModel)
+                                    .onAppear {
+                                        coursesViewModel.onCourseSelected = { [weak coordinator] courseId in
+                                            coordinator?.push(.courseDetails(courseId: courseId))
+                                        }
+                                    }
                             )
                         }
                     )

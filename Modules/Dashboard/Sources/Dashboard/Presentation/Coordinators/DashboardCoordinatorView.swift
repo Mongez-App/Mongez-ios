@@ -13,17 +13,20 @@ public struct DashboardCoordinatorView: View {
     @StateObject var viewModel: DashboardViewModel
     
     private let studyRoomFactory: (String, String) -> AnyView
+    private let courseDetailsFactory: (String) -> AnyView
     private let coursesFactory: () -> AnyView
     
     public init(
         coordinator: DashboardCoordinator,
         viewModel: DashboardViewModel,
         studyRoomFactory: @escaping (String, String) -> AnyView,
+        courseDetailsFactory: @escaping (String) -> AnyView,
         coursesFactory: @escaping () -> AnyView
     ) {
         self.coordinator = coordinator
         self._viewModel = StateObject(wrappedValue: viewModel)
         self.studyRoomFactory = studyRoomFactory
+        self.courseDetailsFactory = courseDetailsFactory
         self.coursesFactory = coursesFactory
     }
     
@@ -54,6 +57,8 @@ public struct DashboardCoordinatorView: View {
                 switch route {
                 case .studyRoom(let courseId, let taskTitle):
                     studyRoomFactory(courseId, taskTitle)
+                case .courseDetails(let courseId):
+                    courseDetailsFactory(courseId)
                 }
             }
         }
