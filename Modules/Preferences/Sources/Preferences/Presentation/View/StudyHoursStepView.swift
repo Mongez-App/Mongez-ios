@@ -49,7 +49,7 @@ private struct HourWheelPicker: View {
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: AppTheme.Spacing.small)
+            RoundedRectangle(cornerRadius: 0)
                 .fill(AppTheme.Colors.purple200.opacity(0.10))
                 .frame(height: Self.rowHeight)
 
@@ -65,12 +65,13 @@ private struct HourWheelPicker: View {
             .animation(isDragging ? nil : .interactiveSpring(), value: selection)
         }
         .frame(height: Self.rowHeight * CGFloat(Self.visibleRows))
+        .background(
+            Capsule()
+                .fill(AppTheme.Colors.white100)
+                .appShadow(opacity: 0.8, radius: 5, y: 0)
+        )
         .clipShape(Capsule())
         .contentShape(Capsule())
-        .overlay(
-            Capsule()
-                .stroke(AppTheme.Colors.purple200.opacity(0.5), lineWidth: 1.5)
-        )
         .appShadow(opacity: 0.25, radius: 16, y: 8)
         .gesture(
             DragGesture()

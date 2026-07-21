@@ -66,8 +66,9 @@ private struct DayChip: View {
                     .background(
                         RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
                             .fill(isSelected ? AppTheme.Colors.purple200 : AppTheme.Colors.white100)
+                            .appShadow(opacity: isSelected ? 0.75 : 0.65, radius: 5, y: 0)
                     )
-                    .appShadow(opacity: isSelected ? 0.35 : 0.15, radius: 10, y: 4)
+                    
 
                 if isSelected {
                     Image(systemName: "checkmark")

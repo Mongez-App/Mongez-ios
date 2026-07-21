@@ -12,6 +12,7 @@ import Authntication
 import Dashboard
 import AIStudyRoom
 import Preferences
+import Coures
 
 struct ContentView: View {
     @StateObject private var appCoordinator = AppCoordinator()
@@ -65,6 +66,11 @@ struct ContentView: View {
                                     viewModel: studyViewModel,
                                     taskTitle: taskTitle
                                 )
+                            )
+                        },
+                        coursesFactory: {
+                            return AnyView(
+                                CoursesView()
                             )
                         }
                     )

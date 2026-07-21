@@ -16,13 +16,13 @@ public enum AppTab: Int, CaseIterable {
     public var iconName: String {
         switch self {
         case .dashboard:
-            return "house.fill"
+            return "home"
         case .courses:
-            return "house.fill"
+            return "courses"
         case .roadmap:
-            return "house.fill"
+            return "roadmap"
         case .profile:
-            return "person.fill"
+            return "name"
         }
     }
 }

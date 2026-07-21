@@ -18,7 +18,7 @@ public struct TabBarView: View {
                     }
                 }) {
                     VStack(spacing: 6) {
-                        Image(systemName: tab.iconName)
+                        Image(tab.iconName, bundle: .main)
                             .renderingMode(.template)
                             .resizable()
                             .scaledToFit()
@@ -40,7 +40,7 @@ public struct TabBarView: View {
         .clipShape(Capsule())
         .appShadow(opacity: 0.55, radius: 6)
         .padding(.horizontal, AppTheme.Spacing.large)
-        .padding(.bottom, AppTheme.Spacing.xSmall)
+        .padding(.bottom, AppTheme.Spacing.xxSmall)
     }
 }
 
