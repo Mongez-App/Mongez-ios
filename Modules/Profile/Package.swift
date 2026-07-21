@@ -4,13 +4,13 @@
 import PackageDescription
 
 let package = Package(
-    name: "CourseDetails",
+    name: "Profile",
     platforms: [.iOS(.v16)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "CourseDetails",
-            targets: ["CourseDetails"]),
+            name: "Profile",
+            targets: ["Profile"]),
     ],
     dependencies: [.package(path: "../Common")
                    ],
@@ -18,10 +18,10 @@ let package = Package(
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "CourseDetails",dependencies: [
+            name: "Profile",dependencies: [
                 .product(name: "Common",package: "Common")]),
         .testTarget(
-            name: "CourseDetailsTests",
-            dependencies: ["CourseDetails"]),
+            name: "ProfileTests",
+            dependencies: ["Profile"]),
     ]
 )
