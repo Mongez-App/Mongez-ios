@@ -32,21 +32,29 @@ public struct StudyRoomView: View {
                 .background(AppTheme.Colors.gray100)
                 .padding(.bottom, AppTheme.Spacing.small)
             
-            ScrollViewReader { proxy in
-                ScrollView {
-                    LazyVStack(spacing: AppTheme.Spacing.medium) {
-                        ForEach(viewModel.messages) { message in
-                            MessageBubbleView(message: message)
-                                .id(message.id)
+            ZStack {
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        LazyVStack(spacing: AppTheme.Spacing.medium) {
+                            ForEach(viewModel.messages) { message in
+                                MessageBubbleView(message: message)
+                                    .id(message.id)
+                            }
                         }
+                        .padding(AppTheme.Spacing.small)
                     }
-                    .padding(AppTheme.Spacing.small)
+                    .onChange(of: viewModel.messages.count) { _ in
+                        scrollToBottom(proxy: proxy)
+                    }
+                    .onChange(of: viewModel.messages.last?.content) { _ in
+                        scrollToBottom(proxy: proxy)
+                    }
                 }
-                .onChange(of: viewModel.messages.count) { _ in
-                    scrollToBottom(proxy: proxy)
-                }
-                .onChange(of: viewModel.messages.last?.content) { _ in
-                    scrollToBottom(proxy: proxy)
+                
+                if viewModel.isLoading {
+                    ProgressView()
+                        .scaleEffect(1.5)
+                        .tint(AppTheme.Colors.purple200)
                 }
             }
             
