@@ -35,7 +35,7 @@ public final class AppCoordinator: ObservableObject, Coordinator {
     @Published public var coursesCoordinator: CoursesCoordinator?
     
     public init() {
-        startCourses()
+        startOnboarding()
     }
     
     public func startOnboarding() {
