@@ -33,6 +33,8 @@ public class CoursesViewModel: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
+    public var onCourseSelected: ((String) -> Void)?
+    
     public init() {
         let repository = CoursesRepositoryImpl()
         self.fetchCoursesUseCase = FetchCoursesUseCase(repository: repository)
@@ -45,6 +47,9 @@ public class CoursesViewModel: ObservableObject {
         loadCourses()
     }
     
+    public func selectCourse(id: String) {
+        onCourseSelected?(id)
+    }
     
     public func loadCourses() {
         isLoading = true

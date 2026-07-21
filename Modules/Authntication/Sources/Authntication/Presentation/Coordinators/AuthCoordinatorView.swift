@@ -21,8 +21,12 @@ public struct AuthCoordinatorView: View {
         NavigationStack(path: $coordinator.path) {
         AuthView(viewModel: viewModel)
             .onAppear {
-                viewModel.onAuthSuccess = { [weak coordinator] in
-                    coordinator?.onLoginSuccess?()
+                viewModel.onAuthSuccess = { [weak coordinator] isNewUser in
+                    if isNewUser {
+                        coordinator?.onRegisterSuccess?()
+                    } else {
+                        coordinator?.onLoginSuccess?()
+                    }
                 }
             }
         }
