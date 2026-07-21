@@ -91,6 +91,7 @@ struct DashboardView: View {
                 //.padding(.horizontal, AppTheme.Spacing.small)
                 .padding(.vertical, AppTheme.Spacing.small)
             }
+            .padding(.bottom, 85)
             .background(AppTheme.Colors.white100)
         }
         .background(AppTheme.Colors.white100)
