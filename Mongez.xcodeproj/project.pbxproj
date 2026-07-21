@@ -12,6 +12,7 @@
 		038C2DD7300E35810046780D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 038C2DD6300E35810046780D /* GoogleService-Info.plist */; };
 		03C4C2A2300A8FFD00031E11 /* OnBoarding in Frameworks */ = {isa = PBXBuildFile; productRef = 03C4C2A1300A8FFD00031E11 /* OnBoarding */; };
 		3153CDC7300E8B3800635A33 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3153CDC6300E8B3800635A33 /* AppCoordinator.swift */; };
+		3195CCEB300EAD82004F0C28 /* CourseDetails in Frameworks */ = {isa = PBXBuildFile; productRef = 3195CCEA300EAD82004F0C28 /* CourseDetails */; };
 		31A2F377300BF7A70014E39A /* Dashboard in Frameworks */ = {isa = PBXBuildFile; productRef = 31A2F376300BF7A70014E39A /* Dashboard */; };
 		31F0B54B300C0D0000293455 /* AIStudyRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 31F0B54A300C0D0000293455 /* AIStudyRoom */; };
 		5ABEF5C83007A98600B1ACEF /* MongezApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5C73007A98600B1ACEF /* MongezApp.swift */; };
@@ -67,6 +68,7 @@
 			files = (
 				03224E73300D2D61007CED78 /* Authntication in Frameworks */,
 				03224E76300D2D7D007CED78 /* Common in Frameworks */,
+				3195CCEB300EAD82004F0C28 /* CourseDetails in Frameworks */,
 				03C4C2A2300A8FFD00031E11 /* OnBoarding in Frameworks */,
 				31A2F377300BF7A70014E39A /* Dashboard in Frameworks */,
 				31F0B54B300C0D0000293455 /* AIStudyRoom in Frameworks */,
@@ -181,6 +183,7 @@
 				03C4C2A1300A8FFD00031E11 /* OnBoarding */,
 				31A2F376300BF7A70014E39A /* Dashboard */,
 				31F0B54A300C0D0000293455 /* AIStudyRoom */,
+				3195CCEA300EAD82004F0C28 /* CourseDetails */,
 			);
 			productName = Mongez;
 			productReference = 5ABEF5C43007A98600B1ACEF /* Mongez.app */;
@@ -681,6 +684,10 @@
 		03C4C2A1300A8FFD00031E11 /* OnBoarding */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OnBoarding;
+		};
+		3195CCEA300EAD82004F0C28 /* CourseDetails */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CourseDetails;
 		};
 		31A2F376300BF7A70014E39A /* Dashboard */ = {
 			isa = XCSwiftPackageProductDependency;
