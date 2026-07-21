@@ -25,10 +25,12 @@ struct DashboardView: View {
                 VStack(spacing: AppTheme.Spacing.xLarge) {
                     if viewModel.todayFocus != nil {
                         TodayFocusCard(todayFocus: $viewModel.todayFocus)
+                            .padding(.horizontal, AppTheme.Spacing.small)
                     }
                     
                     if viewModel.progressMetrics != nil {
                         ProgressList(progressMetrics: $viewModel.progressMetrics)
+                            .padding(.leading, AppTheme.Spacing.small)
                     }
                     
                     if viewModel.todayTasks != nil {
@@ -53,6 +55,7 @@ struct DashboardView: View {
                                 viewModel.onTaskSelected?(selectedTask.taskId, selectedTask.title)
                             }
                         }
+                        .padding(.horizontal, AppTheme.Spacing.small)
                     }
                     
                     if viewModel.upcomingDeadlines != nil {
@@ -75,11 +78,13 @@ struct DashboardView: View {
                             
                             DeadlineList(upcomingDeadlines: $viewModel.upcomingDeadlines)
                         }
+                        .padding(.horizontal, AppTheme.Spacing.small)
                     }
                     
                     SuggestionCard()
+                        .padding(.horizontal, AppTheme.Spacing.small)
                 }
-                .padding(.horizontal, AppTheme.Spacing.small)
+                //.padding(.horizontal, AppTheme.Spacing.small)
                 .padding(.vertical, AppTheme.Spacing.small)
             }
             .background(AppTheme.Colors.white100)
