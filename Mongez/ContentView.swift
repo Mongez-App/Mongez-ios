@@ -12,6 +12,8 @@ import Authntication
 import Dashboard
 import AIStudyRoom
 import Preferences
+import Coures
+import CourseDetails
 
 struct ContentView: View {
     @StateObject private var appCoordinator = AppCoordinator()
@@ -64,6 +66,47 @@ struct ContentView: View {
                                 StudyRoomView(
                                     viewModel: studyViewModel,
                                     taskTitle: taskTitle
+                                )
+                            )
+                        }
+                    )
+                    .transition(.opacity)
+                }
+            case .courses:
+                if let coordinator = appCoordinator.coursesCoordinator {
+                    CoursesCoordinatorView(
+                        coordinator: coordinator,
+                        viewModel: CoursesViewModel(),
+                        courseDetailsFactory: { courseId in
+                            
+                            let courseDetailsRepository = MockCourseDetailsRepository()
+                            let detailsCoordinator = CourseDetailsCoordinator()
+                            let detailsViewModel = CourseDetailsViewModel(
+                                courseId: courseId,
+                                getMaterialsUseCase: GetCourseMaterialsUseCase(repository: courseDetailsRepository),
+                                getTasksUseCase: GetCourseTasksUseCase(repository: courseDetailsRepository)
+                            )
+                            
+                            return AnyView(
+                                CourseDetailsCoordinatorView(
+                                    coordinator: detailsCoordinator,
+                                    viewModel: detailsViewModel,
+                                    path: Binding(get: { coordinator.path }, set: { coordinator.path = $0 }),
+                                    studyRoomFactory: { roomId, taskTitle in
+                                        let chatRepository = MockChatRepository()
+                                        let studyViewModel = StudyRoomViewModel(
+                                            courseId: roomId,
+                                            getChatHistoryUseCase: GetChatHistoryUseCase(repository: chatRepository),
+                                            sendMessageUseCase: SendMessageUseCase(repository: chatRepository)
+                                        )
+                                        
+                                        return AnyView(
+                                            StudyRoomView(
+                                                viewModel: studyViewModel,
+                                                taskTitle: taskTitle
+                                            )
+                                        )
+                                    }
                                 )
                             )
                         }

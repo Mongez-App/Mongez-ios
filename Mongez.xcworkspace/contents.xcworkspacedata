@@ -2,10 +2,10 @@
 <Workspace
    version = "1.0">
    <FileRef
-       location = "group:Modules/CourseDetails">
+      location = "group:Modules/CourseDetails">
    </FileRef>
    <FileRef
-         location = "group:Modules/Coures">
+      location = "group:Modules/Coures">
    </FileRef>
    <FileRef
       location = "group:Modules/AIStudyRoom">

@@ -13,12 +13,14 @@ import OnBoarding
 import Dashboard
 import AIStudyRoom
 import Preferences
+import Coures
 
 public enum AppState {
     case onboarding
     case auth
     case preferences
     case dashboard
+    case courses
 }
 
 public final class AppCoordinator: ObservableObject, Coordinator {
@@ -30,6 +32,7 @@ public final class AppCoordinator: ObservableObject, Coordinator {
     @Published public var authCoordinator: AuthCoordinator?
     @Published public var preferencesCoordinator: PreferencesCoordinator?
     @Published public var dashboardCoordinator: DashboardCoordinator?
+    @Published public var coursesCoordinator: CoursesCoordinator?
     
     public init() {
         startOnboarding()
@@ -54,6 +57,13 @@ public final class AppCoordinator: ObservableObject, Coordinator {
         let coordinator = AuthCoordinator()
         
         coordinator.onLoginSuccess = { [weak self] in
+            guard let self = self else { return }
+            self.removeChild(coordinator)
+            self.authCoordinator = nil
+            self.startDashboard()
+        }
+        
+        coordinator.onRegisterSuccess = { [weak self] in
             guard let self = self else { return }
             self.removeChild(coordinator)
             self.authCoordinator = nil
@@ -85,5 +95,12 @@ public final class AppCoordinator: ObservableObject, Coordinator {
         addChild(coordinator)
         self.dashboardCoordinator = coordinator
         self.state = .dashboard
+    }
+    
+    public func startCourses() {
+        let coordinator = CoursesCoordinator()
+        addChild(coordinator)
+        self.coursesCoordinator = coordinator
+        self.state = .courses
     }
 }
