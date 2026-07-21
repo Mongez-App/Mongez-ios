@@ -52,7 +52,11 @@ struct DashboardView: View {
                             }
                             
                             TasksList(todayTasks: $viewModel.todayTasks) { selectedTask in
-                                viewModel.onTaskSelected?(selectedTask.taskId, selectedTask.title)
+                                viewModel.selectTask(
+                                    courseId: selectedTask.taskId,
+                                    taskTitle: selectedTask.title,
+                                    isCompleted: selectedTask.isCompleted
+                                )
                             }
                         }
                         .padding(.horizontal, AppTheme.Spacing.small)

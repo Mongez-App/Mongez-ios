@@ -45,8 +45,13 @@ public struct CourseTasksTabView: View {
                             .padding(.horizontal, AppTheme.Spacing.small)
                         
                         ForEach(todayTasks) { task in
-                            TaskRowView(task: task)
-                                .padding(.horizontal, AppTheme.Spacing.small)
+                            Button {
+                                viewModel.selectTask(task)
+                            } label: {
+                                TaskRowView(task: task)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .padding(.horizontal, AppTheme.Spacing.small)
                         }
                     }
                     
@@ -58,8 +63,13 @@ public struct CourseTasksTabView: View {
                             .padding(.horizontal, AppTheme.Spacing.small)
                         
                         ForEach(upcomingTasks) { task in
-                            TaskRowView(task: task)
-                                .padding(.horizontal, AppTheme.Spacing.small)
+                            Button {
+                                viewModel.selectTask(task)
+                            } label: {
+                                TaskRowView(task: task)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .padding(.horizontal, AppTheme.Spacing.small)
                         }
                     }
                 }

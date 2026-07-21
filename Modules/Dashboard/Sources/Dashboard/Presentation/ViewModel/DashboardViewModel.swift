@@ -47,7 +47,9 @@ public class DashboardViewModel : ObservableObject {
         upcomingDeadlines = dashboard.upcomingDeadlines
     }
     
-    public func selectTask(courseId: String, taskTitle: String) {
-        onTaskSelected?(courseId, taskTitle)
+    public func selectTask(courseId: String, taskTitle: String ,isCompleted : Bool) {
+        if !isCompleted {
+            onTaskSelected?(courseId, taskTitle)
+        }
     }
 }
