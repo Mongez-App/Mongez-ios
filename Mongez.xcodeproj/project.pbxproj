@@ -11,6 +11,7 @@
 		03224E76300D2D7D007CED78 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 03224E75300D2D7D007CED78 /* Common */; };
 		038C2DD7300E35810046780D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 038C2DD6300E35810046780D /* GoogleService-Info.plist */; };
 		03C4C2A2300A8FFD00031E11 /* OnBoarding in Frameworks */ = {isa = PBXBuildFile; productRef = 03C4C2A1300A8FFD00031E11 /* OnBoarding */; };
+		AAF3D4DFECC50FF2DCF6CD70 /* Preferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2865055BCA38AF44B8B266E9 /* Preferences */; };
 		3153CDC7300E8B3800635A33 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3153CDC6300E8B3800635A33 /* AppCoordinator.swift */; };
 		31A2F377300BF7A70014E39A /* Dashboard in Frameworks */ = {isa = PBXBuildFile; productRef = 31A2F376300BF7A70014E39A /* Dashboard */; };
 
@@ -71,6 +72,7 @@
 				03224E73300D2D61007CED78 /* Authntication in Frameworks */,
 				03224E76300D2D7D007CED78 /* Common in Frameworks */,
 				03C4C2A2300A8FFD00031E11 /* OnBoarding in Frameworks */,
+				AAF3D4DFECC50FF2DCF6CD70 /* Preferences in Frameworks */,
 				31A2F377300BF7A70014E39A /* Dashboard in Frameworks */,
 
 				5AB1211B300DA1A600953837 /* Coures in Frameworks */,
@@ -186,6 +188,7 @@
 				03224E72300D2D61007CED78 /* Authntication */,
 				03224E75300D2D7D007CED78 /* Common */,
 				03C4C2A1300A8FFD00031E11 /* OnBoarding */,
+				2865055BCA38AF44B8B266E9 /* Preferences */,
 				31A2F376300BF7A70014E39A /* Dashboard */,
 
 				5AB1211A300DA1A600953837 /* Coures */,
@@ -692,6 +695,10 @@
 		03C4C2A1300A8FFD00031E11 /* OnBoarding */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OnBoarding;
+		};
+		2865055BCA38AF44B8B266E9 /* Preferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Preferences;
 		};
 		31A2F376300BF7A70014E39A /* Dashboard */ = {
 			isa = XCSwiftPackageProductDependency;

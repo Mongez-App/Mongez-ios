@@ -11,6 +11,7 @@ import OnBoarding
 import Authntication
 import Dashboard
 import AIStudyRoom
+import Preferences
 
 struct ContentView: View {
     @StateObject private var appCoordinator = AppCoordinator()
@@ -37,6 +38,15 @@ struct ContentView: View {
                     .transition(.opacity)
                 }
                 
+            case .preferences:
+                if let coordinator = appCoordinator.preferencesCoordinator {
+                    PreferencesCoordinatorView(
+                        coordinator: coordinator,
+                        viewModel: PreferencesViewModel()
+                    )
+                    .transition(.opacity)
+                }
+
             case .dashboard:
                 if let coordinator = appCoordinator.dashboardCoordinator {
                     DashboardCoordinatorView(

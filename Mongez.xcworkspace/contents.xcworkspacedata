@@ -17,6 +17,9 @@
       location = "group:Modules/Common">
    </FileRef>
    <FileRef
+      location = "group:Modules/Preferences">
+   </FileRef>
+   <FileRef
       location = "group:Modules/Authntication">
    </FileRef>
    <FileRef

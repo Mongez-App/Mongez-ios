@@ -12,10 +12,12 @@ import Authntication
 import OnBoarding
 import Dashboard
 import AIStudyRoom
+import Preferences
 
 public enum AppState {
     case onboarding
     case auth
+    case preferences
     case dashboard
 }
 
@@ -26,6 +28,7 @@ public final class AppCoordinator: ObservableObject, Coordinator {
     @Published public var state: AppState = .onboarding
     @Published public var onboardingCoordinator: OnboardingCoordinator?
     @Published public var authCoordinator: AuthCoordinator?
+    @Published public var preferencesCoordinator: PreferencesCoordinator?
     @Published public var dashboardCoordinator: DashboardCoordinator?
     
     public init() {
@@ -54,14 +57,29 @@ public final class AppCoordinator: ObservableObject, Coordinator {
             guard let self = self else { return }
             self.removeChild(coordinator)
             self.authCoordinator = nil
-            self.startDashboard()
+            self.startPreferences()
         }
-        
+
         addChild(coordinator)
         self.authCoordinator = coordinator
         self.state = .auth
     }
-    
+
+    public func startPreferences() {
+        let coordinator = PreferencesCoordinator()
+
+        coordinator.onFinish = { [weak self] in
+            guard let self = self else { return }
+            self.removeChild(coordinator)
+            self.preferencesCoordinator = nil
+            self.startDashboard()
+        }
+
+        addChild(coordinator)
+        self.preferencesCoordinator = coordinator
+        self.state = .preferences
+    }
+
     public func startDashboard() {
         let coordinator = DashboardCoordinator()
         addChild(coordinator)
