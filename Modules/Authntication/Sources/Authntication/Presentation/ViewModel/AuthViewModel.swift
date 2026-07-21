@@ -15,7 +15,7 @@ public final class AuthViewModel: ObservableObject {
         case login
         case register
     }
-    public var onAuthSuccess: (() -> Void)?
+    public var onAuthSuccess: ((_ isNewUser: Bool) -> Void)?
     
     @Published public var mode: Mode = .login
     @Published public var name: String = ""
@@ -77,11 +77,12 @@ public final class AuthViewModel: ObservableObject {
             case .login:
             let idToken = try await FirebaseEmailAuthService.shared.signIn(email: email, password: password)
                 //user = try await useCase.executeLogin(email: email, password: password, idToken: idToken)
+                onAuthSuccess?(false)
             case .register:
                 let idToken = try await FirebaseEmailAuthService.shared.register(name: name, email: email, password: password)
                 //user = try await useCase.executeRegister(name: name, email: email, password: password, idToken: idToken)
+                onAuthSuccess?(true)
             }
-            onAuthSuccess?()
         } catch {
             errorMessage = mapError(error)
         }
@@ -103,7 +104,7 @@ public final class AuthViewModel: ObservableObject {
         catch {
                 errorMessage = mapError(error)
             }
-        onAuthSuccess?()
+        onAuthSuccess?(false)
         }
 
     private func mapError(_ error: Error) -> String {

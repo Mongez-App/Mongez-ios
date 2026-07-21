@@ -15,6 +15,7 @@ public final class AuthCoordinator: ObservableObject, Coordinator {
 
     @Published public var path = NavigationPath()
     public var onLoginSuccess: (() -> Void)?
+    public var onRegisterSuccess: (() -> Void)?
     
     public init() {}
 }
