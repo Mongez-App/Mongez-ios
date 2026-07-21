@@ -14,7 +14,7 @@ public class CourseDetailsViewModel: ObservableObject {
     @Published public var materials: [CourseMaterial] = []
     @Published public var tasks: [CourseTask] = []
     
-    // Derived progress values
+    public var onTaskSelected: ((String, String) -> Void)?
     public var completedTasksCount: Int { tasks.filter { $0.isCompleted }.count }
     public var totalTasksCount: Int { tasks.count }
     public var progressPercentage: Double {
@@ -36,8 +36,16 @@ public class CourseDetailsViewModel: ObservableObject {
         do {
             materials = try await getMaterialsUseCase.execute(courseId: courseId)
             tasks = try await getTasksUseCase.execute(courseId: courseId)
+        } catch is CancellationError {
+            return
         } catch {
             print("Error loading course details: \(error)")
+        }
+    }
+    
+    public func selectTask(_ task: CourseTask) {
+        if !task.isCompleted {
+            onTaskSelected?(courseId, task.title)
         }
     }
 }
