@@ -14,6 +14,7 @@ public final class DashboardCoordinator: ObservableObject, Coordinator {
     public var childCoordinators: [any Coordinator] = []
     
     @Published public var path = NavigationPath()
+    @Published public var selectedTab: AppTab = .dashboard
     
     public init() {}
     

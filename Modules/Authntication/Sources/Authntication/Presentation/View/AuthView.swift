@@ -165,9 +165,10 @@ public struct AuthView: View {
 
     private func borderColor(for field: Field) -> Color {
         if focusedField == field {
-            return AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.55)
+            return AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.4)
         }
-        return AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.4)
+        
+        return AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.55)
     }
 
     private func borderWidth(for field: Field) -> CGFloat {

@@ -12,11 +12,15 @@ import Authntication
 import OnBoarding
 import Dashboard
 import AIStudyRoom
+import Preferences
+import Courses
 
 public enum AppState {
     case onboarding
     case auth
+    case preferences
     case dashboard
+    case courses
 }
 
 public final class AppCoordinator: ObservableObject, Coordinator {
@@ -26,7 +30,9 @@ public final class AppCoordinator: ObservableObject, Coordinator {
     @Published public var state: AppState = .onboarding
     @Published public var onboardingCoordinator: OnboardingCoordinator?
     @Published public var authCoordinator: AuthCoordinator?
+    @Published public var preferencesCoordinator: PreferencesCoordinator?
     @Published public var dashboardCoordinator: DashboardCoordinator?
+    @Published public var coursesCoordinator: CoursesCoordinator?
     
     public init() {
         startOnboarding()
@@ -57,15 +63,44 @@ public final class AppCoordinator: ObservableObject, Coordinator {
             self.startDashboard()
         }
         
+        coordinator.onRegisterSuccess = { [weak self] in
+            guard let self = self else { return }
+            self.removeChild(coordinator)
+            self.authCoordinator = nil
+            self.startPreferences()
+        }
+
         addChild(coordinator)
         self.authCoordinator = coordinator
         self.state = .auth
     }
-    
+
+    public func startPreferences() {
+        let coordinator = PreferencesCoordinator()
+
+        coordinator.onFinish = { [weak self] in
+            guard let self = self else { return }
+            self.removeChild(coordinator)
+            self.preferencesCoordinator = nil
+            self.startDashboard()
+        }
+
+        addChild(coordinator)
+        self.preferencesCoordinator = coordinator
+        self.state = .preferences
+    }
+
     public func startDashboard() {
         let coordinator = DashboardCoordinator()
         addChild(coordinator)
         self.dashboardCoordinator = coordinator
         self.state = .dashboard
+    }
+    
+    public func startCourses() {
+        let coordinator = CoursesCoordinator()
+        addChild(coordinator)
+        self.coursesCoordinator = coordinator
+        self.state = .courses
     }
 }

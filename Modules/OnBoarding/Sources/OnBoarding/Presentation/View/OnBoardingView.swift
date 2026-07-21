@@ -19,6 +19,7 @@ public struct OnBoardingView: View {
         VStack {
             HStack {
                 Spacer()
+            if !viewModel.isLastPage {
                 Button(action: {
                     viewModel.skip()
                 }) {
@@ -28,8 +29,8 @@ public struct OnBoardingView: View {
                 }
                 .padding(.trailing, AppTheme.Spacing.large)
                 .padding(.top, AppTheme.Spacing.medium)
-            }
-            
+             }
+           }
             TabView(selection: $viewModel.currentPage) {
                 ForEach(0..<viewModel.steps.count, id: \.self) { index in
                     OnboardingPageView(step: viewModel.steps[index])
