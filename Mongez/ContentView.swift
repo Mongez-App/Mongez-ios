@@ -12,7 +12,7 @@ import Authntication
 import Dashboard
 import AIStudyRoom
 import Preferences
-import Coures
+import Courses
 import CourseDetails
 
 struct ContentView: View {

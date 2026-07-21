@@ -127,6 +127,7 @@ public struct CoursesView: View {
                                 viewModel.requestDelete(course: course)
                             }
                         )
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(PlainButtonStyle())
                     
