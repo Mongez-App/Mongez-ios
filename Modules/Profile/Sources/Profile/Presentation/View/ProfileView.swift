@@ -5,6 +5,13 @@
 //  Created by Shady Eldakrory on 21/07/2026.
 //
 
+//
+//  File.swift
+//
+//
+//  Created by Shady Eldakrory on 21/07/2026.
+//
+
 import SwiftUI
 import Common
 
@@ -17,7 +24,8 @@ public struct ProfileView: View {
         )
     )
     
-    public init(){}
+    public init() {}
+    
     public var body: some View {
         ScrollView {
             VStack(spacing: AppTheme.Spacing.large) {
@@ -57,15 +65,34 @@ public struct ProfileView: View {
                 
                 VStack(spacing: 0) {
                     SettingRow(
+                        iconName: "slider.horizontal.3",
+                        iconColor: AppTheme.Colors.purple200,
+                        bgOpacity: 0.12,
+                        title: "Edit Preferences",
+                        font: AppTheme.textStyle(size: 16, weight: .medium)
+                    ) {
+                        Image(systemName: "chevron.right")
+                            .font(AppTheme.textStyle(size: 14, weight: .semibold))
+                            .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.35))
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        viewModel.openEditPreferences()
+                    }
+
+                    SettingRow(
                         iconName: "calendar",
                         iconColor: AppTheme.Colors.green100,
                         bgOpacity: 0.10,
                         title: "Calendar Sync",
                         font: AppTheme.textStyle(size: 16, weight: .medium)
                     ) {
-                        Toggle("", isOn: $viewModel.isCalendarSyncEnabled)
-                            .labelsHidden()
-                            .tint(AppTheme.Colors.green100)
+                        Toggle("", isOn: Binding(
+                            get: { viewModel.isCalendarSyncEnabled },
+                            set: { viewModel.requestCalendarSyncChange(to: $0) }
+                        ))
+                        .labelsHidden()
+                        .tint(AppTheme.Colors.green100)
                     }
                     
                     SettingRow(
@@ -86,20 +113,41 @@ public struct ProfileView: View {
                         title: "Language",
                         font: AppTheme.textStyle(size: 16, weight: .medium)
                     ) {
-                        HStack(spacing: AppTheme.Spacing.xxxSmall) {
-                            Text(viewModel.selectedLanguage)
-                                .font(AppTheme.textStyle(size: 14, weight: .regular))
-                                .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
-                            Image(systemName: "chevron.down")
-                                .font(AppTheme.textStyle(size: 12, weight: .regular))
-                                .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
+                        Menu {
+                            Button {
+                                viewModel.selectedLanguage = "EN"
+                            } label: {
+                                if viewModel.selectedLanguage == "EN" {
+                                    Label("English", systemImage: "checkmark")
+                                } else {
+                                    Text("English")
+                                }
+                            }
+                            Button {
+                                viewModel.selectedLanguage = "AR"
+                            } label: {
+                                if viewModel.selectedLanguage == "AR" {
+                                    Label("العربية", systemImage: "checkmark")
+                                } else {
+                                    Text("العربية")
+                                }
+                            }
+                        } label: {
+                            HStack(spacing: AppTheme.Spacing.xxxSmall) {
+                                Text(viewModel.selectedLanguage)
+                                    .font(AppTheme.textStyle(size: 14, weight: .regular))
+                                    .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
+                                Image(systemName: "chevron.down")
+                                    .font(AppTheme.textStyle(size: 12, weight: .regular))
+                                    .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
+                            }
+                            .padding(.horizontal, AppTheme.Spacing.xSmall)
+                            .padding(.vertical, 6)
+                            .background(
+                                RoundedRectangle(cornerRadius: AppTheme.Spacing.xxSmall)
+                                    .stroke(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.1))
+                            )
                         }
-                        .padding(.horizontal, AppTheme.Spacing.xSmall)
-                        .padding(.vertical, 6)
-                        .background(
-                            RoundedRectangle(cornerRadius: AppTheme.Spacing.xxSmall)
-                                .stroke(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.1))
-                        )
                     }
                     
                     SettingRow(
@@ -121,6 +169,28 @@ public struct ProfileView: View {
         .background(AppTheme.Colors.white100)
         .onAppear {
             viewModel.loadProfile()
+        }
+        .alert("Turn off Calendar Sync?", isPresented: $viewModel.showDisableCalendarSyncAlert) {
+            Button("Cancel", role: .cancel) {
+                viewModel.cancelDisableCalendarSync()
+            }
+            Button("Turn Off", role: .destructive) {
+                viewModel.confirmDisableCalendarSync()
+            }
+        } message: {
+            Text("Your study sessions will stop syncing to your calendar. You can turn this back on anytime.")
+        }
+        .sheet(isPresented: $viewModel.isEditPreferencesPresented) {
+            EditPreferencesSheet(
+                initialHours: viewModel.dailyStudyHours,
+                initialDays: viewModel.availableDays,
+                onSave: { hours, days in
+                    viewModel.saveEditPreferences(hours: hours, days: days)
+                },
+                onCancel: {
+                    viewModel.cancelEditPreferences()
+                }
+            )
         }
     }
 }
