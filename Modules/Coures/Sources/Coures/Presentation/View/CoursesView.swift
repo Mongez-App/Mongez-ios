@@ -2,9 +2,11 @@ import SwiftUI
 import Common
 
 public struct CoursesView: View {
-    @StateObject private var viewModel = CoursesViewModel()
-    
-    public init() {}
+    @ObservedObject public var viewModel: CoursesViewModel
+        
+    public init(viewModel: CoursesViewModel) {
+        self.viewModel = viewModel
+    }
     
     public var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -116,12 +118,18 @@ public struct CoursesView: View {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVStack(spacing: AppTheme.Spacing.small) {
                 ForEach(viewModel.courses) { course in
-                    CourseCardView(
-                        course: course,
-                        onDelete: {
-                            viewModel.requestDelete(course: course)
-                        }
-                    )
+                    Button(action: {
+                        viewModel.selectCourse(id: course.id)
+                    }) {
+                        CourseCardView(
+                            course: course,
+                            onDelete: {
+                                viewModel.requestDelete(course: course)
+                            }
+                        )
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    
                 }
             }
             .padding(.horizontal, AppTheme.Spacing.large)
@@ -151,6 +159,6 @@ public struct CoursesView: View {
 
 struct CoursesView_Previews: PreviewProvider {
     static var previews: some View {
-        CoursesView()
+        CoursesView(viewModel: CoursesViewModel())
     }
 }
