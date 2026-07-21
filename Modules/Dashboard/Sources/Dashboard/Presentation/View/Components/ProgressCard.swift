@@ -75,10 +75,12 @@ struct ProgressCard: View {
 }
 
 
-#Preview {
-    ProgressCard(color:AppTheme.Colors.blue100,
-               title: "Today's Goal",
-               numerator: 4,
-               denominator: 7,
-               unit: "Tasks")
+struct ProgressCard_Previews: PreviewProvider {
+    static var previews: some View {
+        ProgressCard(color:AppTheme.Colors.blue100,
+                   title: "Today's Goal",
+                   numerator: 4,
+                   denominator: 7,
+                   unit: "Tasks")
+    }
 }

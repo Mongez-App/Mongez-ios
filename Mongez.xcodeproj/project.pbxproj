@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,10 +11,14 @@
 		03224E76300D2D7D007CED78 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 03224E75300D2D7D007CED78 /* Common */; };
 		038C2DD7300E35810046780D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 038C2DD6300E35810046780D /* GoogleService-Info.plist */; };
 		03C4C2A2300A8FFD00031E11 /* OnBoarding in Frameworks */ = {isa = PBXBuildFile; productRef = 03C4C2A1300A8FFD00031E11 /* OnBoarding */; };
+		AAF3D4DFECC50FF2DCF6CD70 /* Preferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2865055BCA38AF44B8B266E9 /* Preferences */; };
 		3153CDC7300E8B3800635A33 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3153CDC6300E8B3800635A33 /* AppCoordinator.swift */; };
 		3195CCEB300EAD82004F0C28 /* CourseDetails in Frameworks */ = {isa = PBXBuildFile; productRef = 3195CCEA300EAD82004F0C28 /* CourseDetails */; };
 		31A2F377300BF7A70014E39A /* Dashboard in Frameworks */ = {isa = PBXBuildFile; productRef = 31A2F376300BF7A70014E39A /* Dashboard */; };
+
+		5AB1211B300DA1A600953837 /* Coures in Frameworks */ = {isa = PBXBuildFile; productRef = 5AB1211A300DA1A600953837 /* Coures */; };
 		31F0B54B300C0D0000293455 /* AIStudyRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 31F0B54A300C0D0000293455 /* AIStudyRoom */; };
+
 		5ABEF5C83007A98600B1ACEF /* MongezApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5C73007A98600B1ACEF /* MongezApp.swift */; };
 		5ABEF5CA3007A98600B1ACEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5C93007A98600B1ACEF /* ContentView.swift */; };
 		5ABEF5CC3007A98800B1ACEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5ABEF5CB3007A98800B1ACEF /* Assets.xcassets */; };
@@ -70,8 +74,13 @@
 				03224E76300D2D7D007CED78 /* Common in Frameworks */,
 				3195CCEB300EAD82004F0C28 /* CourseDetails in Frameworks */,
 				03C4C2A2300A8FFD00031E11 /* OnBoarding in Frameworks */,
+				AAF3D4DFECC50FF2DCF6CD70 /* Preferences in Frameworks */,
 				31A2F377300BF7A70014E39A /* Dashboard in Frameworks */,
+
+				5AB1211B300DA1A600953837 /* Coures in Frameworks */,
+
 				31F0B54B300C0D0000293455 /* AIStudyRoom in Frameworks */,
+
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,9 +190,13 @@
 				03224E72300D2D61007CED78 /* Authntication */,
 				03224E75300D2D7D007CED78 /* Common */,
 				03C4C2A1300A8FFD00031E11 /* OnBoarding */,
+				2865055BCA38AF44B8B266E9 /* Preferences */,
 				31A2F376300BF7A70014E39A /* Dashboard */,
+
+				5AB1211A300DA1A600953837 /* Coures */,
+
 				31F0B54A300C0D0000293455 /* AIStudyRoom */,
-				3195CCEA300EAD82004F0C28 /* CourseDetails */,
+                3195CCEA300EAD82004F0C28 /* CourseDetails */,
 			);
 			productName = Mongez;
 			productReference = 5ABEF5C43007A98600B1ACEF /* Mongez.app */;
@@ -659,7 +672,7 @@
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
 				kind = exactVersion;
-				version = 10.29.0;
+				version = 10.19.0;
 			};
 		};
 		038D5377300CEA5200579547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
@@ -685,13 +698,22 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = OnBoarding;
 		};
-		3195CCEA300EAD82004F0C28 /* CourseDetails */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CourseDetails;
+        3195CCEA300EAD82004F0C28 /* CourseDetails */ = {
+            isa = XCSwiftPackageProductDependency;
+            productName = CourseDetails;
+        };
+        2865055BCA38AF44B8B266E9 /* Preferences */ = {
+            isa = XCSwiftPackageProductDependency;
+            productName = Preferences;
 		};
 		31A2F376300BF7A70014E39A /* Dashboard */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Dashboard;
+		};
+
+		5AB1211A300DA1A600953837 /* Coures */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Coures;
 		};
 		31F0B54A300C0D0000293455 /* AIStudyRoom */ = {
 			isa = XCSwiftPackageProductDependency;
