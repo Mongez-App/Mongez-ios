@@ -32,7 +32,7 @@ public struct StudyRoomInputView: View {
             Button(action: onSendAction) {
                 Image("send")
                     .resizable()
-                    .frame(width: 24, height: 24)
+                    .frame(width: 20, height: 20)
                     .padding(AppTheme.Spacing.xSmall)
                     .background(Circle().foregroundColor(AppTheme.Colors.white100).appShadow(opacity: 0.7, radius: 2.5))
             }

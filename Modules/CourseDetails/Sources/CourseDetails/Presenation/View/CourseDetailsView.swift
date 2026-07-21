@@ -10,7 +10,9 @@ import SwiftUI
 import Common
 
 public struct CourseDetailsView: View {
+    @Environment(\.dismiss) private var dismiss
     @StateObject var viewModel: CourseDetailsViewModel
+    @State private var showEditSheet: Bool = false
     
     public init(viewModel: CourseDetailsViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -18,7 +20,16 @@ public struct CourseDetailsView: View {
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            CourseHeaderView(title: "Operating Systems")
+            CourseHeaderView(
+                title: "Opearating Systems",
+                onBack: { dismiss() },
+                onEdit: { showEditSheet = true },
+                onDelete: {  }
+            )
+            .sheet(isPresented: $showEditSheet) {
+                EditCourseSheetView()
+                    .presentationDetents([.fraction(0.85)])
+            }
             
             CourseTabBarView(selectedTab: $viewModel.selectedTab)
             
@@ -29,6 +40,8 @@ public struct CourseDetailsView: View {
             }
         }
         .background(AppTheme.Colors.white100.ignoresSafeArea())
+        .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(true)
         .task {
             await viewModel.loadData()
         }

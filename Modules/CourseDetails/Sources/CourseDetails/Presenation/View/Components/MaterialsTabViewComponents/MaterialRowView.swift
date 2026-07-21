@@ -39,10 +39,9 @@ public struct MaterialRowView: View {
             }
             Spacer(minLength: AppTheme.Spacing.small)
             
-            Text("...")
-                .font(AppTheme.textStyle(size: 24, weight: .bold))
+            Image(systemName: "ellipsis")
+                .font(.system(size: 20, weight: .regular))
                 .foregroundColor(AppTheme.Colors.black100)
-                .offset(y: -6)
         }
         .padding(AppTheme.Spacing.small)
         .background(
