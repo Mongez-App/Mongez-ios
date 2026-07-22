@@ -7,24 +7,25 @@
 
 import Foundation
 public struct AuthResponseDTO: Codable {
-    public let token: String
     public let userId: String
     public let email: String?
     public let name: String?
+    public let isNewUser: Bool
     
     enum CodingKeys: String, CodingKey {
-        case token, email, name
+        case email,name
         case userId = "user_id"
+        case isNewUser = "is_new_user"
     }
 }
 
 extension AuthResponseDTO {
-    func mapToUserEntity() -> User {
+    func mapToUserEntity(firebaseToken : String) -> User {
         return User(
             id: userId,
             name: name ?? "Guest",
             email: email ?? "",
-            token: token
+            token: firebaseToken
         )
     }
 }
