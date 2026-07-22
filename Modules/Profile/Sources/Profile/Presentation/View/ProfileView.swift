@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Shady Eldakrory on 21/07/2026.
 //
@@ -31,17 +31,9 @@ public struct ProfileView: View {
             VStack(spacing: AppTheme.Spacing.large) {
                 if let profile = viewModel.profile {
                     VStack(spacing: AppTheme.Spacing.xSmall) {
-                        Image("onboarding_img1")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 88, height: 88)
-                            .clipShape(Circle())
-                            .shadow(
-                                color: AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple100, opacity: 0.75),
-                                radius: 15 / 2,
-                                x: 0,
-                                y: 4
-                            )
+                        CircledAsyncImage(urlString: profile.avatarUrl,
+                                          size: 88,
+                                          name: profile.name)
                         
                         VStack(spacing: AppTheme.Spacing.xxxSmall) {
                             Text(profile.name)
@@ -65,7 +57,7 @@ public struct ProfileView: View {
                 
                 VStack(spacing: 0) {
                     SettingRow(
-                        iconName: "slider.horizontal.3",
+                        iconName: "preferences",
                         iconColor: AppTheme.Colors.purple200,
                         bgOpacity: 0.12,
                         title: "Edit Preferences",
@@ -79,9 +71,9 @@ public struct ProfileView: View {
                     .onTapGesture {
                         viewModel.openEditPreferences()
                     }
-
+                    
                     SettingRow(
-                        iconName: "calendar",
+                        iconName: "calendar-green",
                         iconColor: AppTheme.Colors.green100,
                         bgOpacity: 0.10,
                         title: "Calendar Sync",
@@ -107,7 +99,7 @@ public struct ProfileView: View {
                     }
                     
                     SettingRow(
-                        iconName: "globe",
+                        iconName: "language",
                         iconColor: AppTheme.Colors.purple100,
                         bgOpacity: 0.15,
                         title: "Language",
@@ -237,7 +229,8 @@ struct SettingRow<TrailingContent: View>: View {
                         .fill(AppTheme.Colors.changeOpacity(color: iconColor, opacity: bgOpacity))
                         .frame(width: 32, height: 32)
                     
-                    Image(systemName: iconName)
+                    Image(iconName)
+                        .renderingMode(.template)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
@@ -257,6 +250,53 @@ struct SettingRow<TrailingContent: View>: View {
             if showDivider {
                 Divider()
                     .padding(.leading, 48)
+            }
+        }
+    }
+}
+
+struct CircledAsyncImage: View {
+    let urlString: String
+    var size: CGFloat = 56
+    var name: String
+    
+    var body: some View {
+        AsyncImage(url: URL(string: urlString)) { phase in
+            switch phase {
+            case .empty:
+                ZStack {
+                    Circle()
+                        .fill(AppTheme.Colors.purple200.opacity(0.2))
+                        .frame(width: 56, height: 56)
+                        .appShadow(opacity: 0.7, radius: 0)
+                    
+                    Text(name.prefix(2).capitalized)
+                        .font(AppTheme.textStyle(size: 20, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.purple200.opacity(0.8))
+                }
+                
+            case .success(let image):
+                image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: size, height: size)
+                    .clipShape(Circle())
+                    .appShadow(opacity: 0.75, radius: 5)
+                
+            case .failure:
+                ZStack {
+                    Circle()
+                        .fill(AppTheme.Colors.purple200.opacity(0.2))
+                        .frame(width: 56, height: 56)
+                        .appShadow(opacity: 0.7, radius: 5)
+                    
+                    Text(name.prefix(2).uppercased())
+                        .font(AppTheme.textStyle(size: 20, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.purple200.opacity(0.8))
+                }
+                
+            @unknown default:
+                EmptyView()
             }
         }
     }
