@@ -51,21 +51,7 @@ struct EmptyCoursesView: View {
             }
             
             if !isSearching {
-                Button(action: onAddCourse) {
-                    HStack(spacing: AppTheme.Spacing.xxSmall) {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.system(size: 18))
-                        
-                        Text("Add Your First Course")
-                            .font(AppTheme.textStyle(size: 15, weight: .semibold))
-                    }
-                    .foregroundColor(AppTheme.Colors.white100)
-                    .padding(.horizontal, AppTheme.Spacing.large)
-                    .padding(.vertical, AppTheme.Spacing.xSmall)
-                    .background(AppTheme.Colors.purple200)
-                    .cornerRadius(AppTheme.radius.small)
-                }
-                .padding(.top, AppTheme.Spacing.xxSmall)
+                // Empty state for courses, no button needed as requested
             }
             
             Spacer()
