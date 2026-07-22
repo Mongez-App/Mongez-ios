@@ -8,22 +8,28 @@
 import Foundation
 
 struct DashboardDTO: Codable {
+    var welcomeMessage: String?
     var todayFocus: TodayFocusDTO
     var progressMetrics: ProgressMetricsDTO
     var todayTasks: [TaskDTO]
     var upcomingDeadlines: [UpcomingDeadlineDTO]
+    var streak: StreakDTO?
+    var aiSuggestion: AISuggestionDTO?
     
     enum CodingKeys: String, CodingKey {
+        case welcomeMessage = "welcome_message"
         case todayFocus = "today_focus"
         case progressMetrics = "progress_metrics"
         case todayTasks = "today_tasks"
         case upcomingDeadlines = "upcoming_deadlines"
+        case streak
+        case aiSuggestion = "ai_suggestion"
     }
 }
 
 struct TodayFocusDTO: Codable {
-    var courseId: String
-    var courseName: String
+    var courseId: String?
+    var courseName: String?
     var allocatedDuration: String
     var durationMinutes: Int
     
@@ -123,6 +129,18 @@ struct UpcomingDeadlineDTO: Codable {
         
         return upcomingDeadline
     }
+}
+
+struct StreakDTO: Codable {
+    var currentStreakDays: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case currentStreakDays = "current_streak_days"
+    }
+}
+
+struct AISuggestionDTO: Codable {
+    var text: String
 }
 
 extension DashboardDTO {

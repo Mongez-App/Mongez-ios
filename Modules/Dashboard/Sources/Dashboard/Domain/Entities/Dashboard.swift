@@ -15,8 +15,8 @@ struct Dashboard {
 }
     
 struct TodayFocus {
-    var courseId: String
-    var courseName: String
+    var courseId: String?
+    var courseName: String?
     var allocatedDuration: String
     var durationMinutes: Int
 }
