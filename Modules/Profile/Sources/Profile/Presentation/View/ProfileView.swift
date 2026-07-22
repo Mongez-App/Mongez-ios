@@ -57,22 +57,6 @@ public struct ProfileView: View {
                 
                 VStack(spacing: 0) {
                     SettingRow(
-                        iconName: "preferences",
-                        iconColor: AppTheme.Colors.purple200,
-                        bgOpacity: 0.12,
-                        title: "Edit Preferences",
-                        font: AppTheme.textStyle(size: 16, weight: .medium)
-                    ) {
-                        Image(systemName: "chevron.right")
-                            .font(AppTheme.textStyle(size: 14, weight: .semibold))
-                            .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.35))
-                    }
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        viewModel.openEditPreferences()
-                    }
-                    
-                    SettingRow(
                         iconName: "calendar-green",
                         iconColor: AppTheme.Colors.green100,
                         bgOpacity: 0.10,
@@ -143,7 +127,23 @@ public struct ProfileView: View {
                     }
                     
                     SettingRow(
-                        iconName: "rectangle.portrait.and.arrow.right",
+                        iconName: "preferences",
+                        iconColor: AppTheme.Colors.purple200,
+                        bgOpacity: 0.12,
+                        title: "Edit Preferences",
+                        font: AppTheme.textStyle(size: 16, weight: .medium)
+                    ) {
+                        Image(systemName: "chevron.right")
+                            .font(AppTheme.textStyle(size: 14, weight: .semibold))
+                            .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.35))
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        viewModel.openEditPreferences()
+                    }
+                    
+                    SettingRow(
+                        iconName: "logout",
                         iconColor: AppTheme.Colors.red100,
                         bgOpacity: 0.13,
                         title: "Logout",
@@ -200,7 +200,7 @@ struct StatCard: View {
             
             Text(value)
                 .font(AppTheme.textStyle(size: 24, weight: .bold))
-                .foregroundColor(AppTheme.Colors.purple100)
+                .foregroundColor(AppTheme.Colors.purple200.opacity(0.9))
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, AppTheme.Spacing.small)

@@ -14,6 +14,7 @@ import AIStudyRoom
 import Preferences
 import Courses
 import CourseDetails
+import Profile
 
 struct ContentView: View {
     @StateObject private var appCoordinator = AppCoordinator()
@@ -91,6 +92,11 @@ struct ContentView: View {
                         coursesFactory: {
                             AnyView(
                                 DashboardCoursesContainer(coordinator: coordinator)
+                            )
+                        },
+                        profileFactory: {
+                            AnyView(
+                                ProfileView()
                             )
                         }
                     )

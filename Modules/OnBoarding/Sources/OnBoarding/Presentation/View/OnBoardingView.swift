@@ -24,7 +24,7 @@ public struct OnBoardingView: View {
                     viewModel.skip()
                 }) {
                     Text("Skip")
-                        .font(AppTheme.textStyle(size: 18, weight: .semibold))
+                        .font(AppTheme.textStyle(size: 17, weight: .regular))
                         .foregroundColor(AppTheme.Colors.purple200)
                 }
                 .padding(.trailing, AppTheme.Spacing.large)
