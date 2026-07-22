@@ -6,10 +6,9 @@
 //
 
 import Foundation
+
 public protocol AuthUseCaseProtocol {
-    func executeLogin(email: String, password: String,idToken: String) async throws -> User
-    func executeRegister(name: String, email: String, password: String,idToken: String) async throws -> User
-    func executeGoogleLogin(idToken: String) async throws -> User
+    func executeHandshake(idToken: String, isGuest: Bool) async throws -> (user: User, isNewUser: Bool)
 }
 
 public class AuthUseCase: AuthUseCaseProtocol {
@@ -19,15 +18,7 @@ public class AuthUseCase: AuthUseCaseProtocol {
         self.repository = repository
     }
     
-    public func executeLogin(email: String, password: String,idToken: String) async throws -> User {
-        return try await repository.login(email: email, password: password, idToken : idToken)
-    }
-    
-    public func executeRegister(name: String, email: String, password: String,idToken: String) async throws -> User {
-        return try await repository.register(name: name, email: email, password: password, idToken : idToken)
-    }
-        public func executeGoogleLogin(idToken: String) async throws -> User {
-                return try await repository.googleLogin(idToken: idToken)
+    public func executeHandshake(idToken: String, isGuest: Bool) async throws -> (user: User, isNewUser: Bool) {
+        return try await repository.handshake(idToken: idToken, isGuest: isGuest)
     }
 }
-

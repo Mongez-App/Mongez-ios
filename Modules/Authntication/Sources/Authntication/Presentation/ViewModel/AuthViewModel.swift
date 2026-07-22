@@ -5,9 +5,6 @@
 //  Created by Shady Eldakrory on 18/07/2026.
 //
 
-import Foundation
-import SwiftUI
-
 @MainActor
 public final class AuthViewModel: ObservableObject {
 
@@ -15,6 +12,7 @@ public final class AuthViewModel: ObservableObject {
         case login
         case register
     }
+    
     public var onAuthSuccess: ((_ isNewUser: Bool) -> Void)?
     
     @Published public var mode: Mode = .login
@@ -25,8 +23,10 @@ public final class AuthViewModel: ObservableObject {
     @Published public var isPasswordVisible: Bool = false
     @Published public var isConfirmPasswordVisible: Bool = false
     @Published public var isLoading: Bool = false
-    @Published public var errorMessage: String? = nil
     @Published public var user: User? = nil
+    
+    @Published public var showAlert: Bool = false
+    @Published public var alertMessage: String = ""
 
     private let useCase: AuthUseCaseProtocol
 
@@ -36,7 +36,8 @@ public final class AuthViewModel: ObservableObject {
 
     public func switchMode() {
         mode = (mode == .login) ? .register : .login
-        errorMessage = nil
+        password = ""
+        confirmPassword = ""
     }
 
     private func validate() -> String? {
@@ -60,12 +61,15 @@ public final class AuthViewModel: ObservableObject {
         }
         return nil
     }
+    
+    private func showError(message: String) {
+        alertMessage = message
+        showAlert = true
+    }
 
     public func submit() async {
-        errorMessage = nil
-
         if let validationError = validate() {
-            errorMessage = validationError
+            showError(message: validationError)
             return
         }
 
@@ -73,51 +77,54 @@ public final class AuthViewModel: ObservableObject {
         defer { isLoading = false }
 
         do {
-            switch mode {
-            case .login:
-            let idToken = try await FirebaseEmailAuthService.shared.signIn(email: email, password: password)
-                //user = try await useCase.executeLogin(email: email, password: password, idToken: idToken)
-                onAuthSuccess?(false)
-            case .register:
-                let idToken = try await FirebaseEmailAuthService.shared.register(name: name, email: email, password: password)
-                //user = try await useCase.executeRegister(name: name, email: email, password: password, idToken: idToken)
-                onAuthSuccess?(true)
+            let idToken: String
+            
+            if mode == .login {
+                idToken = try await FirebaseEmailAuthService.shared.signIn(email: email, password: password)
+            } else {
+                idToken = try await FirebaseEmailAuthService.shared.register(name: name, email: email, password: password)
             }
+            
+            let result = try await useCase.executeHandshake(idToken: idToken, isGuest: false)
+            self.user = result.user
+            onAuthSuccess?(result.isNewUser)
+            
         } catch {
-            errorMessage = mapError(error)
+            showError(message: mapError(error))
         }
     }
 
-    public func continueAsGuest() async {
-        errorMessage = "Guest login is not available yet"
-    }
     public func signInWithGoogle() async {
-            errorMessage = nil
-            isLoading = true
-            defer { isLoading = false }
-     
-            do {
-                let firebaseIDToken = try await GoogleAuthService.shared.signInAndGetFirebaseIDToken()
-              //  user = try await useCase.executeGoogleLogin(idToken: firebaseIDToken)
-            }
-      
-        catch {
-                errorMessage = mapError(error)
-            }
-        onAuthSuccess?(false)
+        isLoading = true
+        defer { isLoading = false }
+ 
+        do {
+            let firebaseIDToken = try await GoogleAuthService.shared.signInAndGetFirebaseIDToken()
+            
+            let result = try await useCase.executeHandshake(idToken: firebaseIDToken, isGuest: false)
+            self.user = result.user
+            onAuthSuccess?(result.isNewUser)
+            
+        } catch {
+            showError(message: mapError(error))
         }
+    }
+    
+    public func continueAsGuest() async {
+        showError(message: "Guest login is not available yet")
+    }
 
     private func mapError(_ error: Error) -> String {
         if let urlError = error as? URLError {
             switch urlError.code {
             case .notConnectedToInternet, .networkConnectionLost:
-                return "No internet connection"
+                return "No internet connection. Please check your network."
             case .badServerResponse:
-                return "Invalid email or password"
+                return "Invalid email or password."
             default:
-                return "Something went wrong, please try again"
+                return "Something went wrong, please try again."
             }
         }
-        return "An unexpected error occurred"
+        return error.localizedDescription
     }
 }

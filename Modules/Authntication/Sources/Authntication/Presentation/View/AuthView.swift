@@ -21,18 +21,18 @@ public struct AuthView: View {
         case name, email, password, confirmPassword
     }
 
-    @ObservedObject public var viewModel: AuthViewModel
+    @StateObject public var viewModel: AuthViewModel
     @FocusState private var focusedField: Field?
 
     @MainActor
     public init(viewModel: AuthViewModel) {
-        self.viewModel = viewModel
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
     public var body: some View {
         ZStack {
             AppTheme.Colors.white100
-            .ignoresSafeArea()
+                .ignoresSafeArea()
 
             VStack(spacing: 0) {
                 ScrollView {
@@ -41,10 +41,10 @@ public struct AuthView: View {
                         header
 
                         if viewModel.mode == .register {
-                            fieldBlock(field: .name, title: "Name", icon: "name", text: $viewModel.name, placeholder: "Jhon Doe")
+                            fieldBlock(field: .name, title: "Name", icon: "name", text: $viewModel.name, placeholder: "John Doe")
                         }
 
-                        fieldBlock(field: .email, title: "Email", icon: "email", text: $viewModel.email, placeholder: "JhonDoe@gmail.com", keyboard: .emailAddress)
+                        fieldBlock(field: .email, title: "Email", icon: "email", text: $viewModel.email, placeholder: "JohnDoe@gmail.com", keyboard: .emailAddress)
 
                         secureFieldBlock(field: .password, title: "Password", text: $viewModel.password, isVisible: $viewModel.isPasswordVisible)
 
@@ -60,14 +60,6 @@ public struct AuthView: View {
                             secureFieldBlock(field: .confirmPassword, title: "Confirm Password", text: $viewModel.confirmPassword, isVisible: $viewModel.isConfirmPasswordVisible)
                         }
 
-                        if let errorMessage = viewModel.errorMessage {
-                            Text(errorMessage)
-                                .font(AppTheme.textStyle(size: 13, weight: .medium))
-                                .foregroundColor(AppTheme.Colors.red100)
-                                .padding(.top, 4)
-                                .transition(.opacity)
-                        }
-
                         primaryButton
                             .padding(.top, AppTheme.Spacing.xSmall)
 
@@ -81,12 +73,20 @@ public struct AuthView: View {
                     }
                     .padding(AppTheme.Spacing.large)
                     .animation(.easeInOut(duration: 0.2), value: viewModel.mode)
-                    .animation(.easeInOut(duration: 0.2), value: viewModel.errorMessage)
                 }
 
                 switchModeFooter
                     .padding(.bottom, 32)
             }
+            .disabled(viewModel.isLoading)
+            .opacity(viewModel.isLoading ? 0.8 : 1.0)
+        }
+        .alert(isPresented: $viewModel.showAlert) {
+            Alert(
+                title: Text("Alert"),
+                message: Text(viewModel.alertMessage),
+                dismissButton: .default(Text("OK"))
+            )
         }
     }
 
@@ -167,7 +167,6 @@ public struct AuthView: View {
         if focusedField == field {
             return AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.4)
         }
-        
         return AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.55)
     }
 
@@ -194,7 +193,6 @@ public struct AuthView: View {
             .foregroundColor(AppTheme.Colors.white100)
             .cornerRadius(AppTheme.radius.meduim)
         }
-        .disabled(viewModel.isLoading)
     }
 
     private var orDivider: some View {
