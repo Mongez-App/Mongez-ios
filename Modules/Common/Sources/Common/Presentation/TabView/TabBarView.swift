@@ -44,13 +44,17 @@ public struct TabBarView: View {
     }
 }
 
-#Preview {
-    ZStack {
-        AppTheme.Colors.white100.ignoresSafeArea()
-        
-        VStack {
-            Spacer()
-            TabBarView(selectedTab: .constant(.dashboard))
+struct TabBarView_Previews: PreviewProvider {
+    static var previews: some View {
+        ZStack {
+            AppTheme.Colors.white100
+                .ignoresSafeArea()
+
+            VStack {
+                Spacer()
+                TabBarView(selectedTab: .constant(.dashboard))
+            }
         }
+        .previewLayout(.sizeThatFits)
     }
 }

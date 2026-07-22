@@ -8,7 +8,7 @@
       location = "group:Modules/CourseDetails">
    </FileRef>
    <FileRef
-      location = "group:Modules/Coures">
+      location = "group:Modules/Courses">
    </FileRef>
    <FileRef
       location = "group:Modules/AIStudyRoom">
