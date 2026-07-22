@@ -68,7 +68,7 @@ public struct CoursesView: View {
                     .background(
                         Circle()
                             .fill(AppTheme.Colors.white100)
-                            .appShadow(opacity: 0.7, radius: 2.5, y: 0)
+                            .appShadow(opacity: 0.7, radius: 2, y: 0)
                     )
             }
         }

@@ -106,7 +106,7 @@ struct CourseCardView: View {
         .background(
             RoundedRectangle(cornerRadius: AppTheme.radius.large)
                 .fill(AppTheme.Colors.white100)
-                .appShadow(opacity: 0.5, radius: 7.5, y: 0)
+                .appShadow(opacity: 0.5, radius: 5, y: 0)
         )
         .contextMenu {
             Button(role: .destructive) {

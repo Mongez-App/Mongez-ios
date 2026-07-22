@@ -65,7 +65,7 @@ public enum AppTheme{
     }
     
     public static func textStyle(size: CGFloat, weight: Font.Weight = .regular) -> Font{
-        Font.custom("Poppins", size: size).weight(weight)
+        Font.custom("Arial", size: size).weight(weight)
     }
     
     public enum Spacing{
