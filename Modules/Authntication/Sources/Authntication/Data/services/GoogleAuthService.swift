@@ -41,6 +41,8 @@ public final class GoogleAuthService {
         do {
             googleResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
         } catch {
+            print("🔴 Google Error: \(error)")
+            print("🔴 Code: \((error as NSError).code)")
             if (error as NSError).code == GIDSignInError.canceled.rawValue {
                 throw GoogleAuthError.cancelled
             }

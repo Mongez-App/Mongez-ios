@@ -7,7 +7,5 @@
 
 import Foundation
 public protocol AuthRepositoryProtocol {
-    func login(email: String, password: String,idToken: String) async throws -> User
-    func register(name: String, email: String, password: String,idToken: String) async throws -> User
-    func googleLogin(idToken: String)async throws -> User
+    func handshake(idToken: String, isGuest: Bool) async throws -> (user: User, isNewUser: Bool)
 }
