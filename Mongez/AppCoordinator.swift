@@ -13,7 +13,7 @@ import OnBoarding
 import Dashboard
 import AIStudyRoom
 import Preferences
-import Coures
+import Courses
 
 public enum AppState {
     case onboarding

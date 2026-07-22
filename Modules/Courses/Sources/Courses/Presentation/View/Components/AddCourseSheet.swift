@@ -12,7 +12,7 @@ struct AddCourseSheet: View {
                 
                 HStack {
                     Text("Add New Course")
-                        .font(AppTheme.textStyle(size: 22, weight: .bold))
+                        .font(AppTheme.textStyle(size: 24, weight: .bold))
                         .foregroundColor(AppTheme.Colors.black100)
                     
                     Spacer()
@@ -48,8 +48,8 @@ struct AddCourseSheet: View {
                 }
                 .padding(AppTheme.Spacing.xxxSmall)
                 .background(
-                    RoundedRectangle(cornerRadius: AppTheme.radius.small)
-                        .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.gray100, opacity: 0.2))
+                    RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
+                        .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.gray100, opacity: 0.15))
                 )
                 
                 
@@ -77,7 +77,8 @@ struct AddCourseSheet: View {
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, AppTheme.Spacing.small)
                         .background(AppTheme.Colors.purple200)
-                        .cornerRadius(AppTheme.radius.small)
+                        .cornerRadius(AppTheme.radius.meduim)
+                        .appShadow(opacity: 0.3, radius: 8, y: 4)
                 }
                 .padding(.bottom, AppTheme.Spacing.small)
             }
@@ -91,7 +92,7 @@ struct AddCourseSheet: View {
     private var onlineCourseForm: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.small) {
             Text("Course URL")
-                .font(AppTheme.textStyle(size: 14, weight: .semibold))
+                .font(AppTheme.textStyle(size: 14, weight: .bold))
                 .foregroundColor(AppTheme.Colors.black100)
             
             TextField("https://example.com/course-link", text: $viewModel.courseURL)
@@ -100,7 +101,7 @@ struct AddCourseSheet: View {
                 .padding(AppTheme.Spacing.xSmall)
                 .background(
                     RoundedRectangle(cornerRadius: AppTheme.radius.small)
-                        .stroke(AppTheme.Colors.gray100, lineWidth: 1)
+                        .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.gray100, opacity: 0.2))
                 )
                 .autocapitalization(.none)
                 .keyboardType(.URL)
@@ -113,7 +114,7 @@ struct AddCourseSheet: View {
     private var uploadMaterialForm: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.small) {
             Text("Course Name")
-                .font(AppTheme.textStyle(size: 14, weight: .semibold))
+                .font(AppTheme.textStyle(size: 14, weight: .bold))
                 .foregroundColor(AppTheme.Colors.black100)
             
             TextField("e.g. Operating Systems", text: $viewModel.courseName)
@@ -122,14 +123,14 @@ struct AddCourseSheet: View {
                 .padding(AppTheme.Spacing.xSmall)
                 .background(
                     RoundedRectangle(cornerRadius: AppTheme.radius.small)
-                        .stroke(AppTheme.Colors.gray100, lineWidth: 1)
+                        .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.gray100, opacity: 0.2))
                 )
             
             deadlinePicker
             
             
             Text("Thumbnail")
-                .font(AppTheme.textStyle(size: 14, weight: .semibold))
+                .font(AppTheme.textStyle(size: 14, weight: .bold))
                 .foregroundColor(AppTheme.Colors.black100)
             
             PhotosPicker(
@@ -175,7 +176,7 @@ struct AddCourseSheet: View {
             
             HStack {
                 Text("Course Material")
-                    .font(AppTheme.textStyle(size: 14, weight: .semibold))
+                    .font(AppTheme.textStyle(size: 14, weight: .bold))
                     .foregroundColor(AppTheme.Colors.black100)
                 
                 Text("(PDFs, slides, notes)")
@@ -238,7 +239,7 @@ struct AddCourseSheet: View {
     private var deadlinePicker: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.xxSmall) {
             Text("Deadline")
-                .font(AppTheme.textStyle(size: 14, weight: .semibold))
+                .font(AppTheme.textStyle(size: 14, weight: .bold))
                 .foregroundColor(AppTheme.Colors.black100)
             
             HStack {
@@ -261,7 +262,7 @@ struct AddCourseSheet: View {
             .padding(.vertical, AppTheme.Spacing.xxSmall)
             .background(
                 RoundedRectangle(cornerRadius: AppTheme.radius.small)
-                    .stroke(AppTheme.Colors.gray100, lineWidth: 1)
+                    .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.gray100, opacity: 0.2))
             )
         }
     }
@@ -280,9 +281,9 @@ struct AddCourseSheet: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, AppTheme.Spacing.xxSmall)
             .background(
-                RoundedRectangle(cornerRadius: AppTheme.radius.small - 2)
-                    .fill(isSelected ? Color.white : Color.clear)
-                    .appShadow(opacity: isSelected ? 0.1 : 0, radius: 4, y: 1)
+                RoundedRectangle(cornerRadius: AppTheme.radius.small)
+                    .fill(isSelected ? AppTheme.Colors.white100 : Color.clear)
+                    .appShadow(opacity: isSelected ? 0.05 : 0, radius: 4, y: 1)
             )
         }
     }

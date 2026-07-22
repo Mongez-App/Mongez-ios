@@ -39,10 +39,10 @@ struct CourseCardView: View {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 80, height: 80)
-                        .clipShape(RoundedRectangle(cornerRadius: AppTheme.radius.small))
+                        .frame(width: 135, height: 135)
+                        .clipShape(RoundedRectangle(cornerRadius: AppTheme.radius.meduim))
                 } else {
-                    RoundedRectangle(cornerRadius: AppTheme.radius.small)
+                    RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
                         .fill(
                             LinearGradient(
                                 colors: [
@@ -53,62 +53,60 @@ struct CourseCardView: View {
                                 endPoint: .bottomTrailing
                             )
                         )
-                        .frame(width: 80, height: 80)
+                        .frame(width: 135, height: 135)
                     
                     Image(systemName: iconName)
-                        .font(.system(size: 30, weight: .light))
+                        .font(.system(size: 40, weight: .light))
                         .foregroundColor(AppTheme.Colors.green100)
                 }
             }
             
             
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.xxxSmall) {
+            VStack(alignment: .leading, spacing: 0) {
                 Text(course.name)
-                    .font(AppTheme.textStyle(size: 16, weight: .semibold))
+                    .font(AppTheme.textStyle(size: 22, weight: .bold))
                     .foregroundColor(AppTheme.Colors.black100)
-                    .lineLimit(1)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
                 
-                Text("Progress")
-                    .font(AppTheme.textStyle(size: 12, weight: .regular))
-                    .foregroundColor(AppTheme.Colors.gray200)
+                Spacer()
                 
-                HStack(spacing: AppTheme.Spacing.xxSmall) {
-                    Text("\(Int(course.completionPercentage))%")
-                        .font(AppTheme.textStyle(size: 16, weight: .bold))
-                        .foregroundColor(progressColor)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Progress")
+                        .font(AppTheme.textStyle(size: 14, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.gray300)
                     
-                    GeometryReader { geometry in
-                        ZStack(alignment: .leading) {
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.gray100, opacity: 0.5))
-                                .frame(height: 6)
-                            
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(progressColor)
-                                .frame(
-                                    width: geometry.size.width * CGFloat(course.completionPercentage / 100.0),
-                                    height: 6
-                                )
+                    VStack(spacing: 4) {
+                        HStack {
+                            Spacer()
+                            Text("\(Int(course.completionPercentage))%")
+                                .font(AppTheme.textStyle(size: 16, weight: .bold))
+                                .foregroundColor(progressColor)
                         }
-                        .frame(maxHeight: .infinity, alignment: .center)
+                        
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.gray100, opacity: 0.3))
+                            .frame(height: 8)
+                            .overlay(alignment: .leading) {
+                                GeometryReader { geometry in
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .fill(progressColor)
+                                        .frame(width: geometry.size.width * CGFloat(course.completionPercentage / 100.0))
+                                }
+                            }
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
                     }
-                    .frame(height: 20)
-                    
-                    Text("\(Int(course.completionPercentage))%")
-                        .font(AppTheme.textStyle(size: 11, weight: .regular))
-                        .foregroundColor(AppTheme.Colors.gray200)
                 }
             }
+            .frame(height: 135)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(AppTheme.Spacing.xSmall)
+        .padding(AppTheme.Spacing.small)
+        .frame(width: 343, height: 167)
         .background(
-            RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
-                .fill(Color.white)
-                .appShadow(opacity: 0.08, radius: 8, y: 2)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
-                .stroke(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.gray100, opacity: 0.5), lineWidth: 1)
+            RoundedRectangle(cornerRadius: AppTheme.radius.large)
+                .fill(AppTheme.Colors.white100)
+                .appShadow(opacity: 0.5, radius: 7.5, y: 0)
         )
         .contextMenu {
             Button(role: .destructive) {
