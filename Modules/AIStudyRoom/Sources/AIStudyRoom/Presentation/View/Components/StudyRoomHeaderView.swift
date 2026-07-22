@@ -57,7 +57,7 @@ public struct StudyRoomHeaderView: View {
                     .resizable()
                     .frame(width: 20, height: 20)
                     .padding(AppTheme.Spacing.xSmall)
-                    .background(Circle().foregroundColor(AppTheme.Colors.white100).appShadow(opacity: 0.7, radius: 2.5))
+                    .background(Circle().foregroundColor(AppTheme.Colors.white100).appShadow(opacity: 0.7, radius: 2))
             }
 
             Button(action: onDoneAction) {
@@ -65,7 +65,7 @@ public struct StudyRoomHeaderView: View {
                     .resizable()
                     .frame(width: 20, height: 20)
                     .padding(AppTheme.Spacing.xSmall)
-                    .background(Circle().foregroundColor(AppTheme.Colors.white100).appShadow(opacity: 0.7, radius: 2.5))
+                    .background(Circle().foregroundColor(AppTheme.Colors.white100).appShadow(opacity: 0.7, radius: 2))
             }
         }
         .padding(.horizontal, AppTheme.Spacing.small)

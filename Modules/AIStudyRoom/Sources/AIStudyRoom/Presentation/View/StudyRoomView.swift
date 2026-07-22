@@ -43,8 +43,8 @@ public struct StudyRoomView: View {
                 .background(AppTheme.Colors.white100)
                 .appShadow(
                     opacity: 0.15,
-                    radius: AppTheme.radius.small,
-                    y: AppTheme.Spacing.xxxSmall
+                    radius: 2.5,
+                    y: 1
                 )
                 .zIndex(1)
                 
