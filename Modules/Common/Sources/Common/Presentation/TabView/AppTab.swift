@@ -22,7 +22,7 @@ public enum AppTab: Int, CaseIterable {
         case .roadmap:
             return "roadmap"
         case .profile:
-            return "name"
+            return "profile"
         }
     }
 }

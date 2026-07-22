@@ -1,6 +1,13 @@
 //
 //  File.swift
-//  
+//
+//
+//  Created by Shady Eldakrory on 21/07/2026.
+//
+
+//
+//  File.swift
+//
 //
 //  Created by Shady Eldakrory on 21/07/2026.
 //
@@ -17,23 +24,16 @@ public struct ProfileView: View {
         )
     )
     
-    public init(){}
+    public init() {}
+    
     public var body: some View {
         ScrollView {
             VStack(spacing: AppTheme.Spacing.large) {
                 if let profile = viewModel.profile {
                     VStack(spacing: AppTheme.Spacing.xSmall) {
-                        Image("onboarding_img1")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 88, height: 88)
-                            .clipShape(Circle())
-                            .shadow(
-                                color: AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple100, opacity: 0.75),
-                                radius: 15 / 2,
-                                x: 0,
-                                y: 4
-                            )
+                        CircledAsyncImage(urlString: profile.avatarUrl,
+                                          size: 88,
+                                          name: profile.name)
                         
                         VStack(spacing: AppTheme.Spacing.xxxSmall) {
                             Text(profile.name)
@@ -57,15 +57,18 @@ public struct ProfileView: View {
                 
                 VStack(spacing: 0) {
                     SettingRow(
-                        iconName: "calendar",
+                        iconName: "calendar-green",
                         iconColor: AppTheme.Colors.green100,
                         bgOpacity: 0.10,
                         title: "Calendar Sync",
                         font: AppTheme.textStyle(size: 16, weight: .medium)
                     ) {
-                        Toggle("", isOn: $viewModel.isCalendarSyncEnabled)
-                            .labelsHidden()
-                            .tint(AppTheme.Colors.green100)
+                        Toggle("", isOn: Binding(
+                            get: { viewModel.isCalendarSyncEnabled },
+                            set: { viewModel.requestCalendarSyncChange(to: $0) }
+                        ))
+                        .labelsHidden()
+                        .tint(AppTheme.Colors.green100)
                     }
                     
                     SettingRow(
@@ -80,30 +83,67 @@ public struct ProfileView: View {
                     }
                     
                     SettingRow(
-                        iconName: "globe",
+                        iconName: "language",
                         iconColor: AppTheme.Colors.purple100,
                         bgOpacity: 0.15,
                         title: "Language",
                         font: AppTheme.textStyle(size: 16, weight: .medium)
                     ) {
-                        HStack(spacing: AppTheme.Spacing.xxxSmall) {
-                            Text(viewModel.selectedLanguage)
-                                .font(AppTheme.textStyle(size: 14, weight: .regular))
-                                .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
-                            Image(systemName: "chevron.down")
-                                .font(AppTheme.textStyle(size: 12, weight: .regular))
-                                .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
+                        Menu {
+                            Button {
+                                viewModel.selectedLanguage = "EN"
+                            } label: {
+                                if viewModel.selectedLanguage == "EN" {
+                                    Label("English", systemImage: "checkmark")
+                                } else {
+                                    Text("English")
+                                }
+                            }
+                            Button {
+                                viewModel.selectedLanguage = "AR"
+                            } label: {
+                                if viewModel.selectedLanguage == "AR" {
+                                    Label("العربية", systemImage: "checkmark")
+                                } else {
+                                    Text("العربية")
+                                }
+                            }
+                        } label: {
+                            HStack(spacing: AppTheme.Spacing.xxxSmall) {
+                                Text(viewModel.selectedLanguage)
+                                    .font(AppTheme.textStyle(size: 14, weight: .regular))
+                                    .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
+                                Image(systemName: "chevron.down")
+                                    .font(AppTheme.textStyle(size: 12, weight: .regular))
+                                    .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
+                            }
+                            .padding(.horizontal, AppTheme.Spacing.xSmall)
+                            .padding(.vertical, 6)
+                            .background(
+                                RoundedRectangle(cornerRadius: AppTheme.Spacing.xxSmall)
+                                    .stroke(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.1))
+                            )
                         }
-                        .padding(.horizontal, AppTheme.Spacing.xSmall)
-                        .padding(.vertical, 6)
-                        .background(
-                            RoundedRectangle(cornerRadius: AppTheme.Spacing.xxSmall)
-                                .stroke(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.1))
-                        )
                     }
                     
                     SettingRow(
-                        iconName: "rectangle.portrait.and.arrow.right",
+                        iconName: "preferences",
+                        iconColor: AppTheme.Colors.purple200,
+                        bgOpacity: 0.12,
+                        title: "Edit Preferences",
+                        font: AppTheme.textStyle(size: 16, weight: .medium)
+                    ) {
+                        Image(systemName: "chevron.right")
+                            .font(AppTheme.textStyle(size: 14, weight: .semibold))
+                            .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.35))
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        viewModel.openEditPreferences()
+                    }
+                    
+                    SettingRow(
+                        iconName: "logout",
                         iconColor: AppTheme.Colors.red100,
                         bgOpacity: 0.13,
                         title: "Logout",
@@ -122,6 +162,28 @@ public struct ProfileView: View {
         .onAppear {
             viewModel.loadProfile()
         }
+        .alert("Turn off Calendar Sync?", isPresented: $viewModel.showDisableCalendarSyncAlert) {
+            Button("Cancel", role: .cancel) {
+                viewModel.cancelDisableCalendarSync()
+            }
+            Button("Turn Off", role: .destructive) {
+                viewModel.confirmDisableCalendarSync()
+            }
+        } message: {
+            Text("Your study sessions will stop syncing to your calendar. You can turn this back on anytime.")
+        }
+        .sheet(isPresented: $viewModel.isEditPreferencesPresented) {
+            EditPreferencesSheet(
+                initialHours: viewModel.dailyStudyHours,
+                initialDays: viewModel.availableDays,
+                onSave: { hours, days in
+                    viewModel.saveEditPreferences(hours: hours, days: days)
+                },
+                onCancel: {
+                    viewModel.cancelEditPreferences()
+                }
+            )
+        }
     }
 }
 
@@ -138,7 +200,7 @@ struct StatCard: View {
             
             Text(value)
                 .font(AppTheme.textStyle(size: 24, weight: .bold))
-                .foregroundColor(AppTheme.Colors.purple100)
+                .foregroundColor(AppTheme.Colors.purple200.opacity(0.9))
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, AppTheme.Spacing.small)
@@ -167,7 +229,8 @@ struct SettingRow<TrailingContent: View>: View {
                         .fill(AppTheme.Colors.changeOpacity(color: iconColor, opacity: bgOpacity))
                         .frame(width: 32, height: 32)
                     
-                    Image(systemName: iconName)
+                    Image(iconName)
+                        .renderingMode(.template)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
@@ -187,6 +250,53 @@ struct SettingRow<TrailingContent: View>: View {
             if showDivider {
                 Divider()
                     .padding(.leading, 48)
+            }
+        }
+    }
+}
+
+struct CircledAsyncImage: View {
+    let urlString: String
+    var size: CGFloat = 56
+    var name: String
+    
+    var body: some View {
+        AsyncImage(url: URL(string: urlString)) { phase in
+            switch phase {
+            case .empty:
+                ZStack {
+                    Circle()
+                        .fill(AppTheme.Colors.purple200.opacity(0.2))
+                        .frame(width: 56, height: 56)
+                        .appShadow(opacity: 0.7, radius: 0)
+                    
+                    Text(name.prefix(2).capitalized)
+                        .font(AppTheme.textStyle(size: 20, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.purple200.opacity(0.8))
+                }
+                
+            case .success(let image):
+                image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: size, height: size)
+                    .clipShape(Circle())
+                    .appShadow(opacity: 0.75, radius: 5)
+                
+            case .failure:
+                ZStack {
+                    Circle()
+                        .fill(AppTheme.Colors.purple200.opacity(0.2))
+                        .frame(width: 56, height: 56)
+                        .appShadow(opacity: 0.7, radius: 5)
+                    
+                    Text(name.prefix(2).uppercased())
+                        .font(AppTheme.textStyle(size: 20, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.purple200.opacity(0.8))
+                }
+                
+            @unknown default:
+                EmptyView()
             }
         }
     }

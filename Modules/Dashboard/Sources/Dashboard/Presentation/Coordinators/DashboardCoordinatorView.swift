@@ -15,19 +15,22 @@ public struct DashboardCoordinatorView: View {
     private let studyRoomFactory: (String, String) -> AnyView
     private let courseDetailsFactory: (String) -> AnyView
     private let coursesFactory: () -> AnyView
+    private let profileFactory: () -> AnyView
     
     public init(
         coordinator: DashboardCoordinator,
         viewModel: DashboardViewModel,
         studyRoomFactory: @escaping (String, String) -> AnyView,
         courseDetailsFactory: @escaping (String) -> AnyView,
-        coursesFactory: @escaping () -> AnyView
+        coursesFactory: @escaping () -> AnyView,
+        profileFactory: @escaping () -> AnyView
     ) {
         self.coordinator = coordinator
         self._viewModel = StateObject(wrappedValue: viewModel)
         self.studyRoomFactory = studyRoomFactory
         self.courseDetailsFactory = courseDetailsFactory
         self.coursesFactory = coursesFactory
+        self.profileFactory = profileFactory
     }
     
     public var body: some View {
@@ -50,7 +53,7 @@ public struct DashboardCoordinatorView: View {
                     Text("Roadmap View")
                     
                 case .profile:
-                    Text("Profile View")
+                    profileFactory()
                 }
             }
             .navigationDestination(for: DashboardRoute.self) { route in
