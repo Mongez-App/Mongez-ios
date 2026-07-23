@@ -59,6 +59,11 @@ struct ContentView: View {
                                 dashboardRepository: DashboardRepository(
                                     remoteDataSource: DashboardRemoteDataSource()
                                 )
+                            ),
+                            getUserUseCase: GetUserUseCase(
+                                dashboardRepository: DashboardRepository(
+                                    remoteDataSource: DashboardRemoteDataSource()
+                                )
                             )
                         ),
                         studyRoomFactory: { courseId, taskTitle in

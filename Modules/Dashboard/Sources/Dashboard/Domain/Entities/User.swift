@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User {
+public struct User {
     var name : String
     var avatarUrl : String
     var streakCount : Int

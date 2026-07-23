@@ -22,4 +22,12 @@ public class DashboardRepository : DashboardRepositoryProtocol {
         
         return dashboard
     }
+    
+    public func fetchUser() async throws -> User {
+        let userDTO = try await remoteDataSource.fetchUser()
+        
+        let user = UserDTO.mapToEntity(user: userDTO)
+        
+        return user
+    }
 }

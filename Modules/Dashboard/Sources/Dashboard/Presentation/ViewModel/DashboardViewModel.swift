@@ -17,23 +17,30 @@ public class DashboardViewModel : ObservableObject {
     @Published var isLoading: Bool = false
     
     let getDashboardDetailsUseCase: GetDashboardDetailsUseCaseProtocol
-//    let getUserUseCase: GetUserUseCaseProtocol
+    let getUserUseCase: GetUserUseCaseProtocol
     
-    public init(getDashboardDetailsUseCase: GetDashboardDetailsUseCaseProtocol) {
+    public init(getDashboardDetailsUseCase: GetDashboardDetailsUseCaseProtocol,
+                getUserUseCase: GetUserUseCaseProtocol) {
         
         self.getDashboardDetailsUseCase = getDashboardDetailsUseCase
         
-//        self.getUserUseCase = getUserUseCase
+        self.getUserUseCase = getUserUseCase
     }
     
     public var onTaskSelected: ((String, String) -> Void)?
     var isEmpty: Bool = false
     
-    func fetchUser() {
-        // Mock User
-        let user = User.getMockUser()
-        
-        self.user = user
+    @MainActor
+    func fetchUser() async {
+        do {
+            let fetchedUser = try await getUserUseCase.execute()
+            self.user = fetchedUser
+            print("User fetched successfully: \(fetchedUser.name)")
+        } catch let decodingError as DecodingError {
+            print("User decoding error: \(decodingError)")
+        } catch {
+            print("Error fetching user: \(error)")
+        }
     }
     
     @MainActor

@@ -122,24 +122,22 @@ struct DashboardView: View {
                 }
             }
             .background(AppTheme.Colors.white100)
-            .onAppear {
-                viewModel.fetchUser()
-            }
             .task {
+                await viewModel.fetchUser()
                 await viewModel.fetchDashboardDetails()
             }
         }
     }
 }
 
-struct DashboardView_Previews: PreviewProvider {
-    static var previews: some View {
-        DashboardView(viewModel: DashboardViewModel(
-            getDashboardDetailsUseCase: GetDashboardDetailsUseCase(
-                dashboardRepository: DashboardRepository(
-                    remoteDataSource: DashboardRemoteDataSource()
-                )
-            )
-        ))
-    }
-}
+//struct DashboardView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        DashboardView(viewModel: DashboardViewModel(
+//            getDashboardDetailsUseCase: GetDashboardDetailsUseCase(
+//                dashboardRepository: DashboardRepository(
+//                    remoteDataSource: DashboardRemoteDataSource()
+//                )
+//            )
+//        ))
+//    }
+//}

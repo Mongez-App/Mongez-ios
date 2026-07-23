@@ -21,6 +21,9 @@ public class NetworkManger {
         let (data,response) = try await URLSession.shared.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
               (200...300).contains(httpResponse.statusCode) else{
+            let statusCode = (response as? HTTPURLResponse)?.statusCode ?? -1
+            let body = String(data: data, encoding: .utf8) ?? "no body"
+            print("❌ API Error [\(endpoint.path)] status: \(statusCode) body: \(body)")
             throw URLError(.badServerResponse)
         }
         return try JSONDecoder().decode(T.self, from: data)
