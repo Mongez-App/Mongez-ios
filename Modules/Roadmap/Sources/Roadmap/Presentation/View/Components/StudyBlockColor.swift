@@ -10,11 +10,10 @@ import Common
 
 enum StudyBlockColor {
     private static let palette: [Color] = [
-        AppTheme.Colors.purple100,
-        AppTheme.Colors.blue100,
-        AppTheme.Colors.green100,
-        AppTheme.Colors.orange100,
-        AppTheme.Colors.yellow100
+        AppTheme.Colors.purple100.opacity(0.75),
+        AppTheme.Colors.blue100.opacity(0.75),
+        AppTheme.Colors.green100.opacity(0.75),
+        AppTheme.Colors.yellow100.opacity(0.75)
     ]
 
     /// Deterministically maps an id to a theme color, so the same block

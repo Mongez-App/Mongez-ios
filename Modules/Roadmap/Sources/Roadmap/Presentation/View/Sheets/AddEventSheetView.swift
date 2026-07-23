@@ -149,13 +149,12 @@ struct AddEventSheetView: View {
     private var addButton: some View {
         Button(action: { dismiss() }) {
             Text("Add Event")
-                .font(AppTheme.textStyle(size: 16, weight: .semibold))
+                .font(AppTheme.textStyle(size: 16, weight: .medium))
                 .foregroundColor(AppTheme.Colors.white100)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, AppTheme.Spacing.small)
                 .background(AppTheme.Colors.purple200)
                 .cornerRadius(AppTheme.radius.meduim)
-                .appShadow(opacity: 0.3, radius: 8, y: 4)
         }
         .padding(.top, AppTheme.Spacing.xxSmall)
     }

@@ -122,13 +122,16 @@ struct FilterRoadmapSheetView: View {
                 selectedCourseNames.removeAll()
             } label: {
                 Text("Reset")
-                    .font(AppTheme.textStyle(size: 16, weight: .bold))
+                    .font(AppTheme.textStyle(size: 16, weight: .medium))
                     .foregroundColor(AppTheme.Colors.black100)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, AppTheme.Spacing.medium)
+                    .padding(.vertical, AppTheme.Spacing.small)
                     .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.gray200, opacity: 0.2))
+                        RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
+                            .fill(AppTheme.Colors.white100))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
+                            .stroke(AppTheme.Colors.gray100, lineWidth: 1)
                     )
             }
 
@@ -136,14 +139,13 @@ struct FilterRoadmapSheetView: View {
                 dismiss()
             } label: {
                 Text("Apply Filters")
-                    .font(AppTheme.textStyle(size: 16, weight: .bold))
+                    .font(AppTheme.textStyle(size: 16, weight: .medium))
                     .foregroundColor(AppTheme.Colors.white100)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, AppTheme.Spacing.medium)
+                    .padding(.vertical, AppTheme.Spacing.small)
                     .background(
-                        RoundedRectangle(cornerRadius: 20)
+                        RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
                             .fill(AppTheme.Colors.purple200)
-                            .appShadow(opacity: 0.4, radius: 12, y: 6)
                     )
             }
         }

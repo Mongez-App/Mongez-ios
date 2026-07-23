@@ -29,10 +29,10 @@ struct RoadmapEntryCardView: View {
 
                 Text(trailingText)
                     .font(AppTheme.textStyle(size: 15, weight: .medium))
-                    .foregroundColor(AppTheme.Colors.gray300)
+                    .foregroundColor(AppTheme.Colors.gray200)
             }
         }
-        .padding(AppTheme.Spacing.small)
+        .padding(AppTheme.Spacing.medium)
         .background(
             RoundedRectangle(cornerRadius: AppTheme.radius.small)
                 .fill(AppTheme.Colors.white100)

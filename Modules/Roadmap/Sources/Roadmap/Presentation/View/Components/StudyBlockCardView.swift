@@ -33,6 +33,7 @@ struct StudyBlockCardView: View {
             Text(block.courseName)
                 .font(AppTheme.textStyle(size: 16, weight: .semibold))
                 .foregroundColor(AppTheme.Colors.white100)
+                .padding(.vertical, AppTheme.Spacing.xxxSmall)
 
             Spacer()
 

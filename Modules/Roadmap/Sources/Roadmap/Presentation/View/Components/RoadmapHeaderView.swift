@@ -36,7 +36,7 @@ struct RoadmapHeaderView: View {
                 .frame(width: 36, height: 36)
                 .background(
                     Circle()
-                        .stroke(AppTheme.Colors.gray100, lineWidth: 1.5)
+                        .foregroundColor(AppTheme.Colors.white100).appShadow(opacity: 0.7, radius: 2)
                 )
         }
     }
