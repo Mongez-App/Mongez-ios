@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+public protocol RoadmapRepositoryProtocol {
+    func getRoadmap() async throws -> Roadmap
+    func getCourses() async throws -> Course
+    func addEvent(courseId: String) async throws
+}

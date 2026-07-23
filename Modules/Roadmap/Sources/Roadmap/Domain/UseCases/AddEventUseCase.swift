@@ -7,10 +7,18 @@
 
 import Foundation
 
-protocol AddEventUseCaseProtocol {
-    
+public protocol AddEventUseCaseProtocol {
+    func execute(courseId: String) async throws
 }
 
-class AddEventUseCase : AddEventUseCaseProtocol {
+public class AddEventUseCase : AddEventUseCaseProtocol {
+    private let roadmapRepository: RoadmapRepositoryProtocol
     
+    public init(roadmapRepository: RoadmapRepositoryProtocol) {
+        self.roadmapRepository = roadmapRepository
+    }
+    
+    public func execute(courseId: String) async throws {
+        
+    }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Course {
+public struct Course {
     var courseId: String
     var courseName: String
 }

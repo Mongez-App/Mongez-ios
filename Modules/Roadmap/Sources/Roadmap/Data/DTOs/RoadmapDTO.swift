@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct RoadmapDTO: Codable {
+public struct RoadmapDTO: Codable {
     let roadmapStartDate: String
     let weeks: [WeekDTO]
     
@@ -17,7 +17,7 @@ struct RoadmapDTO: Codable {
         case weeks
     }
     
-    static func mapToEntity(_ dto: RoadmapDTO) -> Roadmap {
+    public static func mapToEntity(_ dto: RoadmapDTO) -> Roadmap {
         Roadmap(
             roadmapStartDate: dto.roadmapStartDate,
             weeks: dto.weeks.map { WeekDTO.mapToEntity($0) }
@@ -25,7 +25,7 @@ struct RoadmapDTO: Codable {
     }
 }
 
-struct WeekDTO: Codable {
+public struct WeekDTO: Codable {
     let weekNumber: Int
     let startDate: String
     let endDate: String
@@ -38,7 +38,7 @@ struct WeekDTO: Codable {
         case studyBlocks = "study_blocks"
     }
     
-    static func mapToEntity(_ dto: WeekDTO) -> Week {
+    public static func mapToEntity(_ dto: WeekDTO) -> Week {
         Week(
             weekNumber: dto.weekNumber,
             startDate: dto.startDate,
@@ -48,7 +48,7 @@ struct WeekDTO: Codable {
     }
 }
 
-struct StudyBlockDTO: Codable {
+public struct StudyBlockDTO: Codable {
     let blockId: String
     let courseId: String
     let courseName: String
@@ -65,7 +65,7 @@ struct StudyBlockDTO: Codable {
         case events
     }
     
-    static func mapToEntity(_ dto: StudyBlockDTO) -> StudyBlock {
+    public static func mapToEntity(_ dto: StudyBlockDTO) -> StudyBlock {
         StudyBlock(
             blockId: dto.blockId,
             courseId: dto.courseId,
@@ -77,7 +77,7 @@ struct StudyBlockDTO: Codable {
     }
 }
 
-struct TaskDTO: Codable {
+public struct TaskDTO: Codable {
     let topic: String
     let durationMinutes: Int
     let taskDate: String
@@ -88,7 +88,7 @@ struct TaskDTO: Codable {
         case taskDate = "task_date"
     }
     
-    static func mapToEntity(_ dto: TaskDTO) -> Task {
+    public static func mapToEntity(_ dto: TaskDTO) -> Task {
         Task(
             topic: dto.topic,
             durationMinutes: dto.durationMinutes,
@@ -97,7 +97,7 @@ struct TaskDTO: Codable {
     }
 }
 
-struct EventDTO: Codable {
+public struct EventDTO: Codable {
     let eventId: String
     let courseId: String
     let courseName: String
@@ -114,7 +114,7 @@ struct EventDTO: Codable {
         case eventDate = "event_date"
     }
     
-    static func mapToEntity(_ dto: EventDTO) -> Event {
+    public static func mapToEntity(_ dto: EventDTO) -> Event {
         Event(
             title: dto.title,
             eventType: dto.eventType,

@@ -7,10 +7,18 @@
 
 import Foundation
 
-protocol GetRoadmapUseCaseProtocol {
-    
+public protocol GetRoadmapUseCaseProtocol {
+    func execute() async throws -> Roadmap
 }
 
-class GetRoadmapUseCase : GetRoadmapUseCaseProtocol {
+public class GetRoadmapUseCase : GetRoadmapUseCaseProtocol {
+    private let roadmapRepository: RoadmapRepositoryProtocol
     
+    public init(roadmapRepository: RoadmapRepositoryProtocol) {
+        self.roadmapRepository = roadmapRepository
+    }
+    
+    public func execute() async throws -> Roadmap {
+        try await roadmapRepository.getRoadmap()
+    }
 }

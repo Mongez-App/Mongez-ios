@@ -7,20 +7,20 @@
 
 import Foundation
 
-struct Roadmap {
+public struct Roadmap {
     let roadmapStartDate: String
     let weeks: [Week]
 }
 
 
-struct Week {
+public struct Week {
     let weekNumber: Int
     let startDate: String
     let endDate: String
     let studyBlocks: [StudyBlock]
 }
 
-struct StudyBlock {
+public struct StudyBlock {
     let blockId: String
     let courseId: String
     let courseName: String
@@ -29,13 +29,13 @@ struct StudyBlock {
     let events: [Event]
 }
 
-struct Task {
+public struct Task {
     let topic: String
     let durationMinutes: Int
     let taskDate: String
 }
 
-struct Event {
+public struct Event {
     let title: String
     let eventType: String
     let eventDate: String
