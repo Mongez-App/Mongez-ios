@@ -15,24 +15,25 @@ struct RoadmapEntryCardView: View {
     let trailingText: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: AppTheme.Spacing.xxSmall) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.xSmall) {
             Text(title)
-                .font(AppTheme.textStyle(size: 18, weight: .bold))
+                .font(AppTheme.textStyle(size: 14, weight: .medium))
                 .foregroundColor(AppTheme.Colors.black100)
 
             HStack {
                 Text(subtitle)
-                    .font(AppTheme.textStyle(size: 15, weight: .medium))
-                    .foregroundColor(AppTheme.Colors.gray300)
+                    .font(AppTheme.textStyle(size: 13, weight: .medium))
+                    .foregroundColor(AppTheme.Colors.gray200)
 
                 Spacer(minLength: AppTheme.Spacing.small)
 
                 Text(trailingText)
-                    .font(AppTheme.textStyle(size: 15, weight: .medium))
+                    .font(AppTheme.textStyle(size: 12, weight: .medium))
                     .foregroundColor(AppTheme.Colors.gray200)
             }
         }
-        .padding(AppTheme.Spacing.medium)
+        .padding(.horizontal, AppTheme.Spacing.xSmall)
+        .padding(.vertical, AppTheme.Spacing.xSmall)
         .background(
             RoundedRectangle(cornerRadius: AppTheme.radius.small)
                 .fill(AppTheme.Colors.white100)

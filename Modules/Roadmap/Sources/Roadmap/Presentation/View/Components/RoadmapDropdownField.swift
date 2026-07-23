@@ -17,7 +17,7 @@ struct RoadmapDropdownField: View {
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.xxSmall) {
             Text(title)
-                .font(AppTheme.textStyle(size: 14, weight: .bold))
+                .font(AppTheme.textStyle(size: 14, weight: .medium))
                 .foregroundColor(AppTheme.Colors.black100)
 
             Menu {

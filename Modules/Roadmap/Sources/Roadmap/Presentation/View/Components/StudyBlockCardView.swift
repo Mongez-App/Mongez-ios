@@ -44,7 +44,7 @@ struct StudyBlockCardView: View {
         .padding(.horizontal, AppTheme.Spacing.small)
         .padding(.vertical, AppTheme.Spacing.xSmall)
         .background(
-            RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
+            RoundedRectangle(cornerRadius: AppTheme.radius.small)
                 .fill(StudyBlockColor.color(for: block.blockId))
         )
         .contentShape(Rectangle())
