@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Common
 public class AuthRepository: AuthRepositoryProtocol {
     public func googleLogin(idToken: String) async throws -> User {
         let dto = try await remote.loginWithGoogle(idToken: idToken)
