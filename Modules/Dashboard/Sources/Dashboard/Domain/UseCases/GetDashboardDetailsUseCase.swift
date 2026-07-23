@@ -7,18 +7,18 @@
 
 import Foundation
 
-protocol GetDashboardDetailsUseCaseProtocol {
+public protocol GetDashboardDetailsUseCaseProtocol {
     func execute() async throws -> Dashboard
 }
 
-class GetDashboardDetailsUseCase : GetDashboardDetailsUseCaseProtocol {
+public class GetDashboardDetailsUseCase : GetDashboardDetailsUseCaseProtocol {
     var dashboardRepository: DashboardRepositoryProtocol
     
-    init(dashboardRepository: DashboardRepositoryProtocol) {
+    public init(dashboardRepository: DashboardRepositoryProtocol) {
         self.dashboardRepository = dashboardRepository
     }
     
-    func execute() async throws-> Dashboard {
+    public func execute() async throws-> Dashboard {
         return try await dashboardRepository.fetchDashboard()
     }
 }

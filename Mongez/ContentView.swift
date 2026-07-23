@@ -54,7 +54,13 @@ struct ContentView: View {
                 if let coordinator = appCoordinator.dashboardCoordinator {
                     DashboardCoordinatorView(
                         coordinator: coordinator,
-                        viewModel: DashboardViewModel(),
+                        viewModel: DashboardViewModel(
+                            getDashboardDetailsUseCase: GetDashboardDetailsUseCase(
+                                dashboardRepository: DashboardRepository(
+                                    remoteDataSource: DashboardRemoteDataSource()
+                                )
+                            )
+                        ),
                         studyRoomFactory: { courseId, taskTitle in
                             let chatRepository = MockChatRepository()
                             let studyViewModel = StudyRoomViewModel(

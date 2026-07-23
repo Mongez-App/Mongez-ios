@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Ahmed Tarek on 22/07/2026.
 //
@@ -20,16 +20,24 @@ public enum DashboardEndpoints : EndPoint {
     }
     
     public var path: String {
-        self.path
+        switch self {
+        case .dashboard(_, let pathValue):
+            return pathValue
+        }
     }
     
-    public var method: HTTPMethod { self.method }
+    public var method: HTTPMethod {
+        switch self {
+        case .dashboard(let methodValue, _):
+            return methodValue
+        }
+    }
     
     public var headers: [String : String]? {
         [
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "Authorization": "\(String(describing: idToken))"
+            "Authorization": "Bearer \(idToken)"
         ]
     }
     

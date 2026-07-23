@@ -8,14 +8,16 @@
 import Foundation
 import Common
 
-protocol DashboardRemoteDataSourceProtocol {
+public protocol DashboardRemoteDataSourceProtocol {
     func fetchDashboard() async throws -> DashboardDTO
 }
 
 
-class DashboardRemoteDataSource : DashboardRemoteDataSourceProtocol {
+public class DashboardRemoteDataSource : DashboardRemoteDataSourceProtocol {
     
-    func fetchDashboard() async throws -> DashboardDTO {
+    public init() {}
+    
+    public func fetchDashboard() async throws -> DashboardDTO {
         try await NetworkManger.shared.request(endpoint: DashboardEndpoints.dashboard(method: .post, path: "/home/dashboard"),
                                                responseType: DashboardDTO.self)
     }

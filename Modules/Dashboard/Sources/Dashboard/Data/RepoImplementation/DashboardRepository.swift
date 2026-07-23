@@ -8,14 +8,14 @@
 import Foundation
 
 
-class DashboardRepository : DashboardRepositoryProtocol {
+public class DashboardRepository : DashboardRepositoryProtocol {
     var remoteDataSource: DashboardRemoteDataSourceProtocol
     
-    init(remoteDataSource: DashboardRemoteDataSourceProtocol) {
+    public init(remoteDataSource: DashboardRemoteDataSourceProtocol) {
         self.remoteDataSource = remoteDataSource
     }
     
-    func fetchDashboard() async throws -> Dashboard {
+    public func fetchDashboard() async throws -> Dashboard {
         let dashboardDTO = try await remoteDataSource.fetchDashboard()
         
         let dashboard = DashboardDTO.mapToEntity(dashboard: dashboardDTO)

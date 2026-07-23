@@ -7,21 +7,21 @@
 
 import Foundation
 
-struct Dashboard {
+public struct Dashboard {
     var todayFocus: TodayFocus
     var progressMetrics: ProgressMetrics
     var todayTasks: [Task]
     var upcomingDeadlines: [UpcomingDeadline]
 }
     
-struct TodayFocus {
+public struct TodayFocus {
     var courseId: String?
     var courseName: String?
     var allocatedDuration: String
     var durationMinutes: Int
 }
 
-struct Task {
+public struct Task {
     var taskId: String
     var title: String
     var durationMinutes: Int
@@ -29,7 +29,7 @@ struct Task {
     var isCompleted: Bool
 }
 
-struct ProgressMetrics {
+public struct ProgressMetrics {
     var todayCompletedTasks: Int
     var todayTotalTasks: Int
     var weeklyHoursCompleted: Int
@@ -38,7 +38,7 @@ struct ProgressMetrics {
     var monthlyHoursGoal: Int
 }
 
-struct UpcomingDeadline {
+public struct UpcomingDeadline {
     var deadlineId: String
     var title: String
     var courseName: String

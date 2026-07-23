@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol DashboardRepositoryProtocol {
+public protocol DashboardRepositoryProtocol {
     func fetchDashboard() async throws -> Dashboard
 }

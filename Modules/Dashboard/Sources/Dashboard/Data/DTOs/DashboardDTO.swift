@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DashboardDTO: Codable {
+public struct DashboardDTO: Codable {
     var welcomeMessage: String?
     var todayFocus: TodayFocusDTO
     var progressMetrics: ProgressMetricsDTO
@@ -27,7 +27,7 @@ struct DashboardDTO: Codable {
     }
 }
 
-struct TodayFocusDTO: Codable {
+public struct TodayFocusDTO: Codable {
     var courseId: String?
     var courseName: String?
     var allocatedDuration: String
@@ -40,7 +40,7 @@ struct TodayFocusDTO: Codable {
         case durationMinutes = "duration_minutes"
     }
     
-    static func mapToEntity(todayFocus: TodayFocusDTO) -> TodayFocus {
+    public static func mapToEntity(todayFocus: TodayFocusDTO) -> TodayFocus {
         let todayFocus = TodayFocus(courseId: todayFocus.courseId,
                                     courseName: todayFocus.courseName,
                                     allocatedDuration: todayFocus.allocatedDuration,
@@ -50,7 +50,7 @@ struct TodayFocusDTO: Codable {
     }
 }
 
-struct ProgressMetricsDTO: Codable {
+public struct ProgressMetricsDTO: Codable {
     var todayCompletedTasks: Int
     var todayTotalTasks: Int
     var weeklyHoursCompleted: Int
@@ -67,7 +67,7 @@ struct ProgressMetricsDTO: Codable {
         case monthlyHoursGoal = "monthly_hours_goal"
     }
     
-    static func mapToEntity(progressMetrics: ProgressMetricsDTO) -> ProgressMetrics {
+    public static func mapToEntity(progressMetrics: ProgressMetricsDTO) -> ProgressMetrics {
         let progressMetrics = ProgressMetrics(todayCompletedTasks:Int(progressMetrics.todayCompletedTasks),
                                               todayTotalTasks: Int(progressMetrics.todayTotalTasks),
                                               weeklyHoursCompleted: Int(progressMetrics.weeklyHoursCompleted),
@@ -79,7 +79,7 @@ struct ProgressMetricsDTO: Codable {
     }
 }
 
-struct TaskDTO: Codable {
+public struct TaskDTO: Codable {
     var taskId: String
     var title: String
     var durationMinutes: Int
@@ -94,7 +94,7 @@ struct TaskDTO: Codable {
         case isCompleted = "is_completed"
     }
     
-    static func mapToEntity(task: TaskDTO) -> Task {
+    public static func mapToEntity(task: TaskDTO) -> Task {
         let task = Task(taskId: task.taskId,
                         title: task.title,
                         durationMinutes: task.durationMinutes,
@@ -105,7 +105,7 @@ struct TaskDTO: Codable {
     }
 }
 
-struct UpcomingDeadlineDTO: Codable {
+public struct UpcomingDeadlineDTO: Codable {
     var deadlineId: String
     var title: String
     var courseName: String
@@ -120,7 +120,7 @@ struct UpcomingDeadlineDTO: Codable {
         case dueDate = "due_date"
     }
     
-    static func mapToEntity(upcomingDeadline: UpcomingDeadlineDTO) -> UpcomingDeadline {
+    public static func mapToEntity(upcomingDeadline: UpcomingDeadlineDTO) -> UpcomingDeadline {
         let upcomingDeadline = UpcomingDeadline(deadlineId: upcomingDeadline.deadlineId,
                                                 title: upcomingDeadline.title,
                                                 courseName: upcomingDeadline.courseName,
@@ -131,7 +131,7 @@ struct UpcomingDeadlineDTO: Codable {
     }
 }
 
-struct StreakDTO: Codable {
+public struct StreakDTO: Codable {
     var currentStreakDays: Int
     
     enum CodingKeys: String, CodingKey {
@@ -139,12 +139,12 @@ struct StreakDTO: Codable {
     }
 }
 
-struct AISuggestionDTO: Codable {
+public struct AISuggestionDTO: Codable {
     var text: String
 }
 
 extension DashboardDTO {
-    static func mapToEntity(dashboard: DashboardDTO) -> Dashboard {
+    public static func mapToEntity(dashboard: DashboardDTO) -> Dashboard {
         let dashboardEntity = Dashboard(
             todayFocus: TodayFocusDTO.mapToEntity(todayFocus: dashboard.todayFocus),
             progressMetrics: ProgressMetricsDTO.mapToEntity(progressMetrics: dashboard.progressMetrics),

@@ -10,30 +10,28 @@ import Common
 
 struct DashboardView: View {
     @ObservedObject public var viewModel: DashboardViewModel
-        
+    
     public init(viewModel: DashboardViewModel) {
         self.viewModel = viewModel
     }
-
+    
     var body: some View {
-        VStack {
-            if viewModel.user != nil {
-                HeaderView(user: $viewModel.user)
-            }
-            
-            ScrollView(.vertical, showsIndicators: false){
-                VStack(spacing: AppTheme.Spacing.xLarge) {
-                    if viewModel.todayFocus != nil {
-                        TodayFocusCard(todayFocus: $viewModel.todayFocus)
-                            .padding(.horizontal, AppTheme.Spacing.small)
-                    }
-                    
-                    if viewModel.progressMetrics != nil {
+        ZStack {
+            VStack {
+                if viewModel.user != nil {
+                    HeaderView(user: $viewModel.user)
+                }
+                
+                ScrollView(.vertical, showsIndicators: false){
+                    VStack(spacing: AppTheme.Spacing.xLarge) {
+                        if let todayFocus = viewModel.todayFocus, todayFocus.courseName != nil {
+                            TodayFocusCard(todayFocus: $viewModel.todayFocus)
+                                .padding(.horizontal, AppTheme.Spacing.small)
+                        }
+                        
                         ProgressList(progressMetrics: $viewModel.progressMetrics)
                             .padding(.leading, AppTheme.Spacing.small)
-                    }
-                    
-                    if viewModel.todayTasks != nil {
+                        
                         VStack(spacing: AppTheme.Spacing.medium) {
                             HStack {
                                 Text("Today's Tasks")
@@ -51,18 +49,30 @@ struct DashboardView: View {
                                 }
                             }
                             
-                            TasksList(todayTasks: $viewModel.todayTasks) { selectedTask in
-                                viewModel.selectTask(
-                                    courseId: selectedTask.taskId,
-                                    taskTitle: selectedTask.title,
-                                    isCompleted: selectedTask.isCompleted
-                                )
+                            if viewModel.todayTasks.isEmpty {
+                                VStack(spacing: AppTheme.Spacing.medium) {
+                                    Image("empty-tasks")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 94, height: 94)
+                                    
+                                    Text("No tasks for today!")
+                                        .font(AppTheme.textStyle(size: 16, weight: .medium))
+                                        .foregroundColor(AppTheme.Colors.black100)
+                                }
+                                //.padding(.vertical, AppTheme.Spacing.small)
+                            } else {
+                                TasksList(todayTasks: $viewModel.todayTasks) { selectedTask in
+                                    viewModel.selectTask(
+                                        courseId: selectedTask.taskId,
+                                        taskTitle: selectedTask.title,
+                                        isCompleted: selectedTask.isCompleted
+                                    )
+                                }
                             }
                         }
                         .padding(.horizontal, AppTheme.Spacing.small)
-                    }
-                    
-                    if viewModel.upcomingDeadlines != nil {
+                        
                         VStack(spacing: AppTheme.Spacing.medium) {
                             HStack {
                                 Text("Upcoming Deadlines")
@@ -80,30 +90,56 @@ struct DashboardView: View {
                                 }
                             }
                             
-                            DeadlineList(upcomingDeadlines: $viewModel.upcomingDeadlines)
+                            if viewModel.upcomingDeadlines.isEmpty {
+                                Text("Yaaay! you are done with this month's deadlines")
+                                    .font(AppTheme.textStyle(size: 14, weight: .medium))
+                                    .foregroundColor(AppTheme.Colors.gray300)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.vertical, AppTheme.Spacing.xxLarge)
+                            } else {
+                                DeadlineList(upcomingDeadlines: $viewModel.upcomingDeadlines)
+                            }
                         }
                         .padding(.horizontal, AppTheme.Spacing.small)
+                        
+                        SuggestionCard()
+                            .padding(.horizontal, AppTheme.Spacing.small)
                     }
-                    
-                    SuggestionCard()
-                        .padding(.horizontal, AppTheme.Spacing.small)
+                    //.padding(.horizontal, AppTheme.Spacing.small)
+                    .padding(.vertical, AppTheme.Spacing.small)
                 }
-                //.padding(.horizontal, AppTheme.Spacing.small)
-                .padding(.vertical, AppTheme.Spacing.small)
+                .padding(.bottom, 85)
+                .background(AppTheme.Colors.white100)
+                .background(AppTheme.Colors.white100)
+                
+                if viewModel.isLoading {
+                    ZStack {
+                        Color.black.opacity(0.15).ignoresSafeArea()
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.Colors.purple200))
+                            .scaleEffect(1.5)
+                    }
+                }
             }
-            .padding(.bottom, 85)
             .background(AppTheme.Colors.white100)
-        }
-        .background(AppTheme.Colors.white100)
-        .onAppear {
-            viewModel.fetchUser()
-            viewModel.fetchDashboardDetails()
+            .onAppear {
+                viewModel.fetchUser()
+            }
+            .task {
+                await viewModel.fetchDashboardDetails()
+            }
         }
     }
 }
 
 struct DashboardView_Previews: PreviewProvider {
     static var previews: some View {
-        DashboardView(viewModel: DashboardViewModel())
+        DashboardView(viewModel: DashboardViewModel(
+            getDashboardDetailsUseCase: GetDashboardDetailsUseCase(
+                dashboardRepository: DashboardRepository(
+                    remoteDataSource: DashboardRemoteDataSource()
+                )
+            )
+        ))
     }
 }
