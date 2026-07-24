@@ -5,6 +5,9 @@
 //  Created by Shady Eldakrory on 18/07/2026.
 //
 
+import Foundation
+import FirebaseAuth
+
 @MainActor
 public final class AuthViewModel: ObservableObject {
 
@@ -85,7 +88,11 @@ public final class AuthViewModel: ObservableObject {
                 idToken = try await FirebaseEmailAuthService.shared.register(name: name, email: email, password: password)
             }
             
-            let result = try await useCase.executeHandshake(idToken: idToken, isGuest: false)
+            let currentUser = Auth.auth().currentUser
+            let displayName = currentUser?.displayName ?? self.name
+            let avatarUrl = currentUser?.photoURL?.absoluteString ?? ""
+            
+            let result = try await useCase.executeHandshake(idToken: idToken, name: displayName, avatarUrl: avatarUrl)
             self.user = result.user
             onAuthSuccess?(result.isNewUser)
             
@@ -101,7 +108,11 @@ public final class AuthViewModel: ObservableObject {
         do {
             let firebaseIDToken = try await GoogleAuthService.shared.signInAndGetFirebaseIDToken()
             
-            let result = try await useCase.executeHandshake(idToken: firebaseIDToken, isGuest: false)
+            let currentUser = Auth.auth().currentUser
+            let displayName = currentUser?.displayName ?? ""
+            let avatarUrl = currentUser?.photoURL?.absoluteString ?? ""
+            
+            let result = try await useCase.executeHandshake(idToken: firebaseIDToken, name: displayName, avatarUrl: avatarUrl)
             self.user = result.user
             onAuthSuccess?(result.isNewUser)
             

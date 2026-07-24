@@ -11,4 +11,5 @@ public struct User {
     public let name: String
     public let email: String
     public let token: String
+    public let avatarUrl: String?
 }

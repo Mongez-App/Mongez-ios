@@ -9,22 +9,28 @@ import Foundation
 
 protocol ProfileRemoteDataSourceProtocol {
     func getProfile() async throws -> UserProfile
+    func updateProfile(name: String, avatarUrl: String, appearance: String, language: String, calendarSyncConnected: Bool) async throws -> UserProfile
+    func updatePreferences(dailyStudyHours: Int, availableDays: [String]) async throws -> UserProfile
 }
+
+import Common
 
 class ProfileRemoteDataSource: ProfileRemoteDataSourceProtocol {
     func getProfile() async throws -> UserProfile {
-        let mockStats = ProfileStats(
-            totalStudyHours: 145,
-            completedTasksCount: 382,
-            currentStreakDays: 14
+        try await NetworkManger.shared.request(endpoint: ProfileEndpoint.getProfile, responseType: UserProfile.self)
+    }
+    
+    func updateProfile(name: String, avatarUrl: String, appearance: String, language: String, calendarSyncConnected: Bool) async throws -> UserProfile {
+        try await NetworkManger.shared.request(
+            endpoint: ProfileEndpoint.updateProfile(name: name, avatarUrl: avatarUrl, appearance: appearance, language: language, calendarSyncConnected: calendarSyncConnected),
+            responseType: UserProfile.self
         )
-        
-        return UserProfile(
-            userId: "usr_firebase_99812",
-            name: "Abdullah Mohamed",
-            email: "abdullah@example.com",
-            avatarUrl: "https://plus.unsplash.com/premium_photo-1689977927774-401b12d137d6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bWFuJTIwYXZhdGFyfGVufDB8fDB8fHww",
-            stats: mockStats
+    }
+    
+    func updatePreferences(dailyStudyHours: Int, availableDays: [String]) async throws -> UserProfile {
+        try await NetworkManger.shared.request(
+            endpoint: ProfileEndpoint.updatePreferences(dailyStudyHours: dailyStudyHours, availableDays: availableDays),
+            responseType: UserProfile.self
         )
     }
 }

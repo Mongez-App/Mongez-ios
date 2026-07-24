@@ -17,12 +17,21 @@ public class AuthRepository: AuthRepositoryProtocol {
         self.keychain = keychain
     }
     
-    public func handshake(idToken: String, isGuest: Bool) async throws -> (user: User, isNewUser: Bool) {
-        let dto = try await remote.handshake(idToken: idToken, isGuest: isGuest)
+    public func handshake(idToken: String, name: String, avatarUrl: String) async throws -> (user: User, isNewUser: Bool) {
+        let (dto, statusCode) = try await remote.handshake(idToken: idToken, name: name, avatarUrl: avatarUrl)
         keychain.saveToken(idToken)
         
         UserDefaults.standard.set(dto.userId, forKey: "current_user_id")
+        print("\(UserDefaults.standard.string(forKey: "current_user_id") ?? "No id Found")")
+        UserDefaults.standard.set(keychain.getToken(), forKey: "main_token")
+        print("\(UserDefaults.standard.string(forKey: "main_token") ?? "No id Found")")
         
-        return (dto.mapToUserEntity(firebaseToken: idToken), dto.isNewUser)
+        let isNewUser = (statusCode == 201)
+        return (dto.mapToUserEntity(firebaseToken: idToken), isNewUser)
+    }
+
+    public func getMe(idToken: String) async throws -> User {
+        let dto = try await remote.getMe(idToken: idToken)
+        return dto.mapToUserEntity(firebaseToken: idToken)
     }
 }

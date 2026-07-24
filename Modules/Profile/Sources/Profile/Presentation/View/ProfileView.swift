@@ -21,6 +21,16 @@ public struct ProfileView: View {
             repository: ProfileRepository(
                 remoteDataSource: ProfileRemoteDataSource()
             )
+        ),
+        updateProfileUseCase: UpdateProfileUseCase(
+            repository: ProfileRepository(
+                remoteDataSource: ProfileRemoteDataSource()
+            )
+        ),
+        updatePreferencesUseCase: UpdatePreferencesUseCase(
+            repository: ProfileRepository(
+                remoteDataSource: ProfileRemoteDataSource()
+            )
         )
     )
     
@@ -31,9 +41,39 @@ public struct ProfileView: View {
             VStack(spacing: AppTheme.Spacing.large) {
                 if let profile = viewModel.profile {
                     VStack(spacing: AppTheme.Spacing.xSmall) {
-                        CircledAsyncImage(urlString: profile.avatarUrl,
-                                          size: 88,
-                                          name: profile.name)
+                        // Avatar with edit badge
+                        ZStack(alignment: .bottomTrailing) {
+                            if let data = viewModel.localSelectedImageData,
+                               let uiImage = UIImage(data: data) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 88, height: 88)
+                                    .clipShape(Circle())
+                                    .appShadow(opacity: 0.75, radius: 5)
+                            } else {
+                                CircledAsyncImage(urlString: profile.avatarUrl,
+                                                  size: 88,
+                                                  name: profile.name)
+                            }
+
+                            // Edit badge
+                            Button {
+                                viewModel.openEditProfile()
+                            } label: {
+                                ZStack {
+                                    Circle()
+                                        .fill(AppTheme.Colors.purple200)
+                                        .frame(width: 26, height: 26)
+                                        .appShadow(opacity: 0.4, radius: 6, y: 3)
+
+                                    Image(systemName: "pencil")
+                                        .font(.system(size: 11, weight: .semibold))
+                                        .foregroundColor(.white)
+                                }
+                            }
+                            .offset(x: 2, y: 2)
+                        }
                         
                         VStack(spacing: AppTheme.Spacing.xxxSmall) {
                             Text(profile.name)
@@ -91,7 +131,7 @@ public struct ProfileView: View {
                     ) {
                         Menu {
                             Button {
-                                viewModel.selectedLanguage = "EN"
+                                viewModel.updateLanguage("EN")
                             } label: {
                                 if viewModel.selectedLanguage == "EN" {
                                     Label("English", systemImage: "checkmark")
@@ -100,7 +140,7 @@ public struct ProfileView: View {
                                 }
                             }
                             Button {
-                                viewModel.selectedLanguage = "AR"
+                                viewModel.updateLanguage("AR")
                             } label: {
                                 if viewModel.selectedLanguage == "AR" {
                                     Label("العربية", systemImage: "checkmark")
@@ -183,6 +223,20 @@ public struct ProfileView: View {
                     viewModel.cancelEditPreferences()
                 }
             )
+        }
+        .sheet(isPresented: $viewModel.isEditProfilePresented) {
+            if let profile = viewModel.profile {
+                EditProfileSheet(
+                    currentName: profile.name,
+                    currentAvatarUrl: profile.avatarUrl,
+                    onSave: { name, imageData in
+                        viewModel.saveEditProfile(name: name, imageData: imageData)
+                    },
+                    onCancel: {
+                        viewModel.cancelEditProfile()
+                    }
+                )
+            }
         }
     }
 }

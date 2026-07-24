@@ -17,4 +17,12 @@ class ProfileRepository: ProfileRepositoryProtocol {
     func fetchProfile() async throws -> UserProfile {
         return try await remoteDataSource.getProfile()
     }
+
+    func updateProfile(name: String, avatarUrl: String, appearance: String, language: String, calendarSyncConnected: Bool) async throws -> UserProfile {
+        return try await remoteDataSource.updateProfile(name: name, avatarUrl: avatarUrl, appearance: appearance, language: language, calendarSyncConnected: calendarSyncConnected)
+    }
+
+    func updatePreferences(dailyStudyHours: Int, availableDays: [String]) async throws -> UserProfile {
+        return try await remoteDataSource.updatePreferences(dailyStudyHours: dailyStudyHours, availableDays: availableDays)
+    }
 }

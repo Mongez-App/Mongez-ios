@@ -26,4 +26,20 @@ public class NetworkManger {
         return try JSONDecoder().decode(T.self, from: data)
     }
     
+    public func requestWithStatus<T:Codable>(endpoint : EndPoint, responseType : T.Type) async throws -> (decoded: T, statusCode: Int) {
+        guard let url = URL(string: endpoint.baseURL + endpoint.path) else {
+            throw URLError(.badURL)
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = endpoint.method.rawValue
+        request.allHTTPHeaderFields = endpoint.headers
+        request.httpBody = endpoint.body
+        let (data,response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200...300).contains(httpResponse.statusCode) else{
+            throw URLError(.badServerResponse)
+        }
+        let decoded = try JSONDecoder().decode(T.self, from: data)
+        return (decoded, httpResponse.statusCode)
+    }
 }

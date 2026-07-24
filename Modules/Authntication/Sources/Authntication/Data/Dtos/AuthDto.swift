@@ -10,12 +10,26 @@ public struct AuthResponseDTO: Codable {
     public let userId: String
     public let email: String?
     public let name: String?
-    public let isNewUser: Bool
+    public let avatarUrl: String?
+    public let stats: AuthStatsDTO?
     
     enum CodingKeys: String, CodingKey {
-        case email,name
+        case email, name
         case userId = "user_id"
-        case isNewUser = "is_new_user"
+        case avatarUrl = "avatar_url"
+        case stats
+    }
+}
+
+public struct AuthStatsDTO: Codable {
+    public let totalStudyHours: Double
+    public let completedTasksCount: Int
+    public let currentStreakDays: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case totalStudyHours = "total_study_hours"
+        case completedTasksCount = "completed_tasks_count"
+        case currentStreakDays = "current_streak_days"
     }
 }
 
@@ -25,7 +39,8 @@ extension AuthResponseDTO {
             id: userId,
             name: name ?? "Guest",
             email: email ?? "",
-            token: firebaseToken
+            token: firebaseToken,
+            avatarUrl: avatarUrl
         )
     }
 }
