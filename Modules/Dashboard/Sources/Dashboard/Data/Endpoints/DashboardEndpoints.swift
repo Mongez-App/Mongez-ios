@@ -7,28 +7,13 @@
 
 import Foundation
 import Common
-import Security
 
 public enum DashboardEndpoints : EndPoint {
     case dashboard(method: HTTPMethod, path: String)
     case user(method: HTTPMethod, path: String)
     
-    // will update it to use the UserDefault
     public var idToken: String? {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: "auth_token",
-            kSecReturnData as String: kCFBooleanTrue!,
-            kSecMatchLimit as String: kSecMatchLimitOne
-        ]
-        
-        var dataTypeRef: AnyObject?
-        let status = SecItemCopyMatching(query as CFDictionary, &dataTypeRef)
-        
-        if status == errSecSuccess, let data = dataTypeRef as? Data {
-            return String(data: data, encoding: .utf8)
-        }
-        return nil
+        UserDefaults.standard.string(forKey: "main_token")
     }
     
     public var baseURL: String {
