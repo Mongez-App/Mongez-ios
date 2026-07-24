@@ -7,6 +7,6 @@
 
 import Foundation
 public protocol AuthRepositoryProtocol {
-    func handshake(idToken: String, name: String, avatarUrl: String) async throws -> (user: User, isNewUser: Bool)
+    func handshake(idToken: String, name: String, appearance: String, language: String) async throws -> (user: User, isNewUser: Bool)
     func getMe(idToken: String) async throws -> User
 }

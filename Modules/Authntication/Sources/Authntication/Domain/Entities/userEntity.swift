@@ -12,4 +12,7 @@ public struct User {
     public let email: String
     public let token: String
     public let avatarUrl: String?
+    public let appearance: String?
+    public let language: String?
+    public let calendarSyncConnected: Bool
 }

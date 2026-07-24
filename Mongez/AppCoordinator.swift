@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import SwiftUI
 import Common
 import Authntication
@@ -23,9 +24,11 @@ public enum AppState {
     case courses
 }
 
+@MainActor
 public final class AppCoordinator: ObservableObject, Coordinator {
     public let id = UUID()
     public var childCoordinators: [any Coordinator] = []
+    private var cancellables = Set<AnyCancellable>()
 
     @Published public var state: AppState = .onboarding
     @Published public var onboardingCoordinator: OnboardingCoordinator?
@@ -36,6 +39,48 @@ public final class AppCoordinator: ObservableObject, Coordinator {
     
     public init() {
         startOnboarding()
+        setupLogoutListener()
+        setupProfileUpdateListener()
+    }
+    
+    private func setupLogoutListener() {
+        NotificationCenter.default.publisher(for: NSNotification.Name("UserDidLogoutNotification"))
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.handleLogout()
+            }
+            .store(in: &cancellables)
+     }
+     
+     private func setupProfileUpdateListener() {
+         NotificationCenter.default.publisher(for: NSNotification.Name("UserDidUpdateProfileNotification"))
+             .receive(on: RunLoop.main)
+             .sink { notification in
+                 if let name = notification.userInfo?["name"] as? String {
+                     Task {
+                         do {
+                             try await FirebaseEmailAuthService.shared.updateProfile(name: name)
+                             print("Firebase Auth profile updated with name: \(name)")
+                         } catch {
+                             print("Failed to update Firebase Auth profile name: \(error)")
+                         }
+                     }
+                 }
+             }
+             .store(in: &cancellables)
+     }
+    
+    private func handleLogout() {
+        GoogleAuthService.shared.signOut()
+        
+        // Clear all child coordinators
+        childCoordinators.removeAll()
+        dashboardCoordinator = nil
+        coursesCoordinator = nil
+        preferencesCoordinator = nil
+        onboardingCoordinator = nil
+        
+        startAuth()
     }
     
     public func startOnboarding() {

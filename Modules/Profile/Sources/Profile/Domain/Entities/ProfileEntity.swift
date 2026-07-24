@@ -8,11 +8,11 @@
 import Foundation
 
 struct UserProfile: Codable {
-    let userId: String
-    let name: String
-    let email: String
-    let avatarUrl: String
-    let stats: ProfileStats
+    let userId: String?
+    let name: String?
+    let email: String?
+    let avatarUrl: String?
+    let stats: ProfileStats?
     
     // Optional additional properties from profile update
     let appearance: String?
@@ -29,12 +29,28 @@ struct UserProfile: Codable {
         case language
         case calendarSyncConnected = "calendar_sync_connected"
     }
+    
+    // Merges missing optional fields from a previous profile state
+    func merged(with updated: UserProfile) -> UserProfile {
+        let mergedStats = self.stats?.merged(with: updated.stats) ?? updated.stats ?? self.stats
+        
+        return UserProfile(
+            userId: updated.userId ?? self.userId,
+            name: updated.name ?? self.name,
+            email: updated.email ?? self.email,
+            avatarUrl: updated.avatarUrl ?? self.avatarUrl,
+            stats: mergedStats,
+            appearance: updated.appearance ?? self.appearance,
+            language: updated.language ?? self.language,
+            calendarSyncConnected: updated.calendarSyncConnected ?? self.calendarSyncConnected
+        )
+    }
 }
 
 struct ProfileStats: Codable {
-    let totalStudyHours: Int
-    let completedTasksCount: Int
-    let currentStreakDays: Int
+    let totalStudyHours: Double?
+    let completedTasksCount: Int?
+    let currentStreakDays: Int?
     
     // Optional additional properties from preferences
     let dailyStudyHours: Int?
@@ -46,5 +62,16 @@ struct ProfileStats: Codable {
         case currentStreakDays = "current_streak_days"
         case dailyStudyHours = "daily_study_hours"
         case availableDays = "available_days"
+    }
+    
+    func merged(with updated: ProfileStats?) -> ProfileStats {
+        guard let updated = updated else { return self }
+        return ProfileStats(
+            totalStudyHours: updated.totalStudyHours ?? self.totalStudyHours,
+            completedTasksCount: updated.completedTasksCount ?? self.completedTasksCount,
+            currentStreakDays: updated.currentStreakDays ?? self.currentStreakDays,
+            dailyStudyHours: updated.dailyStudyHours ?? self.dailyStudyHours,
+            availableDays: updated.availableDays ?? self.availableDays
+        )
     }
 }

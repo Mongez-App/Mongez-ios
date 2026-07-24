@@ -41,7 +41,7 @@ public struct ProfileView: View {
             VStack(spacing: AppTheme.Spacing.large) {
                 if let profile = viewModel.profile {
                     VStack(spacing: AppTheme.Spacing.xSmall) {
-                        // Avatar with edit badge
+                    
                         ZStack(alignment: .bottomTrailing) {
                             if let data = viewModel.localSelectedImageData,
                                let uiImage = UIImage(data: data) {
@@ -52,12 +52,12 @@ public struct ProfileView: View {
                                     .clipShape(Circle())
                                     .appShadow(opacity: 0.75, radius: 5)
                             } else {
-                                CircledAsyncImage(urlString: profile.avatarUrl,
+                                CircledAsyncImage(urlString: profile.avatarUrl ?? "",
                                                   size: 88,
-                                                  name: profile.name)
+                                                  name: profile.name ?? "default value")
                             }
 
-                            // Edit badge
+                           
                             Button {
                                 viewModel.openEditProfile()
                             } label: {
@@ -76,11 +76,11 @@ public struct ProfileView: View {
                         }
                         
                         VStack(spacing: AppTheme.Spacing.xxxSmall) {
-                            Text(profile.name)
+                            Text(profile.name ?? "default value")
                                 .font(AppTheme.textStyle(size: 20, weight: .bold))
                                 .foregroundColor(AppTheme.Colors.black100)
                             
-                            Text(profile.email)
+                            Text(profile.email ?? "default value")
                                 .font(AppTheme.textStyle(size: 14, weight: .regular))
                                 .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
                         }
@@ -88,9 +88,9 @@ public struct ProfileView: View {
                     .padding(.top, AppTheme.Spacing.xLarge)
                     
                     HStack(spacing: AppTheme.Spacing.small) {
-                        StatCard(title: "Studying\nHours", value: "\(profile.stats.totalStudyHours)")
-                        StatCard(title: "Completed\nTasks", value: "\(profile.stats.completedTasksCount)")
-                        StatCard(title: "Streak\nDays", value: "\(profile.stats.currentStreakDays)")
+                        StatCard(title: "Studying\nHours", value: String(format: "%.1f", profile.stats?.totalStudyHours ?? 0.0))
+                        StatCard(title: "Completed\nTasks", value: "\(profile.stats?.completedTasksCount ?? 0)")
+                        StatCard(title: "Streak\nDays", value: "\(profile.stats?.currentStreakDays ?? 0)")
                     }
                     .padding(.horizontal, AppTheme.Spacing.medium)
                 }
@@ -193,6 +193,10 @@ public struct ProfileView: View {
                     ) {
                         EmptyView()
                     }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        viewModel.logout()
+                    }
                 }
                 .padding(.horizontal, AppTheme.Spacing.medium)
                 .padding(.top, AppTheme.Spacing.small)
@@ -227,8 +231,8 @@ public struct ProfileView: View {
         .sheet(isPresented: $viewModel.isEditProfilePresented) {
             if let profile = viewModel.profile {
                 EditProfileSheet(
-                    currentName: profile.name,
-                    currentAvatarUrl: profile.avatarUrl,
+                    currentName: profile.name ?? "default value",
+                    currentAvatarUrl: profile.avatarUrl ?? "",
                     onSave: { name, imageData in
                         viewModel.saveEditProfile(name: name, imageData: imageData)
                     },
@@ -320,12 +324,12 @@ struct CircledAsyncImage: View {
             case .empty:
                 ZStack {
                     Circle()
-                        .fill(AppTheme.Colors.purple200.opacity(0.2))
-                        .frame(width: 56, height: 56)
-                        .appShadow(opacity: 0.7, radius: 0)
+                        .fill(AppTheme.Colors.purple200.opacity(0.15))
+                        .frame(width: size, height: size)
+                        .appShadow(opacity: 0.15, radius: 5, y: 2)
                     
                     Text(name.prefix(2).capitalized)
-                        .font(AppTheme.textStyle(size: 20, weight: .medium))
+                        .font(AppTheme.textStyle(size: size * 0.35, weight: .medium))
                         .foregroundColor(AppTheme.Colors.purple200.opacity(0.8))
                 }
                 
@@ -335,17 +339,17 @@ struct CircledAsyncImage: View {
                     .scaledToFill()
                     .frame(width: size, height: size)
                     .clipShape(Circle())
-                    .appShadow(opacity: 0.75, radius: 5)
+                    .appShadow(opacity: 0.15, radius: 5, y: 2)
                 
             case .failure:
                 ZStack {
                     Circle()
-                        .fill(AppTheme.Colors.purple200.opacity(0.2))
-                        .frame(width: 56, height: 56)
-                        .appShadow(opacity: 0.7, radius: 5)
+                        .fill(AppTheme.Colors.purple200.opacity(0.15))
+                        .frame(width: size, height: size)
+                        .appShadow(opacity: 0.15, radius: 5, y: 2)
                     
                     Text(name.prefix(2).uppercased())
-                        .font(AppTheme.textStyle(size: 20, weight: .medium))
+                        .font(AppTheme.textStyle(size: size * 0.35, weight: .medium))
                         .foregroundColor(AppTheme.Colors.purple200.opacity(0.8))
                 }
                 

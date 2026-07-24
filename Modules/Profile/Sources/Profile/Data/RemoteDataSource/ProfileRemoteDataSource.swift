@@ -17,18 +17,18 @@ import Common
 
 class ProfileRemoteDataSource: ProfileRemoteDataSourceProtocol {
     func getProfile() async throws -> UserProfile {
-        try await NetworkManger.shared.request(endpoint: ProfileEndpoint.getProfile, responseType: UserProfile.self)
+        return try await NetworkManger.shared.request(endpoint: ProfileEndpoint.getProfile, responseType: UserProfile.self)
     }
     
     func updateProfile(name: String, avatarUrl: String, appearance: String, language: String, calendarSyncConnected: Bool) async throws -> UserProfile {
-        try await NetworkManger.shared.request(
+        return try await NetworkManger.shared.request(
             endpoint: ProfileEndpoint.updateProfile(name: name, avatarUrl: avatarUrl, appearance: appearance, language: language, calendarSyncConnected: calendarSyncConnected),
             responseType: UserProfile.self
         )
     }
     
     func updatePreferences(dailyStudyHours: Int, availableDays: [String]) async throws -> UserProfile {
-        try await NetworkManger.shared.request(
+        return try await NetworkManger.shared.request(
             endpoint: ProfileEndpoint.updatePreferences(dailyStudyHours: dailyStudyHours, availableDays: availableDays),
             responseType: UserProfile.self
         )

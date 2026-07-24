@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseAuth
+import Common
 
 @MainActor
 public final class AuthViewModel: ObservableObject {
@@ -90,9 +91,12 @@ public final class AuthViewModel: ObservableObject {
             
             let currentUser = Auth.auth().currentUser
             let displayName = currentUser?.displayName ?? self.name
-            let avatarUrl = currentUser?.photoURL?.absoluteString ?? ""
             
-            let result = try await useCase.executeHandshake(idToken: idToken, name: displayName, avatarUrl: avatarUrl)
+            // Use saved preferences; default to system values on first launch
+            let appearance = UserDefaults.standard.string(forKey: "user_appearance") ?? "Light Mode"
+            let language  = UserDefaults.standard.string(forKey: "selected_language")?.lowercased() ?? "en"
+            
+            let result = try await useCase.executeHandshake(idToken: idToken, name: displayName, appearance: appearance, language: language)
             self.user = result.user
             onAuthSuccess?(result.isNewUser)
             
@@ -110,9 +114,12 @@ public final class AuthViewModel: ObservableObject {
             
             let currentUser = Auth.auth().currentUser
             let displayName = currentUser?.displayName ?? ""
-            let avatarUrl = currentUser?.photoURL?.absoluteString ?? ""
             
-            let result = try await useCase.executeHandshake(idToken: firebaseIDToken, name: displayName, avatarUrl: avatarUrl)
+            // Use saved preferences; default to system values on first launch
+            let appearance = UserDefaults.standard.string(forKey: "user_appearance") ?? "Light Mode"
+            let language  = UserDefaults.standard.string(forKey: "selected_language")?.lowercased() ?? "en"
+            
+            let result = try await useCase.executeHandshake(idToken: firebaseIDToken, name: displayName, appearance: appearance, language: language)
             self.user = result.user
             onAuthSuccess?(result.isNewUser)
             
@@ -126,12 +133,15 @@ public final class AuthViewModel: ObservableObject {
     }
 
     private func mapError(_ error: Error) -> String {
+        if let apiError = error as? APIError {
+            return apiError.message
+        }
         if let urlError = error as? URLError {
             switch urlError.code {
             case .notConnectedToInternet, .networkConnectionLost:
                 return "No internet connection. Please check your network."
-            case .badServerResponse:
-                return "Invalid email or password."
+            case .timedOut:
+                return "The request timed out. Please try again."
             default:
                 return "Something went wrong, please try again."
             }

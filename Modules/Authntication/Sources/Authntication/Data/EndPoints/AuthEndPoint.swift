@@ -7,7 +7,7 @@
 import Common
 import Foundation
 public enum AuthEndpoint: EndPoint {
-    case handshake(idToken: String, name: String, avatarUrl: String)
+    case handshake(idToken: String, name: String, appearance: String, language: String)
     case me(idToken: String)
     
     public var baseURL: String { "https://api-gateway-production-3fd0.up.railway.app/api/v1" }
@@ -33,7 +33,7 @@ public enum AuthEndpoint: EndPoint {
     public var headers: [String: String]? {
         let token: String
         switch self {
-        case .handshake(let idToken, _, _):
+        case .handshake(let idToken, _, _, _):
             token = idToken
         case .me(let idToken):
             token = idToken
@@ -51,13 +51,16 @@ public enum AuthEndpoint: EndPoint {
     
     public var body: Data? {
         switch self {
-        case .handshake(_, let name, let avatarUrl):
-            return try? JSONEncoder().encode([
+        case .handshake(_, let name, let appearance, let language):
+            let payload: [String: String] = [
                 "name": name,
-                "avatar_url": avatarUrl
-            ])
+                "appearance": appearance,
+                "language": language
+            ]
+            return try? JSONEncoder().encode(payload)
         case .me:
             return nil
         }
     }
 }
+
