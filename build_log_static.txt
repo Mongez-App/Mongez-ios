@@ -1,0 +1,146 @@
+Command line invocation:
+    /Users/mohamedsharaf/Downloads/Xcode.app/Contents/Developer/usr/bin/xcodebuild -workspace Mongez.xcworkspace -scheme Mongez -destination "generic/platform=iOS Simulator" build
+
+User defaults from command line:
+    IDEPackageSupportUseBuiltinSCM = YES
+
+Resolve Package Graph
+
+Updating from https://github.com/google/GTMAppAuth.git
+
+Updating from https://github.com/firebase/firebase-ios-sdk.git
+
+Updating from https://github.com/google/interop-ios-for-google-sdks.git
+
+Updating from https://github.com/google/GoogleDataTransport.git
+
+Updating from https://github.com/google/app-check.git
+
+Updating from https://github.com/firebase/leveldb.git
+
+Updating from https://github.com/google/GoogleAppMeasurement.git
+
+Updating from https://github.com/Alamofire/Alamofire.git
+
+Updating from https://github.com/apple/swift-protobuf.git
+
+Updating from https://github.com/sdwebimage/sdwebimage
+
+Updating from https://github.com/firebase/nanopb.git
+
+Updating from https://github.com/google/grpc-binary.git
+
+Updating from https://github.com/google/GoogleSignIn-iOS.git
+
+Updating from https://github.com/google/GoogleUtilities.git
+
+Updating from https://github.com/google/promises.git
+
+Updating from https://github.com/Swinject/Swinject.git
+
+Updating from https://github.com/cloudinary/cloudinary_ios.git
+
+Updating from https://github.com/google/gtm-session-fetcher.git
+
+Updating from https://github.com/openid/AppAuth-iOS.git
+
+Updating from https://github.com/google/abseil-cpp-binary.git
+
+Cloning local copy of package ‘interop-ios-for-google-sdks’
+
+Checking out 100.0.0 of package ‘interop-ios-for-google-sdks’
+
+Cloning local copy of package ‘GoogleDataTransport’
+
+Checking out 9.4.0 of package ‘GoogleDataTransport’
+
+Cloning local copy of package ‘sdwebimage’
+
+Checking out 5.9.5 of package ‘sdwebimage’
+
+Cloning local copy of package ‘leveldb’
+
+Checking out 1.22.5 of package ‘leveldb’
+
+Cloning local copy of package ‘GoogleSignIn-iOS’
+
+Checking out 7.1.0 of package ‘GoogleSignIn-iOS’
+
+Cloning local copy of package ‘grpc-binary’
+
+Checking out 1.49.2 of package ‘grpc-binary’
+
+Cloning local copy of package ‘AppAuth-iOS’
+
+Checking out 1.7.6 of package ‘AppAuth-iOS’
+
+Cloning local copy of package ‘cloudinary_ios’
+
+Checking out 5.0.0 of package ‘cloudinary_ios’
+
+Cloning local copy of package ‘GoogleAppMeasurement’
+
+Checking out 10.17.0 of package ‘GoogleAppMeasurement’
+
+Cloning local copy of package ‘Alamofire’
+
+Checking out 5.6.4 of package ‘Alamofire’
+
+Cloning local copy of package ‘gtm-session-fetcher’
+
+Checking out 3.5.0 of package ‘gtm-session-fetcher’
+
+Cloning local copy of package ‘swift-protobuf’
+
+Checking out 1.26.0 of package ‘swift-protobuf’
+
+Cloning local copy of package ‘app-check’
+
+Checking out 10.19.2 of package ‘app-check’
+
+Cloning local copy of package ‘nanopb’
+
+Checking out 2.30909.0 of package ‘nanopb’
+
+Cloning local copy of package ‘firebase-ios-sdk’
+
+Checking out 10.19.0 of package ‘firebase-ios-sdk’
+
+Cloning local copy of package ‘promises’
+
+Checking out 2.4.1 of package ‘promises’
+
+Cloning local copy of package ‘Swinject’
+
+Checking out 2.8.3 of package ‘Swinject’
+
+Cloning local copy of package ‘GoogleUtilities’
+
+Checking out 7.13.3 of package ‘GoogleUtilities’
+
+Cloning local copy of package ‘GTMAppAuth’
+
+Checking out 4.1.1 of package ‘GTMAppAuth’
+
+Cloning local copy of package ‘abseil-cpp-binary’
+
+Checking out 1.2022062300.1 of package ‘abseil-cpp-binary’
+
+file not found at path: /Users/mohamedsharaf/Library/Developer/Xcode/DerivedData/Mongez-aexwdhexirknzkevydqrqsnoszri/SourcePackages/artifacts/grpc-binary/grpc.zipfile not found at path: /Users/mohamedsharaf/Library/Developer/Xcode/DerivedData/Mongez-aexwdhexirknzkevydqrqsnoszri/SourcePackages/artifacts/grpc-binary/openssl_grpc.zip
+Resolved source packages:
+  Authntication: (null)
+  Dashboard: (null)
+  Courses: (null)
+  CourseDetails: (null)
+  OnBoarding: (null)
+  Common: (null)
+  Preferences: (null)
+  Profile: (null)
+  AIStudyRoom: (null)
+
+2026-07-24 19:08:12.907 xcodebuild[18049:234838] Writing error result bundle to /var/folders/r6/46d0_jf523d92g0b4n0p48380000gn/T/ResultBundle_2026-24-07_19-08-0012.xcresult
+fatalErrorxcodebuild: error: Could not resolve package dependencies:
+  file not found at path: /Users/mohamedsharaf/Library/Developer/Xcode/DerivedData/Mongez-aexwdhexirknzkevydqrqsnoszri/SourcePackages/artifacts/grpc-binary/grpc.zip
+  file not found at path: /Users/mohamedsharaf/Library/Developer/Xcode/DerivedData/Mongez-aexwdhexirknzkevydqrqsnoszri/SourcePackages/artifacts/grpc-binary/openssl_grpc.zip
+  fatalError
+
