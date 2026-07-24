@@ -15,6 +15,7 @@ import Preferences
 import Courses
 import CourseDetails
 import Profile
+import Roadmap
 
 struct ContentView: View {
     @StateObject private var appCoordinator = AppCoordinator()
@@ -103,6 +104,11 @@ struct ContentView: View {
                         coursesFactory: {
                             AnyView(
                                 DashboardCoursesContainer(coordinator: coordinator)
+                            )
+                        },
+                        roadmapFactory: {
+                            AnyView(
+                                RoadmapView(viewModel: RoadmapViewmodel())
                             )
                         },
                         profileFactory: {
