@@ -9,14 +9,14 @@ import SwiftUI
 import Common
 
 struct DeadlineList: View {
-    @Binding var upcomingDeadlines: [UpcomingDeadline]?
+    @Binding var upcomingDeadlines: [UpcomingDeadline]
     
     let colors = [AppTheme.Colors.red100, AppTheme.Colors.green100]
     
     var body: some View {
         HStack(spacing: AppTheme.Spacing.small) {
-            ForEach(upcomingDeadlines!.indices, id: \.self) { index in
-                DeadlineCard(color: colors[index], upcomingDeadline: upcomingDeadlines![index])
+            ForEach(upcomingDeadlines.indices, id: \.self) { index in
+                DeadlineCard(color: colors[index], upcomingDeadline: upcomingDeadlines[index])
             }
             .frame(maxWidth: .infinity)
         }

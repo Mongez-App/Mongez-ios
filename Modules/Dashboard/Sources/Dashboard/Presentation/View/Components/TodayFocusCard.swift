@@ -47,7 +47,7 @@ struct TodayFocusCard: View {
                     .foregroundColor(AppTheme.Colors.white100)
                     .padding(.bottom, 2)
                 
-                Text("\(todayFocus!.courseName)")
+                Text("\(todayFocus!.courseName ?? "")")
                     .font(AppTheme.textStyle(size: 20, weight: .semibold))
                     .foregroundColor(AppTheme.Colors.white100)
                     .lineLimit(2)
@@ -61,7 +61,7 @@ struct TodayFocusCard: View {
                         .scaledToFit()
                         .frame(width: 16, height: 16)
                     
-                    Text("\(todayFocus!.allocatedDuration)")
+                    Text(todayFocus!.allocatedDuration)
                         .font(AppTheme.textStyle(size: 13, weight: .regular))
                 }
                 .foregroundColor(AppTheme.Colors.white100)
