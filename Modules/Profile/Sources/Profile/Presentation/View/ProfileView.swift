@@ -101,7 +101,7 @@ public struct ProfileView: View {
                         iconColor: AppTheme.Colors.green100,
                         bgOpacity: 0.10,
                         title: "Calendar Sync",
-                        font: AppTheme.textStyle(size: 16, weight: .medium)
+                        font: AppTheme.textStyle(size: 16, weight: .regular)
                     ) {
                         Toggle("", isOn: Binding(
                             get: { viewModel.isCalendarSyncEnabled },
@@ -116,7 +116,7 @@ public struct ProfileView: View {
                         iconColor: AppTheme.Colors.black100,
                         bgOpacity: 0.10,
                         title: "Dark Mode",
-                        font: AppTheme.textStyle(size: 16, weight: .medium)
+                        font: AppTheme.textStyle(size: 16, weight: .regular)
                     ) {
                         Toggle("", isOn: $viewModel.isDarkModeEnabled)
                             .labelsHidden()
@@ -127,7 +127,7 @@ public struct ProfileView: View {
                         iconColor: AppTheme.Colors.purple100,
                         bgOpacity: 0.15,
                         title: "Language",
-                        font: AppTheme.textStyle(size: 16, weight: .medium)
+                        font: AppTheme.textStyle(size: 16, weight: .regular)
                     ) {
                         Menu {
                             Button {
@@ -168,10 +168,10 @@ public struct ProfileView: View {
                     
                     SettingRow(
                         iconName: "preferences",
-                        iconColor: AppTheme.Colors.purple200,
-                        bgOpacity: 0.12,
+                        iconColor: AppTheme.Colors.yellow100,
+                        bgOpacity: 0.13,
                         title: "Edit Preferences",
-                        font: AppTheme.textStyle(size: 16, weight: .medium)
+                        font: AppTheme.textStyle(size: 16, weight: .regular)
                     ) {
                         Image(systemName: "chevron.right")
                             .font(AppTheme.textStyle(size: 14, weight: .semibold))
@@ -185,10 +185,10 @@ public struct ProfileView: View {
                     SettingRow(
                         iconName: "logout",
                         iconColor: AppTheme.Colors.red100,
-                        bgOpacity: 0.13,
+                        bgOpacity: 0.12,
                         title: "Logout",
                         titleColor: AppTheme.Colors.red100,
-                        font: AppTheme.textStyle(size: 16, weight: .medium),
+                        font: AppTheme.textStyle(size: 16, weight: .regular),
                         showDivider: false
                     ) {
                         EmptyView()
@@ -199,7 +199,6 @@ public struct ProfileView: View {
                     }
                 }
                 .padding(.horizontal, AppTheme.Spacing.medium)
-                .padding(.top, AppTheme.Spacing.small)
             }
         }
         .background(AppTheme.Colors.white100)

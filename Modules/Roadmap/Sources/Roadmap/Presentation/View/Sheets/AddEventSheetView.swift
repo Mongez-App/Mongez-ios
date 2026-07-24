@@ -133,9 +133,12 @@ struct AddEventSheetView: View {
 
                 Spacer()
 
-                Image(systemName: "calendar")
-                    .foregroundColor(AppTheme.Colors.purple200)
-                    .font(.system(size: 18))
+                Image("calendar-red")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20, height: 20)
+                    .foregroundColor(AppTheme.Colors.purple200.opacity(0.9))
             }
             .padding(.horizontal, AppTheme.Spacing.xSmall)
             .padding(.vertical, AppTheme.Spacing.xxSmall)

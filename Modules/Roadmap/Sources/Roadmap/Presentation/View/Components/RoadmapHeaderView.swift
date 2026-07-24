@@ -21,19 +21,22 @@ struct RoadmapHeaderView: View {
             Spacer()
 
             HStack(spacing: AppTheme.Spacing.xSmall) {
-                headerButton(systemImage: "line.3.horizontal.decrease", action: onFilterTapped)
-                headerButton(systemImage: "plus", action: onAddTapped)
+                headerButton(icon: "filter", size: 18, action: onFilterTapped)
+                headerButton(icon: "add", size: 30, action: onAddTapped)
             }
         }
         .padding(.horizontal, AppTheme.Spacing.small)
     }
 
-    private func headerButton(systemImage: String, action: @escaping () -> Void) -> some View {
+    private func headerButton(icon: String, size: CGFloat, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            Image(systemName: systemImage)
-                .font(AppTheme.textStyle(size: 16, weight: .semibold))
-                .foregroundColor(AppTheme.Colors.purple200)
-                .frame(width: 36, height: 36)
+            Image(icon)
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+                .frame(width: size, height: size)
+                .foregroundColor(AppTheme.Colors.purple200.opacity(0.9))
+                .frame(width: 40, height: 40)
                 .background(
                     Circle()
                         .foregroundColor(AppTheme.Colors.white100).appShadow(opacity: 0.7, radius: 2)
