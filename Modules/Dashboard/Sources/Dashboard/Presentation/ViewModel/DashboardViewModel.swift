@@ -11,7 +11,7 @@ public class DashboardViewModel : ObservableObject {
     @Published var user: User?
     @Published var todayFocus: TodayFocus?
     @Published var progressMetrics: ProgressMetrics = ProgressMetrics(todayCompletedTasks: 0, todayTotalTasks: 0, weeklyHoursCompleted: 0, weeklyHoursGoal: 0, monthlyHoursCompleted: 0, monthlyHoursGoal: 0)
-    @Published var todayTasks: [Task] = []
+    @Published var todayTasks: [TodayTask] = []
     @Published var upcomingDeadlines: [UpcomingDeadline] = []
     
     @Published var isLoading: Bool = false
