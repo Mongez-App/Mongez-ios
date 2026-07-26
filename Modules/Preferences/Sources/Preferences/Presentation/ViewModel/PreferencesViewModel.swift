@@ -13,13 +13,19 @@ public final class PreferencesViewModel: ObservableObject {
     @Published public var currentStep: Int = 0
     @Published public var studyHoursPerDay: Int = 6
     @Published public var selectedDays: Set<Weekday> = []
+    @Published public var isSaving: Bool = false
+    @Published public var errorMessage: String?
 
     public let totalSteps = 3
     public let hoursRange = Array(1...12)
 
     public var onFinish: (() -> Void)?
 
-    public init() {}
+    private let useCase: PreferencesUseCaseProtocol
+
+    public init(useCase: PreferencesUseCaseProtocol = PreferencesUseCase()) {
+        self.useCase = useCase
+    }
 
     public var isLastStep: Bool {
         currentStep == totalSteps - 1
@@ -41,7 +47,7 @@ public final class PreferencesViewModel: ObservableObject {
         if currentStep < totalSteps - 1 {
             currentStep += 1
         } else {
-            finish()
+            Task { await finish() }
         }
     }
 
@@ -51,15 +57,40 @@ public final class PreferencesViewModel: ObservableObject {
         }
     }
 
-    public func skip() {
-        finish()
+    public func skip() async {
+        await finish()
     }
 
-    public func syncCalendar() {
-        finish()
+    public func syncCalendar() async {
+        await finish()
     }
 
-    private func finish() {
+    private func finish() async {
+        errorMessage = nil
+        isSaving = true
+        defer { isSaving = false }
+
+        do {
+            _ = try await useCase.executeUpdatePreferences(
+                dailyStudyHours: studyHoursPerDay,
+                availableDays: Array(selectedDays)
+            )
+        } catch {
+            errorMessage = mapError(error)
+        }
+
         onFinish?()
+    }
+
+    private func mapError(_ error: Error) -> String {
+        if let urlError = error as? URLError {
+            switch urlError.code {
+            case .notConnectedToInternet, .networkConnectionLost:
+                return "No internet connection"
+            default:
+                return "Couldn't save your preferences, please try again"
+            }
+        }
+        return "Couldn't save your preferences, please try again"
     }
 }
