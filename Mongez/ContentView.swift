@@ -103,7 +103,10 @@ struct ContentView: View {
                         },
                         coursesFactory: {
                             AnyView(
-                                DashboardCoursesContainer(coordinator: coordinator)
+                                DashboardCoursesContainer(
+                                    coordinator: coordinator,
+                                    viewModel: appCoordinator.makeCoursesViewModel()
+                                )
                             )
                         },
                         roadmapFactory: {
@@ -123,7 +126,7 @@ struct ContentView: View {
                 if let coordinator = appCoordinator.coursesCoordinator {
                     CoursesCoordinatorView(
                         coordinator: coordinator,
-                        viewModel: CoursesViewModel(),
+                        viewModel: appCoordinator.makeCoursesViewModel(),
                         courseDetailsFactory: { courseId in
                             
                             let courseDetailsRepository = MockCourseDetailsRepository()
@@ -155,7 +158,7 @@ struct ContentView: View {
 
 struct DashboardCoursesContainer: View {
     let coordinator: DashboardCoordinator
-    @StateObject private var viewModel = CoursesViewModel()
+    let viewModel: CoursesViewModel
     
     var body: some View {
         CoursesView(viewModel: viewModel)
