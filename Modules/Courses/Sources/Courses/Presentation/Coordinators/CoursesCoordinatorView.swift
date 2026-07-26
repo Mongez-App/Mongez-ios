@@ -1,19 +1,12 @@
-//
-//  File.swift
-//  
-//
-//  Created by Mazen Amr on 21/07/2026.
-//
-
 import Foundation
 import SwiftUI
 
 public struct CoursesCoordinatorView: View {
     @ObservedObject var coordinator: CoursesCoordinator
     @StateObject var viewModel: CoursesViewModel
-    
+
     private let courseDetailsFactory: (String) -> AnyView
-    
+
     public init(
         coordinator: CoursesCoordinator,
         viewModel: CoursesViewModel,
@@ -23,7 +16,7 @@ public struct CoursesCoordinatorView: View {
         self._viewModel = StateObject(wrappedValue: viewModel)
         self.courseDetailsFactory = courseDetailsFactory
     }
-    
+
     public var body: some View {
         NavigationStack(path: $coordinator.path) {
             CoursesView(viewModel: viewModel)
@@ -41,3 +34,4 @@ public struct CoursesCoordinatorView: View {
         }
     }
 }
+

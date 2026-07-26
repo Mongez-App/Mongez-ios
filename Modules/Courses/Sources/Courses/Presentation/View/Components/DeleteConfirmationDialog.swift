@@ -5,19 +5,18 @@ struct DeleteConfirmationDialog: View {
     let courseName: String
     let onConfirm: () -> Void
     let onCancel: () -> Void
-    
+
     var body: some View {
         ZStack {
-            
+
             Color.black.opacity(0.4)
                 .ignoresSafeArea()
                 .onTapGesture {
                     onCancel()
                 }
-            
-            
+
             VStack(spacing: AppTheme.Spacing.medium) {
-                
+
                 ZStack {
                     Circle()
                         .fill(
@@ -27,25 +26,22 @@ struct DeleteConfirmationDialog: View {
                             )
                         )
                         .frame(width: 64, height: 64)
-                    
+
                     Image(systemName: "trash.fill")
                         .font(.system(size: 26))
                         .foregroundColor(AppTheme.Colors.red100)
                 }
-                
-                
+
                 Text("Delete Course?")
                     .font(AppTheme.textStyle(size: 20, weight: .bold))
                     .foregroundColor(AppTheme.Colors.black100)
-                
-                
+
                 Text("Are you sure you want to delete \"\(courseName)\"? This action cannot be undone and all associated materials will be removed.")
                     .font(AppTheme.textStyle(size: 14, weight: .regular))
                     .foregroundColor(AppTheme.Colors.gray200)
                     .multilineTextAlignment(.center)
                     .lineSpacing(3)
-                
-                
+
                 VStack(spacing: AppTheme.Spacing.xSmall) {
                     Button(action: onConfirm) {
                         Text("Delete")
@@ -56,7 +52,7 @@ struct DeleteConfirmationDialog: View {
                             .background(AppTheme.Colors.red100)
                             .cornerRadius(AppTheme.radius.small)
                     }
-                    
+
                     Button(action: onCancel) {
                         Text("Cancel")
                             .font(AppTheme.textStyle(size: 15, weight: .semibold))
@@ -92,3 +88,4 @@ struct DeleteConfirmationDialog_Previews: PreviewProvider {
         )
     }
 }
+

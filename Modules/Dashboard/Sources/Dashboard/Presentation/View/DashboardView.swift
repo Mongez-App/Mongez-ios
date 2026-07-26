@@ -16,12 +16,12 @@ struct DashboardView: View {
     }
     
     var body: some View {
-        ZStack {
-            VStack {
-                if viewModel.user != nil {
-                    HeaderView(user: $viewModel.user)
-                }
-                
+        VStack(spacing: 0) {
+            if viewModel.user != nil {
+                HeaderView(user: $viewModel.user)
+            }
+            
+            GeometryReader { geometry in
                 ScrollView(.vertical, showsIndicators: false){
                     VStack(spacing: AppTheme.Spacing.xLarge) {
                         if let todayFocus = viewModel.todayFocus, todayFocus.courseName != nil {
@@ -60,7 +60,6 @@ struct DashboardView: View {
                                         .font(AppTheme.textStyle(size: 16, weight: .medium))
                                         .foregroundColor(AppTheme.Colors.black100)
                                 }
-                                //.padding(.vertical, AppTheme.Spacing.small)
                             } else {
                                 TasksList(todayTasks: $viewModel.todayTasks) { selectedTask in
                                     viewModel.selectTask(
@@ -105,13 +104,16 @@ struct DashboardView: View {
                         SuggestionCard()
                             .padding(.horizontal, AppTheme.Spacing.small)
                     }
-                    //.padding(.horizontal, AppTheme.Spacing.small)
                     .padding(.vertical, AppTheme.Spacing.small)
+                    .padding(.bottom, 100)
+                    .frame(width: geometry.size.width)
                 }
-                .padding(.bottom, 85)
                 .background(AppTheme.Colors.white100)
-                .background(AppTheme.Colors.white100)
-                
+            }
+        }
+        .background(AppTheme.Colors.white100.ignoresSafeArea())
+        .overlay(
+            Group {
                 if viewModel.isLoading {
                     ZStack {
                         Color.black.opacity(0.15).ignoresSafeArea()
@@ -121,11 +123,10 @@ struct DashboardView: View {
                     }
                 }
             }
-            .background(AppTheme.Colors.white100)
-            .task {
-                await viewModel.fetchUser()
-                await viewModel.fetchDashboardDetails()
-            }
+        )
+        .task {
+            await viewModel.fetchUser()
+            await viewModel.fetchDashboardDetails()
         }
     }
 }
