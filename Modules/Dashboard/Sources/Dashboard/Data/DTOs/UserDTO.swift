@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct UserDTO : Codable {
+public struct UserDTO : Codable {
     var userId : String
-    var name : String
+    var name : String?
     var email : String
-    var avatarUrl : String
+    var avatarUrl : String?
     var stats : Stats
     
     enum CodingKeys : String, CodingKey {
@@ -22,16 +22,16 @@ struct UserDTO : Codable {
         case stats
     }
     
-   static func mapToEntity(user: UserDTO) -> User {
-        let user = User(name: user.name,
-                        avatarUrl: user.avatarUrl,
+   public static func mapToEntity(user: UserDTO) -> User {
+       let user = User(name: user.name ?? "NO Name",
+                       avatarUrl: user.avatarUrl ?? "",
                         streakCount: user.stats.streakCount)
         
         return user
     }
 }
 
-struct Stats : Codable {
+public struct Stats : Codable {
     var totalStudyHours : Float
     var completedTasksCount : Float
     var streakCount : Int

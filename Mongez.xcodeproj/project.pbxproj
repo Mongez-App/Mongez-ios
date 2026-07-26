@@ -32,6 +32,7 @@
 		5ABEF5E83007A98900B1ACEF /* MongezUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5E73007A98900B1ACEF /* MongezUITests.swift */; };
 		5ABEF5EA3007A98900B1ACEF /* MongezUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5E93007A98900B1ACEF /* MongezUITestsLaunchTests.swift */; };
 		AAF3D4DFECC50FF2DCF6CD70 /* Preferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2865055BCA38AF44B8B266E9 /* Preferences */; };
+		5049958C192D9E49C8579EA9 /* Roadmap in Frameworks */ = {isa = PBXBuildFile; productRef = DE4CCD63590C46EA769D7093 /* Roadmap */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,7 @@
 				5AB1211B300DA1A600953837 /* Courses in Frameworks */,
 				5A429D843011B20B0013DAB5 /* SDWebImageMapKit in Frameworks */,
 				31F0B54B300C0D0000293455 /* AIStudyRoom in Frameworks */,
+				5049958C192D9E49C8579EA9 /* Roadmap in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,6 +205,7 @@
 				31F0B54A300C0D0000293455 /* AIStudyRoom */,
 				3195CCEA300EAD82004F0C28 /* CourseDetails */,
 				03BC5243300F908100548CAD /* Profile */,
+				DE4CCD63590C46EA769D7093 /* Roadmap */,
 				5A429D793011A4890013DAB5 /* Alamofire */,
 				5A429D7C3011A64D0013DAB5 /* Swinject */,
 				5A429D7E3011A64D0013DAB5 /* Swinject-Dynamic */,
@@ -284,6 +287,11 @@
 			packageReferences = (
 				038D5376300CE93A00579547 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				038D5377300CEA5200579547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				03224E71300D2D61007CED78 /* XCLocalSwiftPackageReference "Modules/Authntication" */,
+				03224E74300D2D7D007CED78 /* XCLocalSwiftPackageReference "Modules/Common" */,
+				03C4C2A0300A8FFD00031E11 /* XCLocalSwiftPackageReference "Modules/OnBoarding" */,
+				31A2F375300BF7A70014E39A /* XCLocalSwiftPackageReference "Modules/Dashboard" */,
+				9A53B9D946D4B4041C3079BF /* XCLocalSwiftPackageReference "Modules/Roadmap" */,
 				03224E71300D2D61007CED78 /* XCLocalSwiftPackageReference "(null)" */,
 				03224E74300D2D7D007CED78 /* XCLocalSwiftPackageReference "(null)" */,
 				03C4C2A0300A8FFD00031E11 /* XCLocalSwiftPackageReference "(null)" */,
@@ -674,6 +682,10 @@
 		31A2F375300BF7A70014E39A /* XCLocalSwiftPackageReference "(null)" */ = {
 			isa = XCLocalSwiftPackageReference;
 		};
+		9A53B9D946D4B4041C3079BF /* XCLocalSwiftPackageReference "Modules/Roadmap" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Modules/Roadmap;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -780,6 +792,10 @@
 		5AB1211A300DA1A600953837 /* Courses */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Courses;
+		};
+		DE4CCD63590C46EA769D7093 /* Roadmap */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Roadmap;
 		};
 /* End XCSwiftPackageProductDependency section */
 

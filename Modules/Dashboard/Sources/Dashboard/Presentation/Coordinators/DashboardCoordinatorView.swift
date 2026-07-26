@@ -15,14 +15,16 @@ public struct DashboardCoordinatorView: View {
     private let studyRoomFactory: (String, String) -> AnyView
     private let courseDetailsFactory: (String) -> AnyView
     private let coursesFactory: () -> AnyView
+    private let roadmapFactory: () -> AnyView
     private let profileFactory: () -> AnyView
-    
+
     public init(
         coordinator: DashboardCoordinator,
         viewModel: DashboardViewModel,
         studyRoomFactory: @escaping (String, String) -> AnyView,
         courseDetailsFactory: @escaping (String) -> AnyView,
         coursesFactory: @escaping () -> AnyView,
+        roadmapFactory: @escaping () -> AnyView,
         profileFactory: @escaping () -> AnyView
     ) {
         self.coordinator = coordinator
@@ -30,6 +32,7 @@ public struct DashboardCoordinatorView: View {
         self.studyRoomFactory = studyRoomFactory
         self.courseDetailsFactory = courseDetailsFactory
         self.coursesFactory = coursesFactory
+        self.roadmapFactory = roadmapFactory
         self.profileFactory = profileFactory
     }
     
@@ -50,7 +53,7 @@ public struct DashboardCoordinatorView: View {
                     coursesFactory()
                     
                 case .roadmap:
-                    Text("Roadmap View")
+                    roadmapFactory()
                     
                 case .profile:
                     profileFactory()

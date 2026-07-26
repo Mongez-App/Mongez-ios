@@ -15,6 +15,7 @@ import Preferences
 import Courses
 import CourseDetails
 import Profile
+import Roadmap
 
 struct ContentView: View {
     @StateObject private var appCoordinator = AppCoordinator()
@@ -54,7 +55,18 @@ struct ContentView: View {
                 if let coordinator = appCoordinator.dashboardCoordinator {
                     DashboardCoordinatorView(
                         coordinator: coordinator,
-                        viewModel: DashboardViewModel(),
+                        viewModel: DashboardViewModel(
+                            getDashboardDetailsUseCase: GetDashboardDetailsUseCase(
+                                dashboardRepository: DashboardRepository(
+                                    remoteDataSource: DashboardRemoteDataSource()
+                                )
+                            ),
+                            getUserUseCase: GetUserUseCase(
+                                dashboardRepository: DashboardRepository(
+                                    remoteDataSource: DashboardRemoteDataSource()
+                                )
+                            )
+                        ),
                         studyRoomFactory: { courseId, taskTitle in
                             let chatRepository = MockChatRepository()
                             let studyViewModel = StudyRoomViewModel(
@@ -92,6 +104,11 @@ struct ContentView: View {
                         coursesFactory: {
                             AnyView(
                                 DashboardCoursesContainer(coordinator: coordinator)
+                            )
+                        },
+                        roadmapFactory: {
+                            AnyView(
+                                RoadmapView(viewModel: RoadmapViewmodel())
                             )
                         },
                         profileFactory: {

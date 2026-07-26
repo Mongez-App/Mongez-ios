@@ -21,6 +21,16 @@ public struct ProfileView: View {
             repository: ProfileRepository(
                 remoteDataSource: ProfileRemoteDataSource()
             )
+        ),
+        updateProfileUseCase: UpdateProfileUseCase(
+            repository: ProfileRepository(
+                remoteDataSource: ProfileRemoteDataSource()
+            )
+        ),
+        updatePreferencesUseCase: UpdatePreferencesUseCase(
+            repository: ProfileRepository(
+                remoteDataSource: ProfileRemoteDataSource()
+            )
         )
     )
     
@@ -31,16 +41,46 @@ public struct ProfileView: View {
             VStack(spacing: AppTheme.Spacing.large) {
                 if let profile = viewModel.profile {
                     VStack(spacing: AppTheme.Spacing.xSmall) {
-                        CircledAsyncImage(urlString: profile.avatarUrl,
-                                          size: 88,
-                                          name: profile.name)
+                    
+                        ZStack(alignment: .bottomTrailing) {
+                            if let data = viewModel.localSelectedImageData,
+                               let uiImage = UIImage(data: data) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 88, height: 88)
+                                    .clipShape(Circle())
+                                    .appShadow(opacity: 0.75, radius: 5)
+                            } else {
+                                CircledAsyncImage(urlString: profile.avatarUrl ?? "",
+                                                  size: 88,
+                                                  name: profile.name ?? "default value")
+                            }
+
+                           
+                            Button {
+                                viewModel.openEditProfile()
+                            } label: {
+                                ZStack {
+                                    Circle()
+                                        .fill(AppTheme.Colors.purple200)
+                                        .frame(width: 26, height: 26)
+                                        .appShadow(opacity: 0.4, radius: 6, y: 3)
+
+                                    Image(systemName: "pencil")
+                                        .font(.system(size: 11, weight: .semibold))
+                                        .foregroundColor(.white)
+                                }
+                            }
+                            .offset(x: 2, y: 2)
+                        }
                         
                         VStack(spacing: AppTheme.Spacing.xxxSmall) {
-                            Text(profile.name)
+                            Text(profile.name ?? "default value")
                                 .font(AppTheme.textStyle(size: 20, weight: .bold))
                                 .foregroundColor(AppTheme.Colors.black100)
                             
-                            Text(profile.email)
+                            Text(profile.email ?? "default value")
                                 .font(AppTheme.textStyle(size: 14, weight: .regular))
                                 .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
                         }
@@ -48,9 +88,9 @@ public struct ProfileView: View {
                     .padding(.top, AppTheme.Spacing.xLarge)
                     
                     HStack(spacing: AppTheme.Spacing.small) {
-                        StatCard(title: "Studying\nHours", value: "\(profile.stats.totalStudyHours)")
-                        StatCard(title: "Completed\nTasks", value: "\(profile.stats.completedTasksCount)")
-                        StatCard(title: "Streak\nDays", value: "\(profile.stats.currentStreakDays)")
+                        StatCard(title: "Studying\nHours", value: String(format: "%.1f", profile.stats?.totalStudyHours ?? 0.0))
+                        StatCard(title: "Completed\nTasks", value: "\(profile.stats?.completedTasksCount ?? 0)")
+                        StatCard(title: "Streak\nDays", value: "\(profile.stats?.currentStreakDays ?? 0)")
                     }
                     .padding(.horizontal, AppTheme.Spacing.medium)
                 }
@@ -61,7 +101,7 @@ public struct ProfileView: View {
                         iconColor: AppTheme.Colors.green100,
                         bgOpacity: 0.10,
                         title: "Calendar Sync",
-                        font: AppTheme.textStyle(size: 16, weight: .medium)
+                        font: AppTheme.textStyle(size: 16, weight: .regular)
                     ) {
                         Toggle("", isOn: Binding(
                             get: { viewModel.isCalendarSyncEnabled },
@@ -76,7 +116,7 @@ public struct ProfileView: View {
                         iconColor: AppTheme.Colors.black100,
                         bgOpacity: 0.10,
                         title: "Dark Mode",
-                        font: AppTheme.textStyle(size: 16, weight: .medium)
+                        font: AppTheme.textStyle(size: 16, weight: .regular)
                     ) {
                         Toggle("", isOn: $viewModel.isDarkModeEnabled)
                             .labelsHidden()
@@ -87,11 +127,11 @@ public struct ProfileView: View {
                         iconColor: AppTheme.Colors.purple100,
                         bgOpacity: 0.15,
                         title: "Language",
-                        font: AppTheme.textStyle(size: 16, weight: .medium)
+                        font: AppTheme.textStyle(size: 16, weight: .regular)
                     ) {
                         Menu {
                             Button {
-                                viewModel.selectedLanguage = "EN"
+                                viewModel.updateLanguage("EN")
                             } label: {
                                 if viewModel.selectedLanguage == "EN" {
                                     Label("English", systemImage: "checkmark")
@@ -100,7 +140,7 @@ public struct ProfileView: View {
                                 }
                             }
                             Button {
-                                viewModel.selectedLanguage = "AR"
+                                viewModel.updateLanguage("AR")
                             } label: {
                                 if viewModel.selectedLanguage == "AR" {
                                     Label("العربية", systemImage: "checkmark")
@@ -128,10 +168,10 @@ public struct ProfileView: View {
                     
                     SettingRow(
                         iconName: "preferences",
-                        iconColor: AppTheme.Colors.purple200,
-                        bgOpacity: 0.12,
+                        iconColor: AppTheme.Colors.yellow100,
+                        bgOpacity: 0.13,
                         title: "Edit Preferences",
-                        font: AppTheme.textStyle(size: 16, weight: .medium)
+                        font: AppTheme.textStyle(size: 16, weight: .regular)
                     ) {
                         Image(systemName: "chevron.right")
                             .font(AppTheme.textStyle(size: 14, weight: .semibold))
@@ -145,17 +185,20 @@ public struct ProfileView: View {
                     SettingRow(
                         iconName: "logout",
                         iconColor: AppTheme.Colors.red100,
-                        bgOpacity: 0.13,
+                        bgOpacity: 0.12,
                         title: "Logout",
                         titleColor: AppTheme.Colors.red100,
-                        font: AppTheme.textStyle(size: 16, weight: .medium),
+                        font: AppTheme.textStyle(size: 16, weight: .regular),
                         showDivider: false
                     ) {
                         EmptyView()
                     }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        viewModel.logout()
+                    }
                 }
                 .padding(.horizontal, AppTheme.Spacing.medium)
-                .padding(.top, AppTheme.Spacing.small)
             }
         }
         .background(AppTheme.Colors.white100)
@@ -183,6 +226,20 @@ public struct ProfileView: View {
                     viewModel.cancelEditPreferences()
                 }
             )
+        }
+        .sheet(isPresented: $viewModel.isEditProfilePresented) {
+            if let profile = viewModel.profile {
+                EditProfileSheet(
+                    currentName: profile.name ?? "default value",
+                    currentAvatarUrl: profile.avatarUrl ?? "",
+                    onSave: { name, imageData in
+                        viewModel.saveEditProfile(name: name, imageData: imageData)
+                    },
+                    onCancel: {
+                        viewModel.cancelEditProfile()
+                    }
+                )
+            }
         }
     }
 }
@@ -266,12 +323,12 @@ struct CircledAsyncImage: View {
             case .empty:
                 ZStack {
                     Circle()
-                        .fill(AppTheme.Colors.purple200.opacity(0.2))
-                        .frame(width: 56, height: 56)
-                        .appShadow(opacity: 0.7, radius: 0)
+                        .fill(AppTheme.Colors.purple200.opacity(0.15))
+                        .frame(width: size, height: size)
+                        .appShadow(opacity: 0.15, radius: 5, y: 2)
                     
                     Text(name.prefix(2).capitalized)
-                        .font(AppTheme.textStyle(size: 20, weight: .medium))
+                        .font(AppTheme.textStyle(size: size * 0.35, weight: .medium))
                         .foregroundColor(AppTheme.Colors.purple200.opacity(0.8))
                 }
                 
@@ -281,17 +338,17 @@ struct CircledAsyncImage: View {
                     .scaledToFill()
                     .frame(width: size, height: size)
                     .clipShape(Circle())
-                    .appShadow(opacity: 0.75, radius: 5)
+                    .appShadow(opacity: 0.15, radius: 5, y: 2)
                 
             case .failure:
                 ZStack {
                     Circle()
-                        .fill(AppTheme.Colors.purple200.opacity(0.2))
-                        .frame(width: 56, height: 56)
-                        .appShadow(opacity: 0.7, radius: 5)
+                        .fill(AppTheme.Colors.purple200.opacity(0.15))
+                        .frame(width: size, height: size)
+                        .appShadow(opacity: 0.15, radius: 5, y: 2)
                     
                     Text(name.prefix(2).uppercased())
-                        .font(AppTheme.textStyle(size: 20, weight: .medium))
+                        .font(AppTheme.textStyle(size: size * 0.35, weight: .medium))
                         .foregroundColor(AppTheme.Colors.purple200.opacity(0.8))
                 }
                 
