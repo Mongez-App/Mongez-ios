@@ -36,24 +36,28 @@ public class AddCourseUseCase {
             hasMaterials: hasMaterials
         )
 
-        for material in materials {
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for material in materials {
+                group.addTask {
+                    let materialResult = try await self.repository.addMaterialMetadata(
+                        courseId: course.id ?? "",
+                        fileName: material.fileName,
+                        contentType: material.contentType,
+                        fileSizeBytes: material.fileSizeBytes,
+                        pageCount: material.pageCount
+                    )
 
-            let materialResult = try await repository.addMaterialMetadata(
-                courseId: course.id ?? "",
-                fileName: material.fileName,
-                contentType: material.contentType,
-                fileSizeBytes: material.fileSizeBytes,
-                pageCount: material.pageCount
-            )
-
-            if let uploadId = materialResult.uploadId ?? Optional(materialResult.id) {
-                try await repository.uploadMaterialFile(
-                    uploadId: uploadId,
-                    fileData: material.fileData,
-                    fileName: material.fileName,
-                    contentType: material.contentType
-                )
+                    if let uploadId = materialResult.uploadId ?? Optional(materialResult.id) {
+                        try await self.repository.uploadMaterialFile(
+                            uploadId: uploadId,
+                            fileData: material.fileData,
+                            fileName: material.fileName,
+                            contentType: material.contentType
+                        )
+                    }
+                }
             }
+            try await group.waitForAll()
         }
 
         return course
