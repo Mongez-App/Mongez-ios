@@ -21,7 +21,7 @@ public struct PreferencesView: View {
                 Spacer()
                 if !viewModel.isLastStep {
                     Button(action: {
-                        viewModel.skip()
+                        Task { await viewModel.skip() }
                     }) {
                         Text("Skip")
                             .font(AppTheme.textStyle(size: 18, weight: .semibold))
