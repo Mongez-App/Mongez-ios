@@ -61,7 +61,6 @@ struct HeaderView: View {
         .background(
             AppTheme.Colors.white100
                 .appShadow(opacity: 0.20, radius: 3, y: 1)
-                .ignoresSafeArea(edges: .top)
         )
     }
 }
