@@ -7,24 +7,26 @@
 import Foundation
 import Common
 public protocol AuthRemoteDataSourceProtocol {
-    func login(email: String, password: String, idToken: String) async throws -> AuthResponseDTO
-    func register(name: String, email: String, password: String, idToken: String) async throws -> AuthResponseDTO
-    func loginWithGoogle(idToken: String) async throws -> AuthResponseDTO
+    func handshake(idToken: String, name: String, appearance: String, language: String) async throws -> (dto: AuthResponseDTO, statusCode: Int)
+    func getMe(idToken: String) async throws -> AuthResponseDTO
 }
  
 public class AuthRemoteDataSource: AuthRemoteDataSourceProtocol {
     public init() {}
  
-    public func login(email: String, password: String, idToken: String) async throws -> AuthResponseDTO {
-        try await NetworkManger.shared.request(endpoint: AuthEndpoint.login(email: email, password: password, idToken: idToken), responseType: AuthResponseDTO.self)
+    public func handshake(idToken: String, name: String, appearance: String, language: String) async throws -> (dto: AuthResponseDTO, statusCode: Int) {
+        let result = try await NetworkManger.shared.requestWithStatus(
+            endpoint: AuthEndpoint.handshake(idToken: idToken, name: name, appearance: appearance, language: language),
+            responseType: AuthResponseDTO.self
+        )
+        return (dto: result.decoded, statusCode: result.statusCode)
     }
- 
-    public func register(name: String, email: String, password: String, idToken: String) async throws -> AuthResponseDTO {
-        try await NetworkManger.shared.request(endpoint: AuthEndpoint.register(name: name, email: email, password: password, idToken: idToken), responseType: AuthResponseDTO.self)
-    }
- 
-    public func loginWithGoogle(idToken: String) async throws -> AuthResponseDTO {
-        try await NetworkManger.shared.request(endpoint: AuthEndpoint.googleLogin(idToken: idToken), responseType: AuthResponseDTO.self)
+    
+    public func getMe(idToken: String) async throws -> AuthResponseDTO {
+        try await NetworkManger.shared.request(
+            endpoint: AuthEndpoint.me(idToken: idToken),
+            responseType: AuthResponseDTO.self
+        )
     }
 }
  

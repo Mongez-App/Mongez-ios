@@ -9,13 +9,13 @@ import SwiftUI
 import Common
 
 struct TasksList: View {
-    @Binding var todayTasks: [Task]?
-    var onTaskTap: ((Task) -> Void)?
+    @Binding var todayTasks: [TodayTask]
+    var onTaskTap: ((TodayTask) -> Void)?
     var body: some View {
         VStack(spacing: AppTheme.Spacing.small) {
-            ForEach(todayTasks!.indices.prefix(3), id: \.self) { index in
-                TaskCard(task: todayTasks![index]) {
-                    onTaskTap?(todayTasks![index])
+            ForEach(todayTasks.prefix(3), id: \.taskId) { task in
+                TaskCard(task: task) {
+                    onTaskTap?(task)
                 }
             }
         }

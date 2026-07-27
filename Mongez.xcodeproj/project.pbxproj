@@ -10,15 +10,18 @@
 		03224E73300D2D61007CED78 /* Authntication in Frameworks */ = {isa = PBXBuildFile; productRef = 03224E72300D2D61007CED78 /* Authntication */; };
 		03224E76300D2D7D007CED78 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 03224E75300D2D7D007CED78 /* Common */; };
 		038C2DD7300E35810046780D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 038C2DD6300E35810046780D /* GoogleService-Info.plist */; };
+		03BC5244300F908100548CAD /* Profile in Frameworks */ = {isa = PBXBuildFile; productRef = 03BC5243300F908100548CAD /* Profile */; };
 		03C4C2A2300A8FFD00031E11 /* OnBoarding in Frameworks */ = {isa = PBXBuildFile; productRef = 03C4C2A1300A8FFD00031E11 /* OnBoarding */; };
-		AAF3D4DFECC50FF2DCF6CD70 /* Preferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2865055BCA38AF44B8B266E9 /* Preferences */; };
 		3153CDC7300E8B3800635A33 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3153CDC6300E8B3800635A33 /* AppCoordinator.swift */; };
 		3195CCEB300EAD82004F0C28 /* CourseDetails in Frameworks */ = {isa = PBXBuildFile; productRef = 3195CCEA300EAD82004F0C28 /* CourseDetails */; };
 		31A2F377300BF7A70014E39A /* Dashboard in Frameworks */ = {isa = PBXBuildFile; productRef = 31A2F376300BF7A70014E39A /* Dashboard */; };
-
-		5AB1211B300DA1A600953837 /* Coures in Frameworks */ = {isa = PBXBuildFile; productRef = 5AB1211A300DA1A600953837 /* Coures */; };
 		31F0B54B300C0D0000293455 /* AIStudyRoom in Frameworks */ = {isa = PBXBuildFile; productRef = 31F0B54A300C0D0000293455 /* AIStudyRoom */; };
-
+		5A429D7A3011A4890013DAB5 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 5A429D793011A4890013DAB5 /* Alamofire */; };
+		5A429D7F3011A64D0013DAB5 /* Swinject-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 5A429D7E3011A64D0013DAB5 /* Swinject-Dynamic */; };
+		5A429D823011B20B0013DAB5 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 5A429D813011B20A0013DAB5 /* SDWebImage */; };
+		5A429D843011B20B0013DAB5 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5A429D833011B20B0013DAB5 /* SDWebImageMapKit */; };
+		5A87E71130132E8F003F9F5E /* Cloudinary in Frameworks */ = {isa = PBXBuildFile; productRef = 5A87E71030132E8F003F9F5E /* Cloudinary */; };
+		5AB1211B300DA1A600953837 /* Courses in Frameworks */ = {isa = PBXBuildFile; productRef = 5AB1211A300DA1A600953837 /* Courses */; };
 		5ABEF5C83007A98600B1ACEF /* MongezApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5C73007A98600B1ACEF /* MongezApp.swift */; };
 		5ABEF5CA3007A98600B1ACEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5C93007A98600B1ACEF /* ContentView.swift */; };
 		5ABEF5CC3007A98800B1ACEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5ABEF5CB3007A98800B1ACEF /* Assets.xcassets */; };
@@ -28,6 +31,8 @@
 		5ABEF5DE3007A98900B1ACEF /* MongezTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5DD3007A98900B1ACEF /* MongezTests.swift */; };
 		5ABEF5E83007A98900B1ACEF /* MongezUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5E73007A98900B1ACEF /* MongezUITests.swift */; };
 		5ABEF5EA3007A98900B1ACEF /* MongezUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5E93007A98900B1ACEF /* MongezUITestsLaunchTests.swift */; };
+		AAF3D4DFECC50FF2DCF6CD70 /* Preferences in Frameworks */ = {isa = PBXBuildFile; productRef = 2865055BCA38AF44B8B266E9 /* Preferences */; };
+		5049958C192D9E49C8579EA9 /* Roadmap in Frameworks */ = {isa = PBXBuildFile; productRef = DE4CCD63590C46EA769D7093 /* Roadmap */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,15 +77,19 @@
 			files = (
 				03224E73300D2D61007CED78 /* Authntication in Frameworks */,
 				03224E76300D2D7D007CED78 /* Common in Frameworks */,
+				5A87E71130132E8F003F9F5E /* Cloudinary in Frameworks */,
 				3195CCEB300EAD82004F0C28 /* CourseDetails in Frameworks */,
+				03BC5244300F908100548CAD /* Profile in Frameworks */,
 				03C4C2A2300A8FFD00031E11 /* OnBoarding in Frameworks */,
+				5A429D7F3011A64D0013DAB5 /* Swinject-Dynamic in Frameworks */,
+				5A429D7A3011A4890013DAB5 /* Alamofire in Frameworks */,
 				AAF3D4DFECC50FF2DCF6CD70 /* Preferences in Frameworks */,
 				31A2F377300BF7A70014E39A /* Dashboard in Frameworks */,
-
-				5AB1211B300DA1A600953837 /* Coures in Frameworks */,
-
+				5A429D823011B20B0013DAB5 /* SDWebImage in Frameworks */,
+				5AB1211B300DA1A600953837 /* Courses in Frameworks */,
+				5A429D843011B20B0013DAB5 /* SDWebImageMapKit in Frameworks */,
 				31F0B54B300C0D0000293455 /* AIStudyRoom in Frameworks */,
-
+				5049958C192D9E49C8579EA9 /* Roadmap in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -192,11 +201,16 @@
 				03C4C2A1300A8FFD00031E11 /* OnBoarding */,
 				2865055BCA38AF44B8B266E9 /* Preferences */,
 				31A2F376300BF7A70014E39A /* Dashboard */,
-
-				5AB1211A300DA1A600953837 /* Coures */,
-
+				5AB1211A300DA1A600953837 /* Courses */,
 				31F0B54A300C0D0000293455 /* AIStudyRoom */,
-                3195CCEA300EAD82004F0C28 /* CourseDetails */,
+				3195CCEA300EAD82004F0C28 /* CourseDetails */,
+				03BC5243300F908100548CAD /* Profile */,
+				DE4CCD63590C46EA769D7093 /* Roadmap */,
+				5A429D793011A4890013DAB5 /* Alamofire */,
+				5A429D7E3011A64D0013DAB5 /* Swinject-Dynamic */,
+				5A429D813011B20A0013DAB5 /* SDWebImage */,
+				5A429D833011B20B0013DAB5 /* SDWebImageMapKit */,
+				5A87E71030132E8F003F9F5E /* Cloudinary */,
 			);
 			productName = Mongez;
 			productReference = 5ABEF5C43007A98600B1ACEF /* Mongez.app */;
@@ -277,6 +291,15 @@
 				03224E74300D2D7D007CED78 /* XCLocalSwiftPackageReference "Modules/Common" */,
 				03C4C2A0300A8FFD00031E11 /* XCLocalSwiftPackageReference "Modules/OnBoarding" */,
 				31A2F375300BF7A70014E39A /* XCLocalSwiftPackageReference "Modules/Dashboard" */,
+				9A53B9D946D4B4041C3079BF /* XCLocalSwiftPackageReference "Modules/Roadmap" */,
+				03224E71300D2D61007CED78 /* XCLocalSwiftPackageReference "(null)" */,
+				03224E74300D2D7D007CED78 /* XCLocalSwiftPackageReference "(null)" */,
+				03C4C2A0300A8FFD00031E11 /* XCLocalSwiftPackageReference "(null)" */,
+				31A2F375300BF7A70014E39A /* XCLocalSwiftPackageReference "(null)" */,
+				5A429D783011A4890013DAB5 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				5A429D7B3011A64D0013DAB5 /* XCRemoteSwiftPackageReference "Swinject" */,
+				5A429D803011B20A0013DAB5 /* XCRemoteSwiftPackageReference "sdwebimage" */,
+				5A87E70F30132E8F003F9F5E /* XCRemoteSwiftPackageReference "cloudinary_ios" */,
 			);
 			productRefGroup = 5ABEF5C53007A98600B1ACEF /* Products */;
 			projectDirPath = "";
@@ -648,21 +671,21 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		03224E71300D2D61007CED78 /* XCLocalSwiftPackageReference "Modules/Authntication" */ = {
+		03224E71300D2D61007CED78 /* XCLocalSwiftPackageReference "(null)" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Modules/Authntication;
 		};
-		03224E74300D2D7D007CED78 /* XCLocalSwiftPackageReference "Modules/Common" */ = {
+		03224E74300D2D7D007CED78 /* XCLocalSwiftPackageReference "(null)" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Modules/Common;
 		};
-		03C4C2A0300A8FFD00031E11 /* XCLocalSwiftPackageReference "Modules/OnBoarding" */ = {
+		03C4C2A0300A8FFD00031E11 /* XCLocalSwiftPackageReference "(null)" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Modules/OnBoarding;
 		};
-		31A2F375300BF7A70014E39A /* XCLocalSwiftPackageReference "Modules/Dashboard" */ = {
+		31A2F375300BF7A70014E39A /* XCLocalSwiftPackageReference "(null)" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = Modules/Dashboard;
+		};
+		9A53B9D946D4B4041C3079BF /* XCLocalSwiftPackageReference "Modules/Roadmap" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Modules/Roadmap;
 		};
 /* End XCLocalSwiftPackageReference section */
 
@@ -683,6 +706,38 @@
 				version = 7.1.0;
 			};
 		};
+		5A429D783011A4890013DAB5 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = exactVersion;
+				version = 5.6.4;
+			};
+		};
+		5A429D7B3011A64D0013DAB5 /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject.git";
+			requirement = {
+				kind = exactVersion;
+				version = 2.8.3;
+			};
+		};
+		5A429D803011B20A0013DAB5 /* XCRemoteSwiftPackageReference "sdwebimage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sdwebimage/sdwebimage";
+			requirement = {
+				kind = exactVersion;
+				version = 5.9.5;
+			};
+		};
+		5A87E70F30132E8F003F9F5E /* XCRemoteSwiftPackageReference "cloudinary_ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/cloudinary/cloudinary_ios.git";
+			requirement = {
+				kind = exactVersion;
+				version = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -694,30 +749,62 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = Common;
 		};
+		03BC5243300F908100548CAD /* Profile */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Profile;
+		};
 		03C4C2A1300A8FFD00031E11 /* OnBoarding */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OnBoarding;
 		};
-        3195CCEA300EAD82004F0C28 /* CourseDetails */ = {
-            isa = XCSwiftPackageProductDependency;
-            productName = CourseDetails;
-        };
-        2865055BCA38AF44B8B266E9 /* Preferences */ = {
-            isa = XCSwiftPackageProductDependency;
-            productName = Preferences;
+		2865055BCA38AF44B8B266E9 /* Preferences */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Preferences;
+		};
+		3195CCEA300EAD82004F0C28 /* CourseDetails */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CourseDetails;
 		};
 		31A2F376300BF7A70014E39A /* Dashboard */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Dashboard;
 		};
-
-		5AB1211A300DA1A600953837 /* Coures */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Coures;
-		};
 		31F0B54A300C0D0000293455 /* AIStudyRoom */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AIStudyRoom;
+		};
+		5A429D793011A4890013DAB5 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5A429D783011A4890013DAB5 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		5A429D7E3011A64D0013DAB5 /* Swinject-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5A429D7B3011A64D0013DAB5 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = "Swinject-Dynamic";
+		};
+		5A429D813011B20A0013DAB5 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5A429D803011B20A0013DAB5 /* XCRemoteSwiftPackageReference "sdwebimage" */;
+			productName = SDWebImage;
+		};
+		5A429D833011B20B0013DAB5 /* SDWebImageMapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5A429D803011B20A0013DAB5 /* XCRemoteSwiftPackageReference "sdwebimage" */;
+			productName = SDWebImageMapKit;
+		};
+		5A87E71030132E8F003F9F5E /* Cloudinary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5A87E70F30132E8F003F9F5E /* XCRemoteSwiftPackageReference "cloudinary_ios" */;
+			productName = Cloudinary;
+		};
+		5AB1211A300DA1A600953837 /* Courses */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Courses;
+		};
+		DE4CCD63590C46EA769D7093 /* Roadmap */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Roadmap;
 		};
 /* End XCSwiftPackageProductDependency section */
 

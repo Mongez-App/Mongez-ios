@@ -10,8 +10,11 @@ import SwiftUI
 import Common
 
 public struct StudyRoomView: View {
+    @Environment(\.dismiss) private var dismiss
     @StateObject var viewModel: StudyRoomViewModel
     let taskTitle: String
+    @State private var isPaused = false
+    @State private var showAlert = false
     
     public init(viewModel: StudyRoomViewModel, taskTitle: String) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -19,53 +22,87 @@ public struct StudyRoomView: View {
     }
     
     public var body: some View {
-        VStack(spacing: 0) {
-            StudyRoomHeaderView(
-                taskTitle: taskTitle,
-                onPauseAction: {  },
-                onDoneAction: { }
-            )
-            
-            StudyRoomTimerView()
-            
-            Divider()
-                .background(AppTheme.Colors.gray100)
+        ZStack {
+            VStack(spacing: 0) {
+                VStack {
+                    StudyRoomHeaderView(
+                        taskTitle: taskTitle,
+                        isPaused: $isPaused,
+                        onTogglePause: { isPaused ? viewModel.pauseTimer() : viewModel.startTimer() },
+                        onDoneAction: { showAlert = true },
+                        onBackAction: { dismiss() }
+                    )
+                    
+                    StudyRoomTimerView(
+                        elapsedTime: viewModel.formattedElapsedTime,
+                        allocatedTime: viewModel.formattedAllocatedTime
+                    )
+                    .padding(.horizontal, AppTheme.Spacing.small)
+                }
                 .padding(.bottom, AppTheme.Spacing.small)
-            
-            ZStack {
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        LazyVStack(spacing: AppTheme.Spacing.medium) {
-                            ForEach(viewModel.messages) { message in
-                                MessageBubbleView(message: message)
-                                    .id(message.id)
+                .background(AppTheme.Colors.white100)
+                .appShadow(
+                    opacity: 0.15,
+                    radius: 2.5,
+                    y: 1
+                )
+                .zIndex(1)
+                
+                ZStack {
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            LazyVStack(spacing: AppTheme.Spacing.medium) {
+                                ForEach(viewModel.messages) { message in
+                                    MessageBubbleView(message: message)
+                                        .id(message.id)
+                                }
                             }
+                            .padding(AppTheme.Spacing.small)
                         }
-                        .padding(AppTheme.Spacing.small)
+                        .onChange(of: viewModel.messages.count) { _ in
+                            scrollToBottom(proxy: proxy)
+                        }
+                        .onChange(of: viewModel.messages.last?.content) { _ in
+                            scrollToBottom(proxy: proxy)
+                        }
                     }
-                    .onChange(of: viewModel.messages.count) { _ in
-                        scrollToBottom(proxy: proxy)
-                    }
-                    .onChange(of: viewModel.messages.last?.content) { _ in
-                        scrollToBottom(proxy: proxy)
+                    
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .scaleEffect(1.5)
+                            .tint(AppTheme.Colors.purple200)
                     }
                 }
                 
-                if viewModel.isLoading {
-                    ProgressView()
-                        .scaleEffect(1.5)
-                        .tint(AppTheme.Colors.purple200)
-                }
+                StudyRoomInputView(
+                    inputText: $viewModel.inputText,
+                    onSendAction: { viewModel.sendMessage() }
+                )
+            }
+            .background(AppTheme.Colors.white100.ignoresSafeArea())
+            .navigationBarBackButtonHidden(true)
+            .navigationBarHidden(true)
+            .task {
+                viewModel.startTimer()
+                await viewModel.loadHistory()
+            }
+            .onDisappear {
+                viewModel.pauseTimer()
             }
             
-            StudyRoomInputView(
-                inputText: $viewModel.inputText,
-                onSendAction: { viewModel.sendMessage() }
-            )
-        }
-        .background(AppTheme.Colors.white100.ignoresSafeArea())
-        .task {
-            await viewModel.loadHistory()
+            if showAlert {
+                EndSessionAlertView(
+                    onEndSession: {
+                        showAlert = false
+                        viewModel.pauseTimer()
+                        dismiss()
+                    },
+                    onKeepStudying: {
+                        showAlert = false
+                    }
+                )
+                .zIndex(2)
+            }
         }
     }
     

@@ -6,49 +6,61 @@
 //
 import Common
 import Foundation
-public enum AuthEndpoint:EndPoint {
-    case login(email: String, password: String,idToken: String)
-    case register(name: String, email: String, password: String,idToken: String)
-    case guestLogin
-    case googleLogin(idToken : String)
+public enum AuthEndpoint: EndPoint {
+    case handshake(idToken: String, name: String, appearance: String, language: String)
+    case me(idToken: String)
     
-    public var baseURL: String { "https://api.smartstudy.app/v3" }
+    public var baseURL: String { "https://api-gateway-production-3fd0.up.railway.app/api/v1" }
     
     public var path: String {
         switch self {
-        case .login: return "/auth/login"
-        case .register: return "/auth/register"
-        case .guestLogin: return "/auth/guest"
-        case .googleLogin: return "/auth/google"
+        case .handshake:
+            return "/auth/handshake"
+        case .me:
+            return "/auth/me"
         }
     }
     
-    public var method: HTTPMethod { .post }
+    public var method: HTTPMethod {
+        switch self {
+        case .handshake:
+            return .post
+        case .me:
+            return .get
+        }
+    }
     
     public var headers: [String: String]? {
-        ["Content-Type": "application/json", "Accept": "application/json"]
+        let token: String
+        switch self {
+        case .handshake(let idToken, _, _, _):
+            token = idToken
+        case .me(let idToken):
+            token = idToken
+        }
+        
+        let lang = UserDefaults.standard.string(forKey: "selected_language")?.lowercased() ?? "en"
+        
+        return [
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": "Bearer \(token)",
+            "Accept-Language": lang
+        ]
     }
     
     public var body: Data? {
         switch self {
-        case .login(let email, let password, let idToken):
-                    return try? JSONEncoder().encode([
-                        "email": email,
-                        "password": password,
-                        "id_token": idToken
-                    ])
-                case .register(let name, let email, let password, let idToken):
-                    return try? JSONEncoder().encode([
-                        "name": name,
-                        "email": email,
-                        "password": password,
-                        "id_token": idToken
-                    ])
-                case .guestLogin:
-                    return try? JSONEncoder().encode(["is_guest": true])
-                case .googleLogin(let idToken):
-
-                    return try? JSONEncoder().encode(["id_token": idToken])
-                }
+        case .handshake(_, let name, let appearance, let language):
+            let payload: [String: String] = [
+                "name": name,
+                "appearance": appearance,
+                "language": language
+            ]
+            return try? JSONEncoder().encode(payload)
+        case .me:
+            return nil
+        }
     }
 }
+

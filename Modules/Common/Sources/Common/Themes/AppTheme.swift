@@ -12,51 +12,51 @@ public enum AppTheme{
     
     public enum Colors {
         public static var purple100 : Color {
-            Color(hex: "#A855F7")
+            Color("purple100", bundle: .module)
         }
         
         public static var purple200 : Color {
-            Color(hex: "#5A67D8")
+            Color("purple200", bundle: .module)
         }
         
         public static var gray100   : Color{
-            Color(hex: "#D1D5DB")
+            Color("gray100", bundle: .module)
         }
         
         public static var gray200   : Color{
-            Color(hex: "#BCBCBE")
+            Color("gray200", bundle: .module)
         }
         
         public static var gray300   : Color{
-            Color(hex: "#B0B0B3")
+            Color("gray300", bundle: .module)
         }
         
         public static var white100  : Color{
-            Color(hex: "#F9F9FF")
+            Color("white100", bundle: .module)
         }
         
         public static var black100  : Color{
-            Color(hex: "#111827")
+            Color("black100", bundle: .module)
         }
         
         public static var green100  : Color{
-            Color(hex: "#10B981")
+            Color("green100", bundle: .module)
         }
         
         public static var red100    : Color{
-            Color(hex: "#EF4444")
+            Color("red100", bundle: .module)
         }
         
         public static var yellow100 : Color{
-            Color(hex: "#F59E0B")
+            Color("yellow100", bundle: .module)
         }
         
         public static var orange100 : Color{
-            Color(hex: "#F97316")
+            Color("orange100", bundle: .module)
         }
         
         public static var blue100 : Color{
-            Color(hex: "#3B82F6")
+            Color("blue100", bundle: .module)
         }
         
         public static func changeOpacity (color : Color, opacity:Double)->Color{
@@ -65,7 +65,7 @@ public enum AppTheme{
     }
     
     public static func textStyle(size: CGFloat, weight: Font.Weight = .regular) -> Font{
-        Font.custom("Poppins", size: size).weight(weight)
+        Font.custom("Arial", size: size).weight(weight)
     }
     
     public enum Spacing{

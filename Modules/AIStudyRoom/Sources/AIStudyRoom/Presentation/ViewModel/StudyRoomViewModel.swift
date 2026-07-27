@@ -14,6 +14,10 @@ public class StudyRoomViewModel: ObservableObject {
     @Published var inputText: String = ""
     @Published var isLoading: Bool = false
     
+    @Published var elapsedTimeInSeconds: Int = 0
+    let allocatedTimeInMinutes: Int = 25
+    private var timerTask: Task<Void, Never>?
+    
     private let courseId: String
     private let getChatHistoryUseCase: GetChatHistoryUseCase
     private let sendMessageUseCase: SendMessageUseCase
@@ -22,6 +26,32 @@ public class StudyRoomViewModel: ObservableObject {
         self.courseId = courseId
         self.getChatHistoryUseCase = getChatHistoryUseCase
         self.sendMessageUseCase = sendMessageUseCase
+    }
+    
+    var formattedElapsedTime: String {
+        let minutes = elapsedTimeInSeconds / 60
+        let seconds = elapsedTimeInSeconds % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    var formattedAllocatedTime: String {
+        return String(format: "%02d:00", allocatedTimeInMinutes)
+    }
+    
+    func startTimer() {
+        timerTask?.cancel()
+        timerTask = Task {
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+                if !Task.isCancelled {
+                    elapsedTimeInSeconds += 1
+                }
+            }
+        }
+    }
+    
+    func pauseTimer() {
+        timerTask?.cancel()
     }
     
     func loadHistory() async {
@@ -64,5 +94,9 @@ public class StudyRoomViewModel: ObservableObject {
                 print("Failed to stream message: \(error)")
             }
         }
+    }
+    
+    deinit {
+        timerTask?.cancel()
     }
 }

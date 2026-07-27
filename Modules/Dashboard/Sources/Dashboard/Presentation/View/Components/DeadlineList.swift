@@ -9,16 +9,17 @@ import SwiftUI
 import Common
 
 struct DeadlineList: View {
-    @Binding var upcomingDeadlines: [UpcomingDeadline]?
+    @Binding var upcomingDeadlines: [UpcomingDeadline]
     
     let colors = [AppTheme.Colors.red100, AppTheme.Colors.green100]
     
     var body: some View {
-        HStack(spacing: AppTheme.Spacing.small) {
-            ForEach(upcomingDeadlines!.indices, id: \.self) { index in
-                DeadlineCard(color: colors[index], upcomingDeadline: upcomingDeadlines![index])
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: AppTheme.Spacing.small) {
+                ForEach(Array(upcomingDeadlines.enumerated()), id: \.element.deadlineId) { index, upcomingDeadline in
+                    DeadlineCard(color: colors[index % colors.count], upcomingDeadline: upcomingDeadline)
+                }
             }
-            .frame(maxWidth: .infinity)
         }
     }
 }

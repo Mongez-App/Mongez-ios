@@ -12,8 +12,10 @@ import Authntication
 import Dashboard
 import AIStudyRoom
 import Preferences
-import Coures
+import Courses
 import CourseDetails
+import Profile
+import Roadmap
 
 struct ContentView: View {
     @StateObject private var appCoordinator = AppCoordinator()
@@ -53,7 +55,18 @@ struct ContentView: View {
                 if let coordinator = appCoordinator.dashboardCoordinator {
                     DashboardCoordinatorView(
                         coordinator: coordinator,
-                        viewModel: DashboardViewModel(),
+                        viewModel: DashboardViewModel(
+                            getDashboardDetailsUseCase: GetDashboardDetailsUseCase(
+                                dashboardRepository: DashboardRepository(
+                                    remoteDataSource: DashboardRemoteDataSource()
+                                )
+                            ),
+                            getUserUseCase: GetUserUseCase(
+                                dashboardRepository: DashboardRepository(
+                                    remoteDataSource: DashboardRemoteDataSource()
+                                )
+                            )
+                        ),
                         studyRoomFactory: { courseId, taskTitle in
                             let chatRepository = MockChatRepository()
                             let studyViewModel = StudyRoomViewModel(
@@ -68,6 +81,43 @@ struct ContentView: View {
                                     taskTitle: taskTitle
                                 )
                             )
+                        },
+                        courseDetailsFactory: { courseId in
+                            let courseDetailsRepository = MockCourseDetailsRepository()
+                            let detailsCoordinator = CourseDetailsCoordinator()
+                            let detailsViewModel = CourseDetailsViewModel(
+                                courseId: courseId,
+                                getMaterialsUseCase: GetCourseMaterialsUseCase(repository: courseDetailsRepository),
+                                getTasksUseCase: GetCourseTasksUseCase(repository: courseDetailsRepository)
+                            )
+                            
+                            return AnyView(
+                                CourseDetailsCoordinatorView(
+                                    coordinator: detailsCoordinator,
+                                    viewModel: detailsViewModel,
+                                    onStudyRoomSelected: { roomId, taskTitle in
+                                        coordinator.push(.studyRoom(courseId: roomId, taskTitle: taskTitle))
+                                    }
+                                )
+                            )
+                        },
+                        coursesFactory: {
+                            AnyView(
+                                DashboardCoursesContainer(
+                                    coordinator: coordinator,
+                                    viewModel: appCoordinator.makeCoursesViewModel()
+                                )
+                            )
+                        },
+                        roadmapFactory: {
+                            AnyView(
+                                RoadmapView(viewModel: RoadmapViewmodel())
+                            )
+                        },
+                        profileFactory: {
+                            AnyView(
+                                ProfileView()
+                            )
                         }
                     )
                     .transition(.opacity)
@@ -76,7 +126,7 @@ struct ContentView: View {
                 if let coordinator = appCoordinator.coursesCoordinator {
                     CoursesCoordinatorView(
                         coordinator: coordinator,
-                        viewModel: CoursesViewModel(),
+                        viewModel: appCoordinator.makeCoursesViewModel(),
                         courseDetailsFactory: { courseId in
                             
                             let courseDetailsRepository = MockCourseDetailsRepository()
@@ -91,21 +141,8 @@ struct ContentView: View {
                                 CourseDetailsCoordinatorView(
                                     coordinator: detailsCoordinator,
                                     viewModel: detailsViewModel,
-                                    path: Binding(get: { coordinator.path }, set: { coordinator.path = $0 }),
-                                    studyRoomFactory: { roomId, taskTitle in
-                                        let chatRepository = MockChatRepository()
-                                        let studyViewModel = StudyRoomViewModel(
-                                            courseId: roomId,
-                                            getChatHistoryUseCase: GetChatHistoryUseCase(repository: chatRepository),
-                                            sendMessageUseCase: SendMessageUseCase(repository: chatRepository)
-                                        )
-                                        
-                                        return AnyView(
-                                            StudyRoomView(
-                                                viewModel: studyViewModel,
-                                                taskTitle: taskTitle
-                                            )
-                                        )
+                                    onStudyRoomSelected: { roomId, taskTitle in
+                                        coordinator.push(.details(courseId: roomId))
                                     }
                                 )
                             )
@@ -118,6 +155,21 @@ struct ContentView: View {
         .animation(.easeInOut, value: appCoordinator.state)
     }
 }
+
+struct DashboardCoursesContainer: View {
+    let coordinator: DashboardCoordinator
+    let viewModel: CoursesViewModel
+    
+    var body: some View {
+        CoursesView(viewModel: viewModel)
+            .onAppear {
+                viewModel.onCourseSelected = { [weak coordinator] courseId in
+                    coordinator?.push(.courseDetails(courseId: courseId))
+                }
+            }
+    }
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)

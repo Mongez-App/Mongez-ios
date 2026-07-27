@@ -10,16 +10,24 @@ import SwiftUI
 import Common
 
 public struct StudyRoomTimerView: View {
+    public let elapsedTime: String
+    public let allocatedTime: String
     
-    public init() {}
+    public init(elapsedTime: String, allocatedTime: String) {
+        self.elapsedTime = elapsedTime
+        self.allocatedTime = allocatedTime
+    }
     
     public var body: some View {
         HStack(spacing: AppTheme.Spacing.xxSmall) {
             HStack(spacing: AppTheme.Spacing.xxxSmall) {
-                Image("clock")
+                Image("clock-white")
+                    .renderingMode(.template)
                     .resizable()
+                    .foregroundColor(AppTheme.Colors.black100)
                     .frame(width: 14, height: 14)
-                Text("00:00")
+                    
+                Text(elapsedTime)
                     .font(AppTheme.textStyle(size: 14, weight: .bold))
                     .foregroundColor(AppTheme.Colors.black100)
             }
@@ -32,10 +40,13 @@ public struct StudyRoomTimerView: View {
                 .foregroundColor(AppTheme.Colors.black100)
             
             HStack(spacing: AppTheme.Spacing.xxxSmall) {
-                Image("clock")
+                Image("clock-white")
+                    .renderingMode(.template)
                     .resizable()
+                    .foregroundColor(AppTheme.Colors.black100)
                     .frame(width: 14, height: 14)
-                Text("25:00")
+                    
+                Text(allocatedTime)
                     .font(AppTheme.textStyle(size: 14, weight: .bold))
                     .foregroundColor(AppTheme.Colors.black100)
             }
