@@ -18,6 +18,7 @@ import Courses
 import Swinject
 
 public enum AppState {
+    case splash
     case onboarding
     case auth
     case preferences
@@ -43,7 +44,7 @@ public final class AppCoordinator: ObservableObject, Coordinator {
         return container.resolve(CoursesViewModel.self)!
     }
 
-    @Published public var state: AppState = .onboarding
+    @Published public var state: AppState = .splash
     @Published public var onboardingCoordinator: OnboardingCoordinator?
     @Published public var authCoordinator: AuthCoordinator?
     @Published public var preferencesCoordinator: PreferencesCoordinator?
@@ -53,7 +54,9 @@ public final class AppCoordinator: ObservableObject, Coordinator {
     public init() {
         setupLogoutListener()
         setupProfileUpdateListener()
-        
+    }
+    
+    public func finishSplash() {
         let hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
         let isLoggedIn = UserDefaults.standard.string(forKey: "main_token") != nil
         

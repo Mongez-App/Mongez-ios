@@ -25,6 +25,16 @@ struct ContentView: View {
         Group {
             switch appCoordinator.state {
                 
+            case .splash:
+                SplashScreenView(
+                    logoImageName: "logo",
+                    sloganImageName: "slogan",
+                    onSplashFinished: {
+                        appCoordinator.finishSplash()
+                    }
+                )
+                .transition(.opacity)
+                
             case .onboarding:
                 if let coordinator = appCoordinator.onboardingCoordinator {
                     OnboardingCoordinatorView(
