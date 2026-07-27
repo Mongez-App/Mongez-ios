@@ -19,6 +19,7 @@ struct DashboardView: View {
         VStack(spacing: 0) {
             if viewModel.user != nil {
                 HeaderView(user: $viewModel.user)
+                    .zIndex(1)
             }
             
             GeometryReader { geometry in

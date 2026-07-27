@@ -8,7 +8,7 @@
 import SwiftUI
 import Common
 
-public struct CustomAlertView: View {
+public struct NegativeActionAlertView: View {
     @Binding var isPresented: Bool
     
     let title: String
@@ -34,12 +34,12 @@ public struct CustomAlertView: View {
                     .frame(width: 32, height: 32)
                     .foregroundColor(AppTheme.Colors.red100)
             }
-            .padding(.bottom, AppTheme.Spacing.xxLarge)
+            .padding(.bottom, AppTheme.Spacing.xLarge)
             
             VStack(spacing: AppTheme.Spacing.xSmall) {
                 Text(title)
                     .font(AppTheme.textStyle(size: 18, weight: .semibold))
-                    .foregroundColor(AppTheme.Colors.blue100)
+                    .foregroundColor(AppTheme.Colors.black100)
                     .multilineTextAlignment(.center)
                 
                 Text(description)
@@ -58,7 +58,7 @@ public struct CustomAlertView: View {
                 } label: {
                     Text(primaryButtonTitle)
                         .font(AppTheme.textStyle(size: 14, weight: .medium))
-                        .foregroundColor(AppTheme.Colors.black100)
+                        .foregroundColor(AppTheme.Colors.white100)
                         .frame(maxWidth: .infinity)
                         .frame(height: 42)
                         .background(AppTheme.Colors.purple200)
@@ -94,6 +94,6 @@ public struct CustomAlertView: View {
                 .fill(Color.white)
                 .appShadow(opacity: 0.7, radius: 25/2)
         )
-        .padding(.horizontal, AppTheme.Spacing.large)
+        .padding(.horizontal, AppTheme.Spacing.xLarge)
     }
 }
