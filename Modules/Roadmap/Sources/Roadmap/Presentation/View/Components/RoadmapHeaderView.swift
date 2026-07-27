@@ -26,6 +26,18 @@ struct RoadmapHeaderView: View {
             }
         }
         .padding(.horizontal, AppTheme.Spacing.small)
+        .padding(.top, AppTheme.Spacing.small)
+        .padding(.bottom, AppTheme.Spacing.xSmall)
+        .frame(maxWidth: .infinity)
+        .background(
+            AppTheme.Colors.white100
+                .ignoresSafeArea(edges: .top)
+                .appShadow(
+                    opacity: 0.2,
+                    radius: 3,
+                    y: 1
+                )
+        )
     }
 
     private func headerButton(icon: String, size: CGFloat, action: @escaping () -> Void) -> some View {
