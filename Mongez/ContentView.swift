@@ -19,6 +19,7 @@ import Roadmap
 
 struct ContentView: View {
     @StateObject private var appCoordinator = AppCoordinator()
+    @AppStorage("user_appearance") private var userAppearance: String = "Light Mode"
     
     var body: some View {
         Group {
@@ -153,6 +154,11 @@ struct ContentView: View {
             }
         }
         .animation(.easeInOut, value: appCoordinator.state)
+        .preferredColorScheme(
+            userAppearance == "Dark Mode" ? .dark :
+            userAppearance == "Light Mode" ? .light :
+            nil  // System: follows device setting
+        )
     }
 }
 

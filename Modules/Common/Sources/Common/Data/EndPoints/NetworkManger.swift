@@ -67,6 +67,15 @@ public class NetworkManger {
 
         let (data, response) = try await URLSession.shared.data(for: request)
         let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
+        
+        if statusCode == 401 && !endpoint.path.contains("/auth") {
+            await MainActor.run {
+                UserDefaults.standard.removeObject(forKey: "current_user_id")
+                UserDefaults.standard.removeObject(forKey: "main_token")
+                NotificationCenter.default.post(name: NSNotification.Name("UserDidLogoutNotification"), object: nil)
+            }
+        }
+        
         return (data, statusCode)
     }
 

@@ -51,9 +51,19 @@ public final class AppCoordinator: ObservableObject, Coordinator {
     @Published public var coursesCoordinator: CoursesCoordinator?
     
     public init() {
-        startOnboarding()
         setupLogoutListener()
         setupProfileUpdateListener()
+        
+        let hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
+        let isLoggedIn = UserDefaults.standard.string(forKey: "main_token") != nil
+        
+        if isLoggedIn {
+            startDashboard()
+        } else if hasCompletedOnboarding {
+            startAuth()
+        } else {
+            startOnboarding()
+        }
     }
     
     private func setupLogoutListener() {
@@ -101,6 +111,7 @@ public final class AppCoordinator: ObservableObject, Coordinator {
         
         coordinator.onFinish = { [weak self] in
             guard let self = self else { return }
+            UserDefaults.standard.set(true, forKey: "hasCompletedOnboarding")
             self.removeChild(coordinator)
             self.onboardingCoordinator = nil
             self.startAuth()
