@@ -91,7 +91,7 @@ public struct NegativeActionAlertView: View {
         .padding(.horizontal, AppTheme.Spacing.large)
         .background(
             RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
-                .fill(Color.white)
+                .fill(AppTheme.Colors.white100)
                 .appShadow(opacity: 0.7, radius: 25/2)
         )
         .padding(.horizontal, AppTheme.Spacing.xLarge)

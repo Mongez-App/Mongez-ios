@@ -19,7 +19,7 @@ import Foundation
 class ProfileViewModel: ObservableObject {
     @Published var profile: UserProfile?
     @Published var isCalendarSyncEnabled: Bool = true
-    @Published var isDarkModeEnabled: Bool = false
+    @Published var appearanceMode: String = UserDefaults.standard.string(forKey: "user_appearance") ?? "System"
     @Published var selectedLanguage: String = UserDefaults.standard.string(forKey: "selected_language") ?? "EN" {
         didSet {
             UserDefaults.standard.set(selectedLanguage, forKey: "selected_language")
@@ -55,7 +55,12 @@ class ProfileViewModel: ObservableObject {
                 
                 // Sync UI fields
                 if let appearance = fetchedProfile.appearance {
-                    self.isDarkModeEnabled = (appearance.lowercased() == "dark mode")
+                    // Only override local setting if it's not "System"
+                    let localAppearance = UserDefaults.standard.string(forKey: "user_appearance") ?? "System"
+                    if localAppearance != "System" {
+                        self.appearanceMode = appearance
+                        UserDefaults.standard.set(appearance, forKey: "user_appearance")
+                    }
                 }
                 if let language = fetchedProfile.language {
                     self.selectedLanguage = (language.lowercased() == "arabic" || language.lowercased() == "ar") ? "AR" : "EN"
@@ -79,7 +84,7 @@ class ProfileViewModel: ObservableObject {
         guard let currentProfile = profile else { return }
         Task {
             do {
-                let appearanceString = isDarkModeEnabled ? "Dark Mode" : "Light Mode"
+                let appearanceString = (appearanceMode == "System") ? "Light Mode" : appearanceMode
                 let languageString = (selectedLanguage == "AR") ? "Arabic" : "English"
                 let updated = try await updateProfileUseCase.execute(
                     name: currentProfile.name ?? "",
@@ -101,10 +106,12 @@ class ProfileViewModel: ObservableObject {
         updateProfileOnServer()
     }
 
-    func updateDarkMode(_ isDark: Bool) {
-        self.isDarkModeEnabled = isDark
-        UserDefaults.standard.set(isDark ? "Dark Mode" : "Light Mode", forKey: "user_appearance")
-        updateProfileOnServer()
+    func updateAppearance(_ mode: String) {
+        self.appearanceMode = mode
+        UserDefaults.standard.set(mode, forKey: "user_appearance")
+        if mode != "System" {
+            updateProfileOnServer()
+        }
     }
 
     func requestCalendarSyncChange(to newValue: Bool) {
@@ -156,19 +163,21 @@ class ProfileViewModel: ObservableObject {
         isEditProfilePresented = true
     }
 
-    func saveEditProfile(name: String, imageData: Data?) {
+    func saveEditProfile(name: String, avatarUrl: String?) {
         isEditProfilePresented = false
         guard let currentProfile = profile else { return }
         
-        if let data = imageData {
-            self.localSelectedImageData = data
+        let newAvatarUrl = avatarUrl ?? currentProfile.avatarUrl
+        
+        if avatarUrl != nil {
+            self.localSelectedImageData = nil
         }
        
         let optimisticallyUpdatedProfile = UserProfile(
             userId: currentProfile.userId,
             name: name,
             email: currentProfile.email,
-            avatarUrl: currentProfile.avatarUrl,
+            avatarUrl: newAvatarUrl,
             stats: currentProfile.stats,
             appearance: currentProfile.appearance,
             language: currentProfile.language,
@@ -178,22 +187,19 @@ class ProfileViewModel: ObservableObject {
         
         Task {
             do {
-                let appearanceString = self.isDarkModeEnabled ? "Dark Mode" : "Light Mode"
+                let appearanceString = (self.appearanceMode == "System") ? "Light Mode" : self.appearanceMode
                 let languageString = (self.selectedLanguage == "AR") ? "Arabic" : "English"
-                let avatarUrl = currentProfile.avatarUrl
                 
                 let serverResponse = try await updateProfileUseCase.execute(
                     name: name,
-                    avatarUrl: avatarUrl ?? "",
+                    avatarUrl: newAvatarUrl ?? "",
                     appearance: appearanceString,
                     language: languageString,
                     calendarSyncConnected: isCalendarSyncEnabled
                 )
                 
-                
                 self.profile = optimisticallyUpdatedProfile.merged(with: serverResponse)
                 
-               
                 NotificationCenter.default.post(name: NSNotification.Name("UserDidUpdateProfileNotification"), object: nil, userInfo: ["name": name])
             } catch {
                 print("Error saving profile details: \(error)")

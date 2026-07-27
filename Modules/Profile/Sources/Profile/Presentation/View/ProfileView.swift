@@ -54,7 +54,7 @@ public struct ProfileView: View {
                             } else {
                                 CircledAsyncImage(urlString: profile.avatarUrl ?? "",
                                                   size: 88,
-                                                  name: profile.name ?? "default value")
+                                                  name: profile.name ?? "")
                             }
                             
                             
@@ -76,11 +76,11 @@ public struct ProfileView: View {
                         }
                         
                         VStack(spacing: AppTheme.Spacing.xxxSmall) {
-                            Text(profile.name ?? "default value")
+                            Text(profile.name ?? "")
                                 .font(AppTheme.textStyle(size: 20, weight: .bold))
                                 .foregroundColor(AppTheme.Colors.black100)
                             
-                            Text(profile.email ?? "default value")
+                            Text(profile.email ?? "")
                                 .font(AppTheme.textStyle(size: 14, weight: .regular))
                                 .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
                         }
@@ -115,11 +115,54 @@ public struct ProfileView: View {
                         iconName: "moon",
                         iconColor: AppTheme.Colors.black100,
                         bgOpacity: 0.10,
-                        title: "Dark Mode",
-                        font: AppTheme.textStyle(size: 16, weight: .regular)
+                        title: "Theme",
+                        font: AppTheme.textStyle(size: 16, weight: .medium)
                     ) {
-                        Toggle("", isOn: $viewModel.isDarkModeEnabled)
-                            .labelsHidden()
+                        Menu {
+                            Button {
+                                viewModel.updateAppearance("Light Mode")
+                            } label: {
+                                if viewModel.appearanceMode == "Light Mode" {
+                                    Label("Light", systemImage: "checkmark")
+                                } else {
+                                    Label("Light", systemImage: "sun.max")
+                                }
+                            }
+                            Button {
+                                viewModel.updateAppearance("Dark Mode")
+                            } label: {
+                                if viewModel.appearanceMode == "Dark Mode" {
+                                    Label("Dark", systemImage: "checkmark")
+                                } else {
+                                    Label("Dark", systemImage: "moon.fill")
+                                }
+                            }
+                            Button {
+                                viewModel.updateAppearance("System")
+                            } label: {
+                                if viewModel.appearanceMode == "System" {
+                                    Label("System", systemImage: "checkmark")
+                                } else {
+                                    Label("System", systemImage: "iphone")
+                                }
+                            }
+                        } label: {
+                            HStack(spacing: AppTheme.Spacing.xxxSmall) {
+                                Text(viewModel.appearanceMode == "Light Mode" ? "Light" :
+                                     viewModel.appearanceMode == "Dark Mode" ? "Dark" : "System")
+                                    .font(AppTheme.textStyle(size: 14, weight: .regular))
+                                    .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
+                                Image(systemName: "chevron.down")
+                                    .font(AppTheme.textStyle(size: 12, weight: .regular))
+                                    .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
+                            }
+                            .padding(.horizontal, AppTheme.Spacing.xSmall)
+                            .padding(.vertical, 6)
+                            .background(
+                                RoundedRectangle(cornerRadius: AppTheme.Spacing.xxSmall)
+                                    .stroke(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.1))
+                            )
+                        }
                     }
                     
                     SettingRow(
@@ -248,10 +291,10 @@ public struct ProfileView: View {
         .sheet(isPresented: $viewModel.isEditProfilePresented) {
             if let profile = viewModel.profile {
                 EditProfileSheet(
-                    currentName: profile.name ?? "default value",
+                    currentName: profile.name ?? "",
                     currentAvatarUrl: profile.avatarUrl ?? "",
-                    onSave: { name, imageData in
-                        viewModel.saveEditProfile(name: name, imageData: imageData)
+                    onSave: { name, avatarUrl in
+                        viewModel.saveEditProfile(name: name, avatarUrl: avatarUrl)
                     },
                     onCancel: {
                         viewModel.cancelEditProfile()
