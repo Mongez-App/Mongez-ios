@@ -1,10 +1,10 @@
 import Foundation
 
-public struct APIError: Error {
+public struct APIError: Error, LocalizedError {
     public let statusCode: Int
     public let message: String
 
-    public var localizedDescription: String { message }
+    public var errorDescription: String? { message }
 }
 
 private struct ServerErrorBody: Decodable {
@@ -17,39 +17,43 @@ public class NetworkManger {
     public static let shared = NetworkManger()
     private init() {}
 
-    public func request<T: Codable>(endpoint: EndPoint, responseType: T.Type) async throws -> T {
+    public func request<T: Decodable>(endpoint: EndPoint, responseType: T.Type) async throws -> T {
         let (data, statusCode) = try await performRequest(endpoint: endpoint)
 
         guard (200...299).contains(statusCode) else {
-            throw buildAPIError(from: data, statusCode: statusCode)
+            throw buildAPIError(from: data, statusCode: statusCode, endpoint: endpoint)
         }
         do {
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("Raw server response: \(jsonString)")
-            }
-            print("Decoding error in request: \(error)")
-            throw APIError(statusCode: statusCode, message: "Parsing Error: \(error.localizedDescription)")
+            let rawResponse = String(data: data, encoding: .utf8) ?? "unknown"
+            print("Raw server response: \(rawResponse)")
+            throw APIError(statusCode: statusCode, message: "Parsing Error: \(error.localizedDescription) | Raw: \(rawResponse)")
         }
     }
 
-    public func requestWithStatus<T: Codable>(endpoint: EndPoint, responseType: T.Type) async throws -> (decoded: T, statusCode: Int) {
+    public func requestWithStatus<T: Decodable>(endpoint: EndPoint, responseType: T.Type) async throws -> (decoded: T, statusCode: Int) {
         let (data, statusCode) = try await performRequest(endpoint: endpoint)
 
         guard (200...299).contains(statusCode) else {
-            throw buildAPIError(from: data, statusCode: statusCode)
+            throw buildAPIError(from: data, statusCode: statusCode, endpoint: endpoint)
         }
         do {
             let decoded = try JSONDecoder().decode(T.self, from: data)
             return (decoded, statusCode)
         } catch {
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("Raw server response: \(jsonString)")
-            }
-            print("Decoding error in requestWithStatus: \(error)")
-            throw APIError(statusCode: statusCode, message: "Parsing Error: \(error.localizedDescription)")
+            let rawResponse = String(data: data, encoding: .utf8) ?? "unknown"
+            print("Raw server response: \(rawResponse)")
+            throw APIError(statusCode: statusCode, message: "Parsing Error: \(error.localizedDescription) | Raw: \(rawResponse)")
         }
+    }
+
+    public func requestRaw(endpoint: EndPoint) async throws -> (Data, Int) {
+        let (data, statusCode) = try await performRequest(endpoint: endpoint)
+        guard (200...299).contains(statusCode) else {
+            throw buildAPIError(from: data, statusCode: statusCode, endpoint: endpoint)
+        }
+        return (data, statusCode)
     }
 
     private func performRequest(endpoint: EndPoint) async throws -> (Data, Int) {
@@ -66,10 +70,10 @@ public class NetworkManger {
         return (data, statusCode)
     }
 
-    private func buildAPIError(from data: Data, statusCode: Int) -> APIError {
+    private func buildAPIError(from data: Data, statusCode: Int, endpoint: EndPoint) -> APIError {
         if let body = try? JSONDecoder().decode(ServerErrorBody.self, from: data) {
-            return APIError(statusCode: statusCode, message: body.resolved)
+            return APIError(statusCode: statusCode, message: "[\(endpoint.path)] \(body.resolved)")
         }
-        return APIError(statusCode: statusCode, message: HTTPURLResponse.localizedString(forStatusCode: statusCode).capitalized)
+        return APIError(statusCode: statusCode, message: "[\(endpoint.path)] " + HTTPURLResponse.localizedString(forStatusCode: statusCode).capitalized)
     }
 }

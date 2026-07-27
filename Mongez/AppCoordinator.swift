@@ -15,6 +15,7 @@ import Dashboard
 import AIStudyRoom
 import Preferences
 import Courses
+import Swinject
 
 public enum AppState {
     case onboarding
@@ -29,6 +30,18 @@ public final class AppCoordinator: ObservableObject, Coordinator {
     public let id = UUID()
     public var childCoordinators: [any Coordinator] = []
     private var cancellables = Set<AnyCancellable>()
+    
+    // MARK: - Swinject Container
+    public let container: Container = {
+        let container = Container()
+        let assembler = Assembler([CoursesAssembly()], container: container)
+        return container
+    }()
+    
+    /// Resolves a CoursesViewModel from the Swinject container
+    public func makeCoursesViewModel() -> CoursesViewModel {
+        return container.resolve(CoursesViewModel.self)!
+    }
 
     @Published public var state: AppState = .onboarding
     @Published public var onboardingCoordinator: OnboardingCoordinator?

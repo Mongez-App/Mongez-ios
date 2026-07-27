@@ -4,12 +4,11 @@ import Common
 struct EmptyCoursesView: View {
     let isSearching: Bool
     let onAddCourse: () -> Void
-    
+
     var body: some View {
         VStack(spacing: AppTheme.Spacing.large) {
             Spacer()
-            
-            
+
             ZStack {
                 Circle()
                     .fill(
@@ -19,7 +18,7 @@ struct EmptyCoursesView: View {
                         )
                     )
                     .frame(width: 160, height: 160)
-                
+
                 Circle()
                     .fill(
                         AppTheme.Colors.changeOpacity(
@@ -28,17 +27,17 @@ struct EmptyCoursesView: View {
                         )
                     )
                     .frame(width: 110, height: 110)
-                
+
                 Image(systemName: isSearching ? "magnifyingglass" : "book.closed")
                     .font(.system(size: 48, weight: .light))
                     .foregroundColor(AppTheme.Colors.purple200)
             }
-            
+
             VStack(spacing: AppTheme.Spacing.xxSmall) {
                 Text(isSearching ? "No results found" : "No courses yet")
                     .font(AppTheme.textStyle(size: 22, weight: .bold))
                     .foregroundColor(AppTheme.Colors.black100)
-                
+
                 Text(
                     isSearching
                     ? "Try a different search term or\nadjust your filters"
@@ -49,11 +48,11 @@ struct EmptyCoursesView: View {
                     .multilineTextAlignment(.center)
                     .lineSpacing(4)
             }
-            
+
             if !isSearching {
-                // Empty state for courses, no button needed as requested
+
             }
-            
+
             Spacer()
             Spacer()
         }
@@ -67,9 +66,10 @@ struct EmptyCoursesView_Previews: PreviewProvider {
         Group {
             EmptyCoursesView(isSearching: false, onAddCourse: {})
                 .previewDisplayName("Empty State")
-            
+
             EmptyCoursesView(isSearching: true, onAddCourse: {})
                 .previewDisplayName("Search State")
         }
     }
 }
+
