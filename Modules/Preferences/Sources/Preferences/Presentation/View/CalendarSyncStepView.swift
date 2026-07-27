@@ -33,7 +33,7 @@ struct CalendarSyncStepView: View {
 
             VStack(spacing: AppTheme.Spacing.small) {
                 Button(action: {
-                    viewModel.syncCalendar()
+                    Task { await viewModel.syncCalendar() }
                 }) {
                     Text("Sync Apple Calendar")
                         .font(AppTheme.textStyle(size: 18, weight: .semibold))
@@ -45,7 +45,7 @@ struct CalendarSyncStepView: View {
                 }
 
                 Button(action: {
-                    viewModel.skip()
+                    Task { await viewModel.skip() }
                 }) {
                     Text("Skip for now")
                         .font(AppTheme.textStyle(size: 16, weight: .semibold))
