@@ -26,6 +26,7 @@ class ProfileViewModel: ObservableObject {
         }
     }
     @Published var showDisableCalendarSyncAlert: Bool = false
+    @Published var showLogoutAlert: Bool = false
     @Published var isEditPreferencesPresented: Bool = false
     @Published var isEditProfilePresented: Bool = false
     @Published var dailyStudyHours: Int = 4
@@ -211,12 +212,16 @@ class ProfileViewModel: ObservableObject {
         isEditProfilePresented = false
     }
     
+    func requestLogout() {
+        showLogoutAlert = true
+    }
+    
     func logout() {
       
         UserDefaults.standard.removeObject(forKey: "current_user_id")
         UserDefaults.standard.removeObject(forKey: "main_token")
         
-        
+        showLogoutAlert = false
         NotificationCenter.default.post(name: NSNotification.Name("UserDidLogoutNotification"), object: nil)
     }
 }

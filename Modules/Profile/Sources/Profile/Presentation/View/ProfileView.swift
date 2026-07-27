@@ -41,7 +41,7 @@ public struct ProfileView: View {
             VStack(spacing: AppTheme.Spacing.large) {
                 if let profile = viewModel.profile {
                     VStack(spacing: AppTheme.Spacing.xSmall) {
-                    
+                        
                         ZStack(alignment: .bottomTrailing) {
                             if let data = viewModel.localSelectedImageData,
                                let uiImage = UIImage(data: data) {
@@ -56,8 +56,8 @@ public struct ProfileView: View {
                                                   size: 88,
                                                   name: profile.name ?? "")
                             }
-
-                           
+                            
+                            
                             Button {
                                 viewModel.openEditProfile()
                             } label: {
@@ -66,7 +66,7 @@ public struct ProfileView: View {
                                         .fill(AppTheme.Colors.purple200)
                                         .frame(width: 26, height: 26)
                                         .appShadow(opacity: 0.4, radius: 6, y: 3)
-
+                                    
                                     Image(systemName: "pencil")
                                         .font(.system(size: 11, weight: .semibold))
                                         .foregroundColor(.white)
@@ -238,7 +238,7 @@ public struct ProfileView: View {
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        viewModel.logout()
+                        viewModel.requestLogout()
                     }
                 }
                 .padding(.horizontal, AppTheme.Spacing.medium)
@@ -248,15 +248,33 @@ public struct ProfileView: View {
         .onAppear {
             viewModel.loadProfile()
         }
-        .alert("Turn off Calendar Sync?", isPresented: $viewModel.showDisableCalendarSyncAlert) {
-            Button("Cancel", role: .cancel) {
-                viewModel.cancelDisableCalendarSync()
+        .overlay {
+            if viewModel.showDisableCalendarSyncAlert || viewModel.showLogoutAlert {
+                Color.black.opacity(0.3).ignoresSafeArea()
             }
-            Button("Turn Off", role: .destructive) {
-                viewModel.confirmDisableCalendarSync()
+            if viewModel.showDisableCalendarSyncAlert {
+                NegativeActionAlertView(
+                    isPresented: $viewModel.showDisableCalendarSyncAlert,
+                    title: "Turn off Calendar Sync?",
+                    description: "Your study sessions will stop syncing to your calendar. You can turn this back on anytime.",
+                    primaryButtonTitle: "Cancel",
+                    secondaryButtonTitle: "Disconnect",
+                    secondaryAction: {
+                        viewModel.confirmDisableCalendarSync()
+                    }
+                )
+            } else if viewModel.showLogoutAlert {
+                NegativeActionAlertView(
+                    isPresented: $viewModel.showLogoutAlert,
+                    title: "Are you sure you want to log out?",
+                    description: "You will need to enter your username and password to sign back in.",
+                    primaryButtonTitle: "Cancel",
+                    secondaryButtonTitle: "Logout",
+                    secondaryAction: {
+                        viewModel.logout()
+                    }
+                )
             }
-        } message: {
-            Text("Your study sessions will stop syncing to your calendar. You can turn this back on anytime.")
         }
         .sheet(isPresented: $viewModel.isEditPreferencesPresented) {
             EditPreferencesSheet(
