@@ -14,6 +14,7 @@ public struct CoursesView: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 headerSection
+                    .zIndex(1)
                 searchSection
 
                 if viewModel.isLoading && viewModel.courses.isEmpty {
@@ -111,8 +112,18 @@ public struct CoursesView: View {
             }
         }
         .padding(.horizontal, AppTheme.Spacing.large)
-        .padding(.top, AppTheme.Spacing.medium)
+        .padding(.top, AppTheme.Spacing.xSmall)
         .padding(.bottom, AppTheme.Spacing.small)
+        .background(
+            AppTheme.Colors.white100
+                .ignoresSafeArea(edges: .top)
+                .appShadow(
+                    opacity: 0.2,
+                    radius: 3,
+                    y: 1
+                )
+        )
+        .padding(.bottom, AppTheme.Spacing.medium)
     }
 
     private var searchSection: some View {
@@ -139,7 +150,7 @@ public struct CoursesView: View {
             RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
                 .stroke(AppTheme.Colors.gray100, lineWidth: 1)
         )
-        .padding(.horizontal, AppTheme.Spacing.large)
+        .padding(.horizontal, AppTheme.Spacing.medium)
         .padding(.bottom, AppTheme.Spacing.small)
     }
 

@@ -21,6 +21,7 @@ public struct RoadmapView: View {
                 onFilterTapped: { viewModel.openFilterSheet() },
                 onAddTapped: { viewModel.openAddEventSheet() }
             )
+            .zIndex(1)
 
             ScrollView(.vertical, showsIndicators: false) {
                 if let roadmap = viewModel.roadmap {
@@ -42,7 +43,6 @@ public struct RoadmapView: View {
             }
             .padding(.bottom, 85)
         }
-        .padding(.top, AppTheme.Spacing.small)
         .background(AppTheme.Colors.white100)
         .onAppear {
             viewModel.loadRoadmap()

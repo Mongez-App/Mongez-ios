@@ -55,13 +55,19 @@ struct HeaderView: View {
             }
         }
         .padding(.horizontal, AppTheme.Spacing.small)
-        .padding(.top, AppTheme.Spacing.xxSmall)
-        .padding(.bottom, AppTheme.Spacing.xSmall)
+        .padding(.top, AppTheme.Spacing.xSmall)
+        .padding(.bottom, AppTheme.Spacing.xxSmall)
         .frame(maxWidth: .infinity)
         .background(
             AppTheme.Colors.white100
-                .appShadow(opacity: 0.20, radius: 3, y: 1)
+                .ignoresSafeArea(edges: .top)
+                .appShadow(
+                    opacity: 0.2,
+                    radius: 3,
+                    y: 1
+                )
         )
+        
     }
 }
 
