@@ -54,9 +54,9 @@ struct HeaderView: View {
 
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.top, 8)
-        .padding(.bottom, 12)
+        .padding(.horizontal, AppTheme.Spacing.small)
+        .padding(.top, AppTheme.Spacing.xxSmall)
+        .padding(.bottom, AppTheme.Spacing.xSmall)
         .frame(maxWidth: .infinity)
         .background(
             AppTheme.Colors.white100

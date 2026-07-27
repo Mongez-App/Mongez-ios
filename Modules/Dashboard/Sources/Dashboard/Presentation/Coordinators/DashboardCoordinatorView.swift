@@ -47,6 +47,9 @@ public struct DashboardCoordinatorView: View {
                             viewModel.onTaskSelected = { [weak coordinator] courseId, taskTitle in
                                 coordinator?.push(.studyRoom(courseId: courseId, taskTitle: taskTitle))
                             }
+                            viewModel.onViewAllTodayTasks = { [weak coordinator] in
+                                coordinator?.push(.todayTasks)
+                            }
                         }
                 
                 case .courses:
@@ -65,6 +68,8 @@ public struct DashboardCoordinatorView: View {
                     studyRoomFactory(courseId, taskTitle)
                 case .courseDetails(let courseId):
                     courseDetailsFactory(courseId)
+                case .todayTasks:
+                    TodayTasksView(viewModel: viewModel)
                 }
             }
         }

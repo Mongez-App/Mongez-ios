@@ -28,6 +28,7 @@ public class DashboardViewModel : ObservableObject {
     }
     
     public var onTaskSelected: ((String, String) -> Void)?
+    public var onViewAllTodayTasks: (() -> Void)?
     var isEmpty: Bool = false
     
     @MainActor
