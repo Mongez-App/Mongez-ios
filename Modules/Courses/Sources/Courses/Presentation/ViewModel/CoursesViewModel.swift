@@ -153,13 +153,22 @@ public class CoursesViewModel: ObservableObject {
                     )
                 }
 
+                print("=== ADD COURSE FLOW ===")
+                print("Name: \(courseName)")
+                print("Code: \(courseCode)")
+                print("StartDate: \(courseStartDate)")
+                print("EndDate: \(courseDeadline)")
+                print("Materials count: \(materialInfos.count)")
+                for m in materialInfos { print("  - \(m.fileName) (\(m.contentType), \(m.fileSizeBytes) bytes)") }
+                print("======================")
+
                 let _ = try await addCourseUseCase.execute(
                     name: courseName,
                     courseCode: courseCode,
                     description: courseDescription.isEmpty ? nil : courseDescription,
                     imageData: selectedImageData,
                     startDate: courseStartDate,
-                    endDate: nil,
+                    endDate: courseDeadline,
                     examDate: courseDeadline,
                     materials: materialInfos
                 )

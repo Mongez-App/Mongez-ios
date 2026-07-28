@@ -48,7 +48,12 @@ public struct RoadmapView: View {
             viewModel.loadRoadmap()
         }
         .sheet(isPresented: $viewModel.isAddEventSheetPresented) {
-            AddEventSheetView()
+            AddEventSheetView(
+                courses: viewModel.courses,
+                onSubmit: { courseId, eventType, title, dueDate, weight in
+                    await viewModel.addEvent(courseId: courseId, eventType: eventType, title: title, dueDate: dueDate, weight: weight)
+                }
+            )
         }
         .sheet(isPresented: $viewModel.isFilterSheetPresented) {
             FilterRoadmapSheetView()
@@ -58,6 +63,11 @@ public struct RoadmapView: View {
 
 struct RoadmapView_Previews: PreviewProvider {
     static var previews: some View {
-        RoadmapView(viewModel: RoadmapViewmodel())
+        let repo = RoadmapRepository(remoteDataSource: RoadmapRemoteDataSource())
+        RoadmapView(viewModel: RoadmapViewmodel(
+            getRoadmapUseCase: GetRoadmapUseCase(roadmapRepository: repo),
+            addEventUseCase: AddEventUseCase(roadmapRepository: repo),
+            roadmapRepository: repo
+        ))
     }
 }

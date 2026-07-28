@@ -1,29 +1,31 @@
-//
-//  File.swift
-//  
-//
-//  Created by Mazen Amr on 21/07/2026.
-//
-
 import Foundation
 
 public struct CourseTaskDTO: Decodable {
-    public let task_id: String
-    public let title: String
-    public let duration_minutes: Int
-    public let priority: String
-    public let is_completed: Bool
-    public let task_start_date: String
+    public let id: String?
+    public let title: String?
+    public let estimatedTime: Int?
+    public let priority: Int?
+    public let studyDate: String?
+    public let dayNumber: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case id = "taskId"
+        case title
+        case estimatedTime
+        case priority
+        case studyDate
+        case dayNumber
+    }
 }
 
 public extension CourseTaskDTO {
     func toDomain(group: TaskGroup) -> CourseTask {
         return CourseTask(
-            id: task_id,
-            title: title,
-            durationMinutes: duration_minutes,
-            priority: TaskPriority(rawValue: priority) ?? .medium,
-            isCompleted: is_completed,
+            id: id ?? UUID().uuidString,
+            title: title ?? "Untitled",
+            durationMinutes: estimatedTime ?? 0,
+            priority: TaskPriority(rawValue: priority.map { $0 >= 667 ? "HIGH" : $0 >= 334 ? "MEDIUM" : "LOW" } ?? "MEDIUM") ?? .medium,
+            isCompleted: false,
             group: group
         )
     }

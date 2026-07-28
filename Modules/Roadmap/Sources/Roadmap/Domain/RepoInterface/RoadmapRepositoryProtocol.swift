@@ -1,14 +1,7 @@
-//
-//  File.swift
-//  
-//
-//  Created by Ahmed Tarek on 22/07/2026.
-//
-
 import Foundation
 
 public protocol RoadmapRepositoryProtocol {
     func getRoadmap() async throws -> Roadmap
-    func getCourses() async throws -> Course
-    func addEvent(courseId: String) async throws
+    func getCourses() async throws -> [Course]
+    func addEvent(courseId: String, eventType: String, title: String, dueDate: String, weight: Int) async throws
 }

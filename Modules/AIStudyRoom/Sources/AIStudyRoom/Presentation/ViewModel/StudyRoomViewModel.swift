@@ -91,7 +91,14 @@ public class StudyRoomViewModel: ObservableObject {
                     }
                 }
             } catch {
-                print("Failed to stream message: \(error)")
+                if let index = messages.firstIndex(where: { $0.id == assistantMessageId }) {
+                    messages[index] = ChatMessage(
+                        id: assistantMessageId,
+                        role: .assistant,
+                        content: error.localizedDescription,
+                        createdAt: messages[index].createdAt
+                    )
+                }
             }
         }
     }

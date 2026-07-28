@@ -24,12 +24,12 @@ public struct StudyBlock {
     let blockId: String
     let courseId: String
     let courseName: String
-    let tasks: [Task]
+    let tasks: [RoadmapTask]
     let isCompleted: Bool
     let events: [Event]
 }
 
-public struct Task {
+public struct RoadmapTask {
     let topic: String
     let durationMinutes: Int
     let taskDate: String

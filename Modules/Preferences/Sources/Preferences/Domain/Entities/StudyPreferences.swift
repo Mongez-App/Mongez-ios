@@ -9,5 +9,5 @@ import Foundation
 
 public struct StudyPreferences {
     public let dailyStudyHours: Int
-    public let availableDays: [Weekday]
+    public let studyDays: [Weekday]
 }

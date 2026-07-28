@@ -1,11 +1,5 @@
-//
-//  File.swift
-//
-//
-//  Created by Ahmed Tarek on 22/07/2026.
-//
-
 import Foundation
+import Combine
 import SwiftUI
 
 public enum RoadmapDetailTab: String, CaseIterable, Identifiable {
@@ -22,19 +16,57 @@ public final class RoadmapViewmodel: ObservableObject {
     @Published private var selectedTabByBlock: [String: RoadmapDetailTab] = [:]
     @Published var isAddEventSheetPresented = false
     @Published var isFilterSheetPresented = false
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+    @Published var courses: [Course] = []
+    @Published var isAddingEvent = false
 
-//    let getRoadmapUseCase: GetRoadmapUseCaseProtocol
-//
-//    public init(getRoadmapUseCase: GetRoadmapUseCaseProtocol = GetRoadmapUseCase()) {
-//        self.getRoadmapUseCase = getRoadmapUseCase
-//    }
+    let getRoadmapUseCase: GetRoadmapUseCaseProtocol
+    private let addEventUseCase: AddEventUseCaseProtocol
+    private let roadmapRepository: RoadmapRepositoryProtocol
 
-    public init() {}
+    public init(getRoadmapUseCase: GetRoadmapUseCaseProtocol, addEventUseCase: AddEventUseCaseProtocol, roadmapRepository: RoadmapRepositoryProtocol) {
+        self.getRoadmapUseCase = getRoadmapUseCase
+        self.addEventUseCase = addEventUseCase
+        self.roadmapRepository = roadmapRepository
+    }
 
     func loadRoadmap() {
         guard roadmap == nil else { return }
-        // Mock Roadmap — swap for getRoadmapUseCase once the Domain/Data layers land.
-        roadmap = .mock
+        isLoading = true
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
+            do {
+                let result = try await self.getRoadmapUseCase.execute()
+                self.roadmap = result
+            } catch {
+                print("Error loading roadmap: \(error)")
+                self.errorMessage = error.localizedDescription
+            }
+            self.isLoading = false
+        }
+    }
+
+    func loadCourses() {
+        Task { @MainActor [weak self] in
+            guard let self = self else { return }
+            do {
+                self.courses = try await self.roadmapRepository.getCourses()
+            } catch {
+                print("Error loading courses: \(error)")
+            }
+        }
+    }
+
+    func addEvent(courseId: String, eventType: String, title: String, dueDate: String, weight: Int) async {
+        isAddingEvent = true
+        do {
+            try await addEventUseCase.execute(courseId: courseId, eventType: eventType, title: title, dueDate: dueDate, weight: weight)
+            isAddEventSheetPresented = false
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        isAddingEvent = false
     }
 
     func isExpanded(_ blockId: String) -> Bool {
@@ -56,6 +88,7 @@ public final class RoadmapViewmodel: ObservableObject {
     }
 
     func openAddEventSheet() {
+        loadCourses()
         isAddEventSheetPresented = true
     }
 

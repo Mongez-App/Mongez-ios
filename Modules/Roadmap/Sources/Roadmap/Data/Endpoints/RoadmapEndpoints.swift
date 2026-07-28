@@ -1,60 +1,58 @@
-//
-//  File.swift
-//  
-//
-//  Created by Ahmed Tarek on 23/07/2026.
-//
-
 import Foundation
 import Common
 
 public enum RoadmapEndpoints: EndPoint {
     case roadmap(method: HTTPMethod, path: String)
-    case event(method: HTTPMethod, path: String) // this will need the course id as a parameter in the path
+    case event(method: HTTPMethod, path: String)
     case courses(method: HTTPMethod, path: String)
-    
+    case createEvent(method: HTTPMethod, path: String, body: Data)
+
     public var baseURL: String {
-        "https://api-gateway-production-3fd0.up.railway.app/api/v1"
+        "https://course-import-service.vercel.app/api/v1/"
     }
-    
+
     public var path: String {
         switch self{
-        case.roadmap(_, let pathValue):
+        case .roadmap(_, let pathValue):
             return pathValue
-            
-        case.event(_, let pathValue):
+        case .event(_, let pathValue):
             return pathValue
-            
-        case.courses(_, let pathValue):
+        case .courses(_, let pathValue):
+            return pathValue
+        case .createEvent(_, let pathValue, _):
             return pathValue
         }
     }
-    
+
     public var method: HTTPMethod {
         switch self{
-        case.roadmap(let methodValue, _):
+        case .roadmap(let methodValue, _):
             return methodValue
-            
-        case.event(let methodValue, _):
+        case .event(let methodValue, _):
             return methodValue
-            
-        case.courses(let methodValue, _):
+        case .courses(let methodValue, _):
+            return methodValue
+        case .createEvent(let methodValue, _, _):
             return methodValue
         }
     }
-    
-    public var headers: [String : String]? {
-        return [
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "Authorization": " "
-        ]
-    }
-    
-    public var body: Data? {
-        nil
-    }
-    
-    
-}
 
+    public var headers: [String : String]? {
+        var headers: [String: String] = [
+            "Content-Type": "application/json"
+        ]
+        if let userId = UserDefaults.standard.string(forKey: "current_user_id") {
+            headers["x-user-id"] = userId
+        }
+        return headers
+    }
+
+    public var body: Data? {
+        switch self {
+        case .createEvent(_, _, let body):
+            return body
+        default:
+            return nil
+        }
+    }
+}

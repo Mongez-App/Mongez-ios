@@ -27,6 +27,7 @@ public struct TodayTask {
     var durationMinutes: Int
     var priority: String
     var isCompleted: Bool
+    var courseId: String?
 }
 
 public struct ProgressMetrics {
@@ -70,21 +71,24 @@ extension Dashboard {
                     title: "Read Chapter 4",
                     durationMinutes: 45,
                     priority: "HIGH",
-                    isCompleted: true
+                    isCompleted: true,
+                    courseId: "course_uuid_9982"
                 ),
                 TodayTask(
                     taskId: "task_002",
                     title: "Practice DFS Problems",
                     durationMinutes: 30,
                     priority: "MEDIUM",
-                    isCompleted: false
+                    isCompleted: false,
+                    courseId: "course_uuid_9982"
                 ),
                 TodayTask(
                     taskId: "task_003",
                     title: "Finish Quiz",
                     durationMinutes: 20,
                     priority: "LOW",
-                    isCompleted: false
+                    isCompleted: false,
+                    courseId: "course_uuid_9982"
                 )
             ],
             upcomingDeadlines: [

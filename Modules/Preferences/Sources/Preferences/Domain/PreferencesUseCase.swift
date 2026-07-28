@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol PreferencesUseCaseProtocol {
-    func executeUpdatePreferences(dailyStudyHours: Int, availableDays: [Weekday]) async throws -> StudyPreferences
+    func executeUpdatePreferences(studyDays: [Weekday], dailyStudyHours: Int) async throws -> StudyPreferences
 }
 
 public class PreferencesUseCase: PreferencesUseCaseProtocol {
@@ -18,7 +18,7 @@ public class PreferencesUseCase: PreferencesUseCaseProtocol {
         self.repository = repository
     }
 
-    public func executeUpdatePreferences(dailyStudyHours: Int, availableDays: [Weekday]) async throws -> StudyPreferences {
-        try await repository.updatePreferences(dailyStudyHours: dailyStudyHours, availableDays: availableDays)
+    public func executeUpdatePreferences(studyDays: [Weekday], dailyStudyHours: Int) async throws -> StudyPreferences {
+        try await repository.updatePreferences(studyDays: studyDays, dailyStudyHours: dailyStudyHours)
     }
 }

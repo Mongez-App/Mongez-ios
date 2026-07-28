@@ -190,7 +190,8 @@ struct MockCoursesRepository: CoursesRepositoryProtocol {
     }
 
     func createCourse(name: String, courseCode: String, imageUrl: String?, startDate: Date, endDate: Date?, examDate: Date, hasMaterials: Bool) async throws -> Course {
-        return Course(name: name, courseCode: courseCode)
+        let courseId = "course_\(UUID().uuidString.prefix(8))"
+        return Course(id: courseId, name: name, courseCode: courseCode)
     }
 
     func deleteCourse(id: String) async throws {}
@@ -199,7 +200,23 @@ struct MockCoursesRepository: CoursesRepositoryProtocol {
         return Material(fileName: fileName, contentType: contentType, fileSizeBytes: fileSizeBytes)
     }
 
-    func uploadMaterialFile(uploadId: String, fileData: Data, fileName: String, contentType: String) async throws {}
+    func uploadMaterialFile(courseId: String, fileData: Data, fileName: String, contentType: String) async throws {}
+
+    func listMaterials(courseId: String) async throws -> [Material] {
+        return []
+    }
+
+    func createTasks(courseId: String, quizQuestionsPerTask: Int) async throws {}
+
+    func listTasks(courseId: String) async throws -> [CourseTask] {
+        return []
+    }
+
+    func createEvent(courseId: String, eventType: String, title: String, dueDate: String, weight: Int) async throws {}
+
+    func listEvents(courseId: String) async throws -> [CourseEvent] {
+        return []
+    }
 
     func addCourseFromURL(url: String) async throws -> Course {
         return Course(name: "Online Course")

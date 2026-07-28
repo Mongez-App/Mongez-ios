@@ -1,34 +1,23 @@
-//
-//  File.swift
-//  
-//
-//  Created by Ahmed Tarek on 23/07/2026.
-//
-
 import Foundation
 
-public class RoadmapRepository : RoadmapRepositoryProtocol {
+public class RoadmapRepository: RoadmapRepositoryProtocol {
     private let remoteDataSource: RoadmapRemoteDataSourceProtocol
-    
+
     public init(remoteDataSource: RoadmapRemoteDataSourceProtocol) {
         self.remoteDataSource = remoteDataSource
     }
-    
+
     public func getRoadmap() async throws -> Roadmap {
         let roadmapDTO = try await remoteDataSource.getRoadmap()
-        
-        let roadmap = RoadmapDTO.mapToEntity(roadmapDTO)
-        
-        return roadmap
+        return RoadmapDTO.mapToEntity(roadmapDTO)
     }
-    
-    public func getCourses() async throws -> Course {
-        Course(courseId: "", courseName: "")
+
+    public func getCourses() async throws -> [Course] {
+        let dtos = try await remoteDataSource.getCourses()
+        return dtos.map { $0.toDomain() }
     }
-    
-    public func addEvent(courseId: String) async throws {
-        
+
+    public func addEvent(courseId: String, eventType: String, title: String, dueDate: String, weight: Int) async throws {
+        try await remoteDataSource.createEvent(courseId: courseId, eventType: eventType, title: title, dueDate: dueDate, weight: weight)
     }
-    
-    
 }

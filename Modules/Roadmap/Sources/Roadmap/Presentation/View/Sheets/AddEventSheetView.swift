@@ -1,20 +1,12 @@
-//
-//  AddEventSheetView.swift
-//
-//
-//  Created by Claude on 23/07/2026.
-//
-
 import SwiftUI
 import Common
 
-/// UI only — submitting just dismisses the sheet until AddEventUseCase is wired up.
 enum RoadmapEventType: String, CaseIterable {
-    case exam = "Exam"
-    case quiz = "Quiz"
-    case assignment = "Assignment"
-    case studySession = "Study Session"
-    case deadline = "Deadline"
+    case quiz = "quiz"
+    case assignment = "assignment"
+    case project = "project"
+    case midterm = "midterm"
+    case exam = "exam"
 }
 
 struct AddEventSheetView: View {
@@ -22,14 +14,17 @@ struct AddEventSheetView: View {
 
     @State private var title: String = ""
     @State private var eventType: String = RoadmapEventType.exam.rawValue
-    @State private var courseName: String
+    @State private var selectedCourseId: String
     @State private var eventDate: Date = Date()
+    @State private var isSubmitting = false
 
     private let courses: [Course]
+    private let onSubmit: (String, String, String, String, Int) async -> Void
 
-    init(courses: [Course] = Course.mockList) {
+    init(courses: [Course], onSubmit: @escaping (String, String, String, String, Int) async -> Void) {
         self.courses = courses
-        _courseName = State(initialValue: courses.first?.courseName ?? "")
+        self.onSubmit = onSubmit
+        _selectedCourseId = State(initialValue: courses.first?.courseId ?? "")
     }
 
     var body: some View {
@@ -43,14 +38,24 @@ struct AddEventSheetView: View {
 
                     RoadmapDropdownField(
                         title: "Event Type",
-                        options: RoadmapEventType.allCases.map(\.rawValue),
-                        selection: $eventType
+                        options: RoadmapEventType.allCases.map { $0.rawValue.capitalized },
+                        selection: Binding(
+                            get: { eventType.capitalized },
+                            set: { newVal in eventType = newVal.lowercased() }
+                        )
                     )
 
                     RoadmapDropdownField(
                         title: "Course",
                         options: courses.map(\.courseName),
-                        selection: $courseName
+                        selection: Binding(
+                            get: { courses.first(where: { $0.courseId == selectedCourseId })?.courseName ?? "" },
+                            set: { newName in
+                                if let course = courses.first(where: { $0.courseName == newName }) {
+                                    selectedCourseId = course.courseId
+                                }
+                            }
+                        )
                     )
 
                     dateTimeField
@@ -65,6 +70,7 @@ struct AddEventSheetView: View {
         .background(AppTheme.Colors.white100.ignoresSafeArea())
         .presentationDetents([.height(560), .large])
         .presentationDragIndicator(.hidden)
+        .disabled(isSubmitting)
     }
 
     private var dragHandle: some View {
@@ -150,21 +156,34 @@ struct AddEventSheetView: View {
     }
 
     private var addButton: some View {
-        Button(action: { dismiss() }) {
-            Text("Add Event")
-                .font(AppTheme.textStyle(size: 16, weight: .medium))
-                .foregroundColor(AppTheme.Colors.white100)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, AppTheme.Spacing.small)
-                .background(AppTheme.Colors.purple200)
-                .cornerRadius(AppTheme.radius.meduim)
+        Button(action: submit) {
+            HStack {
+                if isSubmitting {
+                    ProgressView()
+                        .tint(.white)
+                }
+                Text("Add Event")
+                    .font(AppTheme.textStyle(size: 16, weight: .medium))
+            }
+            .foregroundColor(AppTheme.Colors.white100)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, AppTheme.Spacing.small)
+            .background(AppTheme.Colors.purple200)
+            .cornerRadius(AppTheme.radius.meduim)
         }
+        .disabled(isSubmitting || title.trimmingCharacters(in: .whitespaces).isEmpty)
         .padding(.top, AppTheme.Spacing.xxSmall)
     }
-}
 
-struct AddEventSheetView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddEventSheetView()
+    private func submit() {
+        guard !title.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+        isSubmitting = true
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let dateString = dateFormatter.string(from: eventDate)
+        Task {
+            await onSubmit(selectedCourseId, eventType.lowercased(), title, dateString, 0)
+            await MainActor.run { dismiss() }
+        }
     }
 }

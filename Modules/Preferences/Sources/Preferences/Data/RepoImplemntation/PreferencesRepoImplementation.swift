@@ -14,10 +14,10 @@ public class PreferencesRepository: PreferencesRepositoryProtocol {
         self.remote = remote
     }
 
-    public func updatePreferences(dailyStudyHours: Int, availableDays: [Weekday]) async throws -> StudyPreferences {
+    public func updatePreferences(studyDays: [Weekday], dailyStudyHours: Int) async throws -> StudyPreferences {
         let dto = try await remote.updatePreferences(
-            dailyStudyHours: dailyStudyHours,
-            availableDays: availableDays.map(\.rawValue)
+            studyDays: studyDays.map(\.index),
+            dailyStudyHours: dailyStudyHours
         )
         return dto.mapToStudyPreferences()
     }

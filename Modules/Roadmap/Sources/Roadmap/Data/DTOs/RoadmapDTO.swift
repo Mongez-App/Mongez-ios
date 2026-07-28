@@ -1,43 +1,41 @@
-//
-//  File.swift
-//
-//
-//  Created by Ahmed Tarek on 22/07/2026.
-//
-
 import Foundation
 
+public struct RoadmapResponseDTO: Decodable {
+    let success: Bool?
+    let data: RoadmapDTO?
+    let message: String?
+}
 
-public struct RoadmapDTO: Codable {
-    let roadmapStartDate: String
+public struct RoadmapDTO: Decodable {
+    let roadmapStartDate: String?
     let weeks: [WeekDTO]
-    
+
     enum CodingKeys: String, CodingKey {
         case roadmapStartDate = "roadmap_start_date"
         case weeks
     }
-    
+
     public static func mapToEntity(_ dto: RoadmapDTO) -> Roadmap {
         Roadmap(
-            roadmapStartDate: dto.roadmapStartDate,
+            roadmapStartDate: dto.roadmapStartDate ?? "",
             weeks: dto.weeks.map { WeekDTO.mapToEntity($0) }
         )
     }
 }
 
-public struct WeekDTO: Codable {
+public struct WeekDTO: Decodable {
     let weekNumber: Int
     let startDate: String
     let endDate: String
     let studyBlocks: [StudyBlockDTO]
-    
+
     enum CodingKeys: String, CodingKey {
         case weekNumber = "week_number"
         case startDate = "start_date"
         case endDate = "end_date"
         case studyBlocks = "study_blocks"
     }
-    
+
     public static func mapToEntity(_ dto: WeekDTO) -> Week {
         Week(
             weekNumber: dto.weekNumber,
@@ -48,14 +46,14 @@ public struct WeekDTO: Codable {
     }
 }
 
-public struct StudyBlockDTO: Codable {
+public struct StudyBlockDTO: Decodable {
     let blockId: String
     let courseId: String
     let courseName: String
-    let tasks: [TaskDTO]
+    let tasks: [RoadmapTaskDTO]
     let isCompleted: Bool
-    let events: [EventDTO]
-    
+    let events: [RoadmapEventDTO]
+
     enum CodingKeys: String, CodingKey {
         case blockId = "block_id"
         case courseId = "course_id"
@@ -64,47 +62,49 @@ public struct StudyBlockDTO: Codable {
         case isCompleted = "is_completed"
         case events
     }
-    
+
     public static func mapToEntity(_ dto: StudyBlockDTO) -> StudyBlock {
         StudyBlock(
             blockId: dto.blockId,
             courseId: dto.courseId,
             courseName: dto.courseName,
-            tasks: dto.tasks.map { TaskDTO.mapToEntity($0) },
+            tasks: dto.tasks.map { RoadmapTaskDTO.mapToEntity($0) },
             isCompleted: dto.isCompleted,
-            events: dto.events.map { EventDTO.mapToEntity($0) }
+            events: dto.events.map { RoadmapEventDTO.mapToEntity($0) }
         )
     }
 }
 
-public struct TaskDTO: Codable {
+public struct RoadmapTaskDTO: Decodable {
     let topic: String
     let durationMinutes: Int
-    let taskDate: String
-    
+    let taskDate: String?
+    let dayNumber: Int?
+
     enum CodingKeys: String, CodingKey {
         case topic
         case durationMinutes = "duration_minutes"
         case taskDate = "task_date"
+        case dayNumber = "day_number"
     }
-    
-    public static func mapToEntity(_ dto: TaskDTO) -> Task {
-        Task(
+
+    public static func mapToEntity(_ dto: RoadmapTaskDTO) -> RoadmapTask {
+        RoadmapTask(
             topic: dto.topic,
             durationMinutes: dto.durationMinutes,
-            taskDate: dto.taskDate
+            taskDate: dto.taskDate ?? ""
         )
     }
 }
 
-public struct EventDTO: Codable {
+public struct RoadmapEventDTO: Decodable {
     let eventId: String
     let courseId: String
     let courseName: String
     let title: String
     let eventType: String
     let eventDate: String
-    
+
     enum CodingKeys: String, CodingKey {
         case eventId = "event_id"
         case courseId = "course_id"
@@ -113,8 +113,8 @@ public struct EventDTO: Codable {
         case eventType = "event_type"
         case eventDate = "event_date"
     }
-    
-    public static func mapToEntity(_ dto: EventDTO) -> Event {
+
+    public static func mapToEntity(_ dto: RoadmapEventDTO) -> Event {
         Event(
             title: dto.title,
             eventType: dto.eventType,
@@ -122,4 +122,3 @@ public struct EventDTO: Codable {
         )
     }
 }
-

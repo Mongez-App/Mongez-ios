@@ -36,31 +36,38 @@ public class AddCourseUseCase {
             hasMaterials: hasMaterials
         )
 
+        let courseId = course.id ?? ""
+
         try await withThrowingTaskGroup(of: Void.self) { group in
             for material in materials {
                 group.addTask {
-                    let materialResult = try await self.repository.addMaterialMetadata(
-                        courseId: course.id ?? "",
+                    try await self.repository.uploadMaterialFile(
+                        courseId: courseId,
+                        fileData: material.fileData,
                         fileName: material.fileName,
-                        contentType: material.contentType,
-                        fileSizeBytes: material.fileSizeBytes,
-                        pageCount: material.pageCount
+                        contentType: material.contentType
                     )
-
-                    if let uploadId = materialResult.uploadId ?? Optional(materialResult.id) {
-                        try await self.repository.uploadMaterialFile(
-                            uploadId: uploadId,
-                            fileData: material.fileData,
-                            fileName: material.fileName,
-                            contentType: material.contentType
-                        )
-                    }
                 }
             }
             try await group.waitForAll()
         }
 
+        if !materials.isEmpty {
+            try? await waitForDocuments(courseId: courseId, maxRetries: 15, delaySec: 2)
+            try? await repository.createTasks(courseId: courseId, quizQuestionsPerTask: 7)
+        }
+
         return course
+    }
+
+    private func waitForDocuments(courseId: String, maxRetries: Int, delaySec: UInt64) async throws {
+        for _ in 0..<maxRetries {
+            let docs = try? await repository.listMaterials(courseId: courseId)
+            if let docs = docs, !docs.isEmpty {
+                return
+            }
+            try await Task.sleep(nanoseconds: delaySec * 1_000_000_000)
+        }
     }
 }
 
@@ -79,4 +86,3 @@ public struct MaterialFileInfo {
         self.fileData = fileData
     }
 }
-

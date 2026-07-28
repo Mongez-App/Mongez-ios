@@ -1,14 +1,17 @@
-//
-//  File.swift
-//  
-//
-//  Created by Mazen Amr on 18/07/2026.
-//
-
 import Foundation
 
-struct ChatHistoryResponseDTO: Decodable {
-    let course_id: String
-    let messages: [ChatMessageDTO]
-    let has_more: Bool
+public struct ChatHistoryWrapperDTO: Decodable {
+    let success: Bool?
+    let data: ChatHistoryResponseDTO?
+    let message: String?
+}
+
+public struct ChatHistoryResponseDTO: Decodable {
+    let messages: [ChatMessageDTO]?
+    let hasMore: Bool?
+
+    enum CodingKeys: String, CodingKey {
+        case messages
+        case hasMore
+    }
 }

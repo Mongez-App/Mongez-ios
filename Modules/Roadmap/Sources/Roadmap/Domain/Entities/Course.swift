@@ -7,7 +7,8 @@
 
 import Foundation
 
-public struct Course {
+public struct Course: Identifiable {
+    public var id: String { courseId }
     var courseId: String
     var courseName: String
 }

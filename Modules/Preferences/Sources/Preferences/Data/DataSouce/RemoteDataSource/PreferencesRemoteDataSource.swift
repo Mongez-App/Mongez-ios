@@ -9,15 +9,15 @@ import Common
 import Foundation
 
 public protocol PreferencesRemoteDataSourceProtocol {
-    func updatePreferences(dailyStudyHours: Int, availableDays: [String]) async throws -> PreferencesDTO
+    func updatePreferences(studyDays: [Int], dailyStudyHours: Int) async throws -> PreferencesDTO
 }
 
 public class PreferencesRemoteDataSource: PreferencesRemoteDataSourceProtocol {
     public init() {}
 
-    public func updatePreferences(dailyStudyHours: Int, availableDays: [String]) async throws -> PreferencesDTO {
+    public func updatePreferences(studyDays: [Int], dailyStudyHours: Int) async throws -> PreferencesDTO {
         try await NetworkManger.shared.request(
-            endpoint: PreferencesEndpoint.updatePreferences(dailyStudyHours: dailyStudyHours, availableDays: availableDays),
+            endpoint: PreferencesEndpoint.updatePreferences(studyDays: studyDays, dailyStudyHours: dailyStudyHours),
             responseType: PreferencesDTO.self
         )
     }

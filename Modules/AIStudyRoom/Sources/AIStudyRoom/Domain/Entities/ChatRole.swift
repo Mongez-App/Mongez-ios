@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum ChatRole {
+public enum ChatRole: String {
     case user
     case assistant
 }

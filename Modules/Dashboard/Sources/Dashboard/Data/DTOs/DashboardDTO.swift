@@ -7,10 +7,16 @@
 
 import Foundation
 
-public struct DashboardDTO: Codable {
+public struct DashboardResponseDTO: Decodable {
+    let success: Bool?
+    let data: DashboardDTO?
+    let message: String?
+}
+
+public struct DashboardDTO: Decodable {
     var welcomeMessage: String?
-    var todayFocus: TodayFocusDTO
-    var progressMetrics: ProgressMetricsDTO
+    var todayFocus: TodayFocusDTO?
+    var progressMetrics: ProgressMetricsDTO?
     var todayTasks: [TodayTaskDTO]
     var upcomingDeadlines: [UpcomingDeadlineDTO]
     var streak: StreakDTO?
@@ -85,6 +91,7 @@ public struct TodayTaskDTO: Codable {
     var durationMinutes: Int
     var priority: String
     var isCompleted: Bool
+    var courseId: String?
     
     enum CodingKeys: String, CodingKey {
         case taskId = "task_id"
@@ -92,6 +99,7 @@ public struct TodayTaskDTO: Codable {
         case durationMinutes = "duration_minutes"
         case priority
         case isCompleted = "is_completed"
+        case courseId = "course_id"
     }
     
     public static func mapToEntity(task: TodayTaskDTO) -> TodayTask {
@@ -99,7 +107,8 @@ public struct TodayTaskDTO: Codable {
                         title: task.title,
                         durationMinutes: task.durationMinutes,
                         priority: task.priority,
-                        isCompleted: task.isCompleted)
+                        isCompleted: task.isCompleted,
+                        courseId: task.courseId)
         
         return task
     }
@@ -146,8 +155,8 @@ public struct AISuggestionDTO: Codable {
 extension DashboardDTO {
     public static func mapToEntity(dashboard: DashboardDTO) -> Dashboard {
         let dashboardEntity = Dashboard(
-            todayFocus: TodayFocusDTO.mapToEntity(todayFocus: dashboard.todayFocus),
-            progressMetrics: ProgressMetricsDTO.mapToEntity(progressMetrics: dashboard.progressMetrics),
+            todayFocus: dashboard.todayFocus.map { TodayFocusDTO.mapToEntity(todayFocus: $0) } ?? TodayFocus(courseId: nil, courseName: nil, allocatedDuration: "0m", durationMinutes: 0),
+            progressMetrics: dashboard.progressMetrics.map { ProgressMetricsDTO.mapToEntity(progressMetrics: $0) } ?? ProgressMetrics(todayCompletedTasks: 0, todayTotalTasks: 0, weeklyHoursCompleted: 0, weeklyHoursGoal: 0, monthlyHoursCompleted: 0, monthlyHoursGoal: 0),
             todayTasks: dashboard.todayTasks.map { TodayTaskDTO.mapToEntity(task: $0) },
             upcomingDeadlines: dashboard.upcomingDeadlines.map { UpcomingDeadlineDTO.mapToEntity(upcomingDeadline: $0) }
         )

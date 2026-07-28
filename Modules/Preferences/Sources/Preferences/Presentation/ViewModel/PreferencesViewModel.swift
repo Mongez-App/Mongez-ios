@@ -72,8 +72,8 @@ public final class PreferencesViewModel: ObservableObject {
 
         do {
             _ = try await useCase.executeUpdatePreferences(
-                dailyStudyHours: studyHoursPerDay,
-                availableDays: Array(selectedDays)
+                studyDays: Array(selectedDays),
+                dailyStudyHours: studyHoursPerDay
             )
         } catch {
             errorMessage = mapError(error)

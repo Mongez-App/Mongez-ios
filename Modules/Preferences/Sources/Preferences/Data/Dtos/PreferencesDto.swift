@@ -9,11 +9,11 @@ import Foundation
 
 public struct PreferencesDTO: Codable {
     public let dailyStudyHours: Int
-    public let availableDays: [String]
+    public let studyDays: [Int]
 
     enum CodingKeys: String, CodingKey {
-        case dailyStudyHours = "daily_study_hours"
-        case availableDays = "available_days"
+        case dailyStudyHours
+        case studyDays
     }
 }
 
@@ -21,7 +21,7 @@ extension PreferencesDTO {
     func mapToStudyPreferences() -> StudyPreferences {
         StudyPreferences(
             dailyStudyHours: dailyStudyHours,
-            availableDays: availableDays.compactMap { Weekday(rawValue: $0) }
+            studyDays: studyDays.compactMap { Weekday(index: $0) }
         )
     }
 }

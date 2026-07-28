@@ -31,4 +31,12 @@ public class MockCourseDetailsRepository: CourseDetailsRepository {
             CourseTask(id: "tsk_05", title: "Read Chapter 4", durationMinutes: 45, priority: .high, isCompleted: false, group: .upcoming)
         ]
     }
+
+    public func uploadMaterial(courseId: String, fileData: Data, fileName: String, contentType: String, pageCount: Int?) async throws {
+        // no-op for mock
+    }
+
+    public func generateTasks(courseId: String) async throws {
+        // no-op for mock
+    }
 }

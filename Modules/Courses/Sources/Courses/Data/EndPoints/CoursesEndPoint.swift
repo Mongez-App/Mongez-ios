@@ -7,40 +7,52 @@ enum CoursesEndPoint: EndPoint {
     case getCourse(id: String)
     case updateCourse(id: String, body: Data)
     case deleteCourse(id: String)
-    case addMaterialMetadata(courseId: String, body: Data)
-    case uploadMaterialFile(uploadId: String, body: Data, boundary: String)
+    case uploadMaterialFile(courseId: String, body: Data, boundary: String)
+    case listMaterials(courseId: String)
+    case createTasks(courseId: String, body: Data)
+    case listTasks(courseId: String)
+    case createEvent(courseId: String, body: Data)
+    case listEvents(courseId: String)
     case addCourseFromURL(body: Data)
 
     var baseURL: String {
-        return "https://api-gateway-production-3fd0.up.railway.app/api/v1/"
+        return "https://course-import-service.vercel.app/api/v1/"
     }
 
     var path: String {
         switch self {
         case .listCourses:
-            return "courses"
+            return "rag/courses"
         case .createCourse:
-            return "courses"
+            return "rag/courses"
         case .getCourse(let id):
-            return "courses/\(id)"
+            return "rag/courses/\(id)"
         case .updateCourse(let id, _):
-            return "courses/\(id)"
+            return "rag/courses/\(id)"
         case .deleteCourse(let id):
-            return "courses/\(id)"
-        case .addMaterialMetadata(let courseId, _):
-            return "courses/\(courseId)/materials"
-        case .uploadMaterialFile(let uploadId, _, _):
-            return "upload/\(uploadId)"
+            return "rag/courses/\(id)"
+        case .uploadMaterialFile(let courseId, _, _):
+            return "rag/courses/\(courseId)/upload"
+        case .listMaterials(let courseId):
+            return "rag/courses/\(courseId)/documents"
+        case .createTasks(let courseId, _):
+            return "rag/courses/\(courseId)/tasks"
+        case .listTasks(let courseId):
+            return "rag/courses/\(courseId)/tasks"
+        case .createEvent(let courseId, _):
+            return "rag/courses/\(courseId)/events"
+        case .listEvents(let courseId):
+            return "rag/courses/\(courseId)/events"
         case .addCourseFromURL:
-            return "courses/url"
+            return "rag/courses/url"
         }
     }
 
     var method: HTTPMethod {
         switch self {
-        case .listCourses, .getCourse:
+        case .listCourses, .getCourse, .listMaterials, .listTasks, .listEvents:
             return .get
-        case .createCourse, .addMaterialMetadata, .uploadMaterialFile, .addCourseFromURL:
+        case .createCourse, .uploadMaterialFile, .addCourseFromURL, .createTasks, .createEvent:
             return .post
         case .updateCourse:
             return .patch
@@ -51,21 +63,17 @@ enum CoursesEndPoint: EndPoint {
 
     var headers: [String: String]? {
         var headers: [String: String] = [:]
-
-        if let token = UserDefaults.standard.string(forKey: "main_token") {
-            headers["Authorization"] = "Bearer \(token)"
-        }
+        headers["Content-Type"] = "application/json"
 
         if let userId = UserDefaults.standard.string(forKey: "current_user_id") {
             headers["x-user-id"] = userId
-            headers["X-User-Id"] = userId
         }
 
         switch self {
         case .uploadMaterialFile(_, _, let boundary):
             headers["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
         default:
-            headers["Content-Type"] = "application/json"
+            break
         }
 
         return headers
@@ -74,12 +82,11 @@ enum CoursesEndPoint: EndPoint {
     var body: Data? {
         switch self {
         case .createCourse(let body), .updateCourse(_, let body),
-             .addMaterialMetadata(_, let body), .addCourseFromURL(let body),
-             .uploadMaterialFile(_, let body, _):
+             .addCourseFromURL(let body),
+             .uploadMaterialFile(_, let body, _), .createTasks(_, let body), .createEvent(_, let body):
             return body
         default:
             return nil
         }
     }
 }
-
