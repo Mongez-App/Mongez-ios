@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct CourseResponse : Decodable {
+public struct CourseResponse : Codable {
     public let courses: [CourseDTO]
     
     public static func mapToEntity(dto: CourseResponse) -> [Course] {
@@ -17,7 +17,7 @@ public struct CourseResponse : Decodable {
     }
 }
 
-public struct CourseDTO : Decodable {
+public struct CourseDTO : Codable {
     public let id: String
     public let userId: String?
     public let name: String

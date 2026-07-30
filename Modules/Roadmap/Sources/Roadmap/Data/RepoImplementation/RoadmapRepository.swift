@@ -14,20 +14,28 @@ public class RoadmapRepository : RoadmapRepositoryProtocol {
         self.remoteDataSource = remoteDataSource
     }
     
-    public func getRoadmap() async throws -> Roadmap {
-        let roadmapDTO = try await remoteDataSource.getRoadmap()
+    public func getRoadmap(date: String) async throws -> Roadmap {
+        let roadmapDTO = try await remoteDataSource.getRoadmap(date: date)
         
         let roadmap = RoadmapDTO.mapToEntity(roadmapDTO)
         
         return roadmap
     }
     
-    public func getCourses() async throws -> Course {
-        Course(courseId: "", courseName: "")
+    public func getCourses() async throws -> [Course] {
+        let coursesResponse = try await remoteDataSource.getCourses()
+        
+        let courses = CourseResponse.mapToEntity(dto: coursesResponse)
+        
+        return courses
     }
     
-    public func addEvent(courseId: String) async throws {
+    public func addEvent(courseId: String, event: Event) async throws -> String {
+        let eventResponse = try await remoteDataSource.addEvent(courseId: courseId, event: event)
         
+        let message = eventResponse.message
+        
+        return message
     }
     
     

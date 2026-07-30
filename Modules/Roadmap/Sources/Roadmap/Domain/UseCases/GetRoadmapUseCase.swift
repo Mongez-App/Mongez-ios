@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol GetRoadmapUseCaseProtocol {
-    func execute() async throws -> Roadmap
+    func execute(date: String) async throws -> Roadmap
 }
 
 public class GetRoadmapUseCase : GetRoadmapUseCaseProtocol {
@@ -18,7 +18,7 @@ public class GetRoadmapUseCase : GetRoadmapUseCaseProtocol {
         self.roadmapRepository = roadmapRepository
     }
     
-    public func execute() async throws -> Roadmap {
-        try await roadmapRepository.getRoadmap()
+    public func execute(date: String) async throws -> Roadmap {
+        try await roadmapRepository.getRoadmap(date: date)
     }
 }

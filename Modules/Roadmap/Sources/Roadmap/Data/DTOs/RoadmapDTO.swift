@@ -123,3 +123,12 @@ public struct EventDTO: Codable {
     }
 }
 
+public struct EventResponse: Codable {
+    let message: String
+    
+    public static func mapToEntity(_ dto: EventResponse) -> String {
+        let message = dto.message
+        
+        return message
+    }
+}
