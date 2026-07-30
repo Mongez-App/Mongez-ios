@@ -93,14 +93,9 @@ struct ContentView: View {
                                 )
                             )
                         },
-                        courseDetailsFactory: { courseId in
-                            let courseDetailsRepository = MockCourseDetailsRepository()
+                        courseDetailsFactory: { courseId, courseName in
                             let detailsCoordinator = CourseDetailsCoordinator()
-                            let detailsViewModel = CourseDetailsViewModel(
-                                courseId: courseId,
-                                getMaterialsUseCase: GetCourseMaterialsUseCase(repository: courseDetailsRepository),
-                                getTasksUseCase: GetCourseTasksUseCase(repository: courseDetailsRepository)
-                            )
+                            let detailsViewModel = ServiceLocator.resolve(CourseDetailsViewModel.self, arguments: courseId, courseName)!
                             
                             return AnyView(
                                 CourseDetailsCoordinatorView(
@@ -138,22 +133,16 @@ struct ContentView: View {
                     CoursesCoordinatorView(
                         coordinator: coordinator,
                         viewModel: appCoordinator.makeCoursesViewModel(),
-                        courseDetailsFactory: { courseId in
-                            
-                            let courseDetailsRepository = MockCourseDetailsRepository()
+                        courseDetailsFactory: { courseId, courseName in
                             let detailsCoordinator = CourseDetailsCoordinator()
-                            let detailsViewModel = CourseDetailsViewModel(
-                                courseId: courseId,
-                                getMaterialsUseCase: GetCourseMaterialsUseCase(repository: courseDetailsRepository),
-                                getTasksUseCase: GetCourseTasksUseCase(repository: courseDetailsRepository)
-                            )
+                            let detailsViewModel = ServiceLocator.resolve(CourseDetailsViewModel.self, arguments: courseId, courseName)!
                             
                             return AnyView(
                                 CourseDetailsCoordinatorView(
                                     coordinator: detailsCoordinator,
                                     viewModel: detailsViewModel,
                                     onStudyRoomSelected: { roomId, taskTitle in
-                                        coordinator.push(.details(courseId: roomId))
+                                        coordinator.push(.details(courseId: roomId, courseName: courseName))
                                     }
                                 )
                             )
@@ -167,7 +156,7 @@ struct ContentView: View {
         .preferredColorScheme(
             userAppearance == "Dark Mode" ? .dark :
             userAppearance == "Light Mode" ? .light :
-            nil  // System: follows device setting
+            nil 
         )
     }
 }
@@ -179,8 +168,8 @@ struct DashboardCoursesContainer: View {
     var body: some View {
         CoursesView(viewModel: viewModel)
             .onAppear {
-                viewModel.onCourseSelected = { [weak coordinator] courseId in
-                    coordinator?.push(.courseDetails(courseId: courseId))
+                viewModel.onCourseSelected = { [weak coordinator] courseId, courseName in
+                    coordinator?.push(.courseDetails(courseId: courseId, courseName: courseName))
                 }
             }
     }
