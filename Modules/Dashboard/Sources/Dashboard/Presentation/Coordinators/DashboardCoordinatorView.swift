@@ -13,7 +13,7 @@ public struct DashboardCoordinatorView: View {
     @StateObject var viewModel: DashboardViewModel
     
     private let studyRoomFactory: (String, String) -> AnyView
-    private let courseDetailsFactory: (String) -> AnyView
+    private let courseDetailsFactory: (String, String) -> AnyView
     private let coursesFactory: () -> AnyView
     private let roadmapFactory: () -> AnyView
     private let profileFactory: () -> AnyView
@@ -22,7 +22,7 @@ public struct DashboardCoordinatorView: View {
         coordinator: DashboardCoordinator,
         viewModel: DashboardViewModel,
         studyRoomFactory: @escaping (String, String) -> AnyView,
-        courseDetailsFactory: @escaping (String) -> AnyView,
+        courseDetailsFactory: @escaping (String, String) -> AnyView,
         coursesFactory: @escaping () -> AnyView,
         roadmapFactory: @escaping () -> AnyView,
         profileFactory: @escaping () -> AnyView
@@ -66,8 +66,8 @@ public struct DashboardCoordinatorView: View {
                 switch route {
                 case .studyRoom(let courseId, let taskTitle):
                     studyRoomFactory(courseId, taskTitle)
-                case .courseDetails(let courseId):
-                    courseDetailsFactory(courseId)
+                case .courseDetails(let courseId, let courseName):
+                    courseDetailsFactory(courseId, courseName)
                 case .todayTasks:
                     TodayTasksView(viewModel: viewModel)
                 }
