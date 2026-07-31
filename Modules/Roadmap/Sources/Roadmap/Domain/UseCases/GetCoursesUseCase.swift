@@ -20,6 +20,10 @@ public class GetCoursesUseCase : GetCoursesUseCaseProtocol {
     }
     
     public func execute() async throws -> [Course] {
-        try await roadmapRepository.getCourses()
+        let courses = try await roadmapRepository.getCourses()
+        
+        print(courses)
+        
+        return courses
     }
 }

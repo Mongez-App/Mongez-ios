@@ -13,6 +13,10 @@ public enum RoadmapEndpoints: EndPoint {
     case event(method: HTTPMethod, path: String, event: Event)
     case courses(method: HTTPMethod, path: String)
     
+    public var idToken: String? {
+        UserDefaults.standard.string(forKey: "main_token")
+    }
+    
     public var baseURL: String {
         "https://api-gateway-production-3fd0.up.railway.app/api/v1"
     }
@@ -47,7 +51,7 @@ public enum RoadmapEndpoints: EndPoint {
         return [
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "Authorization": " "
+            "Authorization": "Bearer \(idToken ?? "")"
         ]
     }
     

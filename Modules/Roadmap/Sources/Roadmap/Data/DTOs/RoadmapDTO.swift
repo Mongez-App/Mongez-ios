@@ -88,8 +88,8 @@ public struct TaskDTO: Codable {
         case taskDate = "task_date"
     }
     
-    public static func mapToEntity(_ dto: TaskDTO) -> Task {
-        Task(
+    public static func mapToEntity(_ dto: TaskDTO) -> CourseTask {
+        CourseTask(
             topic: dto.topic,
             durationMinutes: dto.durationMinutes,
             taskDate: dto.taskDate

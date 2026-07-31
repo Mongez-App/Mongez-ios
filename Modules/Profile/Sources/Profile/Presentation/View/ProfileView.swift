@@ -115,8 +115,8 @@ public struct ProfileView: View {
                         iconName: "moon",
                         iconColor: AppTheme.Colors.black100,
                         bgOpacity: 0.10,
-                        title: "Theme",
-                        font: AppTheme.textStyle(size: 16, weight: .medium)
+                        title: "Appearance",
+                        font: AppTheme.textStyle(size: 16, weight: .regular)
                     ) {
                         Menu {
                             Button {

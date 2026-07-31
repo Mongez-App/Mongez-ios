@@ -23,9 +23,9 @@ public class RoadmapRepository : RoadmapRepositoryProtocol {
     }
     
     public func getCourses() async throws -> [Course] {
-        let coursesResponse = try await remoteDataSource.getCourses()
+        let courseDTOs = try await remoteDataSource.getCourses()
         
-        let courses = CourseResponse.mapToEntity(dto: coursesResponse)
+        let courses = courseDTOs.map { CourseDTO.mapToEntity(dto: $0) }
         
         return courses
     }

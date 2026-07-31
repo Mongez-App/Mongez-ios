@@ -44,11 +44,23 @@ public struct RoadmapView: View {
             .padding(.bottom, 85)
         }
         .background(AppTheme.Colors.white100)
+        .overlay(
+            Group {
+                if viewModel.isLoading {
+                    ZStack {
+                        Color.black.opacity(0.15).ignoresSafeArea()
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.Colors.purple200))
+                            .scaleEffect(1.5)
+                    }
+                }
+            }
+        )
         .onAppear {
             viewModel.loadRoadmap()
         }
         .sheet(isPresented: $viewModel.isAddEventSheetPresented) {
-            AddEventSheetView()
+            AddEventSheetView(viewModel: viewModel)
         }
         .sheet(isPresented: $viewModel.isFilterSheetPresented) {
             FilterRoadmapSheetView()

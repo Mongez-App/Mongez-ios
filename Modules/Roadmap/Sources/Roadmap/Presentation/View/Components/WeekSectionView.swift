@@ -33,7 +33,7 @@ struct WeekSectionView: View {
                         .font(AppTheme.textStyle(size: 20, weight: .bold))
                         .foregroundColor(AppTheme.Colors.black100)
 
-                    Text("\(week.startDate) - \(week.endDate)")
+                    Text("\(week.startDate.toRoadmapDate()) - \(week.endDate.toRoadmapDate())")
                         .font(AppTheme.textStyle(size: 14, weight: .medium))
                         .foregroundColor(AppTheme.Colors.gray300)
                 }

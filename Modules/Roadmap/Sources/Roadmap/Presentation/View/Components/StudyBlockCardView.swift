@@ -67,7 +67,7 @@ struct StudyBlockCardView: View {
                         RoadmapEntryCardView(
                             title: event.title,
                             subtitle: event.eventType,
-                            trailingText: event.eventDate
+                            trailingText: event.eventDate.toRoadmapDateTime()
                         )
                     }
                 }
@@ -80,7 +80,7 @@ struct StudyBlockCardView: View {
                         RoadmapEntryCardView(
                             title: task.topic,
                             subtitle: "\(task.durationMinutes) min",
-                            trailingText: task.taskDate
+                            trailingText: task.taskDate.toRoadmapDate()
                         )
                     }
                 }
