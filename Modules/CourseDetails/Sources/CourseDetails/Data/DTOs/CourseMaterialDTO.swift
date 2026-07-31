@@ -7,13 +7,14 @@
 
 import Foundation
 
-public struct CourseMaterialDTO: Decodable {
+public struct CourseMaterialDTO: Codable {
     public let material_id: String
     public let name: String
-    public let page_count: Int
+    public let page_count: Int?
     public let file_size_mb: Double
     public let status: String
     public let uploaded_at: String
+    public let material_path: String?
 }
 
 public extension CourseMaterialDTO {
@@ -21,8 +22,11 @@ public extension CourseMaterialDTO {
         return CourseMaterial(
             id: material_id,
             name: name,
-            pageCount: page_count,
-            fileSizeMB: file_size_mb
+            pageCount: page_count ?? 0,
+            fileSizeMB: file_size_mb,
+            status: status,
+            uploadedAt: uploaded_at,
+            materialPath: material_path
         )
     }
 }

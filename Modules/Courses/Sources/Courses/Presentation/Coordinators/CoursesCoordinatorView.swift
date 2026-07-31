@@ -5,12 +5,12 @@ public struct CoursesCoordinatorView: View {
     @ObservedObject var coordinator: CoursesCoordinator
     @StateObject var viewModel: CoursesViewModel
 
-    private let courseDetailsFactory: (String) -> AnyView
+    private let courseDetailsFactory: (String, String) -> AnyView
 
     public init(
         coordinator: CoursesCoordinator,
         viewModel: CoursesViewModel,
-        courseDetailsFactory: @escaping (String) -> AnyView
+        courseDetailsFactory: @escaping (String, String) -> AnyView
     ) {
         self.coordinator = coordinator
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -21,14 +21,14 @@ public struct CoursesCoordinatorView: View {
         NavigationStack(path: $coordinator.path) {
             CoursesView(viewModel: viewModel)
                 .onAppear {
-                    viewModel.onCourseSelected = { [weak coordinator] courseId in
-                        coordinator?.push(.details(courseId: courseId))
+                    viewModel.onCourseSelected = { [weak coordinator] courseId, courseName in
+                        coordinator?.push(.details(courseId: courseId, courseName: courseName))
                     }
                 }
                 .navigationDestination(for: CoursesRoute.self) { route in
                     switch route {
-                    case .details(let courseId):
-                        courseDetailsFactory(courseId)
+                    case .details(let courseId, let courseName):
+                        courseDetailsFactory(courseId, courseName)
                     }
                 }
         }

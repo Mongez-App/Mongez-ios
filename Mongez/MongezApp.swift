@@ -9,6 +9,9 @@ import FirebaseCore
 import GoogleSignIn
 import Authntication
 import Profile
+import Common
+import CourseDetails
+import Swinject
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
@@ -18,6 +21,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         if let clientID = FirebaseApp.app()?.options.clientID {
             GIDSignIn.sharedInstance.configuration = GIDConfiguration(clientID: clientID)
         }
+        
+        let container = DIContainer.shared.getContainer()
+        CourseDetailsAssembly().assemble(container: container)
+        AppAssembly().assemble(container: container)
 
         return true
     }
@@ -43,5 +50,27 @@ struct MongezApp: App {
                     GIDSignIn.sharedInstance.handle(url)
                 }
         }
+    }
+}
+
+public class AppAssembly: DIAssembly {
+    
+    public init() {}
+    
+    public func assemble(container: Container) {
+        
+        container.register(CourseDetailsViewModel.self) { (resolver, courseId: String, courseName: String) in
+            return CourseDetailsViewModel(
+                courseId: courseId,
+                courseName: courseName,
+                getMaterialsUseCase: resolver.resolve(GetCourseMaterialsUseCase.self)!,
+                getTasksUseCase: resolver.resolve(GetCourseTasksUseCase.self)!,
+                uploadMaterialUseCase: resolver.resolve(UploadCourseMaterialUseCase.self)!,
+                updateCourseUseCase: resolver.resolve(UpdateCourseUseCase.self)!,
+                deleteCourseUseCase: resolver.resolve(DeleteCourseUseCase.self)!,
+                deleteCourseMaterialUseCase: resolver.resolve(DeleteCourseMaterialUseCase.self)!
+            )
+        }
+        
     }
 }
