@@ -82,7 +82,7 @@ struct DashboardView: View {
                                 Spacer()
                                 
                                 Button(action: {
-                                    print("View all tapped")
+                                    viewModel.onViewAllUpcomingDeadlines?()
                                 }) {
                                     Text("View all")
                                         .font(AppTheme.textStyle(size: 12, weight: .semibold))

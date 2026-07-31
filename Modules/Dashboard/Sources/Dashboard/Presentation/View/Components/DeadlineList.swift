@@ -16,7 +16,7 @@ struct DeadlineList: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: AppTheme.Spacing.small) {
-                ForEach(Array(upcomingDeadlines.enumerated()), id: \.element.deadlineId) { index, upcomingDeadline in
+                ForEach(Array(upcomingDeadlines.enumerated()).prefix(2), id: \.element.deadlineId) { index, upcomingDeadline in
                     DeadlineCard(color: colors[index % colors.count], upcomingDeadline: upcomingDeadline)
                 }
             }
