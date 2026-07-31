@@ -11,9 +11,11 @@ import Common
 
 public struct MaterialRowView: View {
     public let material: CourseMaterial
+    public var onDelete: (() -> Void)?
     
-    public init(material: CourseMaterial) {
+    public init(material: CourseMaterial, onDelete: (() -> Void)? = nil) {
         self.material = material
+        self.onDelete = onDelete
     }
     
     public var body: some View {
@@ -39,9 +41,18 @@ public struct MaterialRowView: View {
             }
             Spacer(minLength: AppTheme.Spacing.small)
             
-            Image(systemName: "ellipsis")
-                .font(.system(size: 20, weight: .regular))
-                .foregroundColor(AppTheme.Colors.black100)
+            Menu {
+                Button(role: .destructive, action: {
+                    onDelete?()
+                }) {
+                    Label("Delete", systemImage: "trash")
+                }
+            } label: {
+                Image(systemName: "ellipsis")
+                    .font(.system(size: 20, weight: .regular))
+                    .foregroundColor(AppTheme.Colors.black100)
+                    .frame(width: 44, height: 44, alignment: .trailing)
+            }
         }
         .padding(AppTheme.Spacing.small)
         .background(

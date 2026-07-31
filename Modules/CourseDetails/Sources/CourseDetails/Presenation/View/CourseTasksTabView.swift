@@ -11,11 +11,28 @@ import Common
 
 public struct CourseTasksTabView: View {
     @ObservedObject var viewModel: CourseDetailsViewModel
-    let filters = ["All", "Pending", "Completed", "High", "Medium"]
+    let filters = ["All", "Pending", "Completed", "High", "Medium", "Low"]
     @State private var selectedFilter = "All"
     
     public init(viewModel: CourseDetailsViewModel) {
         self.viewModel = viewModel
+    }
+    
+    private var filteredTasks: [CourseTask] {
+        switch selectedFilter {
+        case "Pending":
+            return viewModel.tasks.filter { !$0.isCompleted }
+        case "Completed":
+            return viewModel.tasks.filter { $0.isCompleted }
+        case "High":
+            return viewModel.tasks.filter { $0.priority == .high }
+        case "Medium":
+            return viewModel.tasks.filter { $0.priority == .medium }
+        case "Low":
+            return viewModel.tasks.filter { $0.priority == .low }
+        default:
+            return viewModel.tasks
+        }
     }
     
     public var body: some View {
@@ -37,7 +54,7 @@ public struct CourseTasksTabView: View {
                 )
                 
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.medium) {
-                    let todayTasks = viewModel.tasks.filter { $0.group == .today }
+                    let todayTasks = filteredTasks.filter { $0.group == .today }
                     if !todayTasks.isEmpty {
                         Text("Today Tasks")
                             .font(AppTheme.textStyle(size: 16, weight: .bold))
@@ -55,7 +72,7 @@ public struct CourseTasksTabView: View {
                         }
                     }
                     
-                    let upcomingTasks = viewModel.tasks.filter { $0.group == .upcoming }
+                    let upcomingTasks = filteredTasks.filter { $0.group == .upcoming }
                     if !upcomingTasks.isEmpty {
                         Text("Upcoming Tasks")
                             .font(AppTheme.textStyle(size: 16, weight: .bold))

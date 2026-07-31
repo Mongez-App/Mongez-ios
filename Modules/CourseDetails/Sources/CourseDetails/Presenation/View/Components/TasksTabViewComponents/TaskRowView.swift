@@ -16,7 +16,7 @@ public struct TaskRowView: View {
         self.task = task
     }
     
-    private func getPriorityColor(for priority: TaskPriority) -> Color {
+    private func getPriorityColor(for priority: CourseTask.Priority) -> Color {
         switch priority {
         case .high: return AppTheme.Colors.red100
         case .medium: return AppTheme.Colors.yellow100

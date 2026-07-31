@@ -52,7 +52,7 @@ public class CoursesViewModel: ObservableObject {
 
     private var cancellables = Set<AnyCancellable>()
 
-    public var onCourseSelected: ((String) -> Void)?
+    public var onCourseSelected: ((String, String) -> Void)?
 
     public var canAddCourse: Bool {
         switch addCourseTab {
@@ -85,8 +85,8 @@ public class CoursesViewModel: ObservableObject {
         setupImageSelectionSubscription()
     }
 
-    public func selectCourse(id: String) {
-        onCourseSelected?(id)
+    public func selectCourse(course: Course) {
+        onCourseSelected?(course.id, course.name)
     }
 
     @MainActor

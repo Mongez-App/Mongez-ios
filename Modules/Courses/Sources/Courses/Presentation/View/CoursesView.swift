@@ -159,7 +159,7 @@ public struct CoursesView: View {
             LazyVStack(spacing: AppTheme.Spacing.medium) {
                 ForEach(viewModel.filteredCourses) { course in
                     Button(action: {
-                        viewModel.selectCourse(id: course.id)
+                        viewModel.selectCourse(course: course)
                     }) {
                         CourseCardView(
                             course: course,
