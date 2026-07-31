@@ -386,7 +386,7 @@ struct CircledAsyncImage: View {
                     Circle()
                         .fill(AppTheme.Colors.purple200.opacity(0.15))
                         .frame(width: size, height: size)
-                        .appShadow(opacity: 0.15, radius: 5, y: 2)
+                        .appShadow(opacity: 0.18, radius: 10, y: 0)
                     
                     Text(name.prefix(2).capitalized)
                         .font(AppTheme.textStyle(size: size * 0.35, weight: .medium))
@@ -399,14 +399,14 @@ struct CircledAsyncImage: View {
                     .scaledToFill()
                     .frame(width: size, height: size)
                     .clipShape(Circle())
-                    .appShadow(opacity: 0.15, radius: 5, y: 2)
+                    .appShadow(opacity: 0.18, radius: 10, y: 0)
                 
             case .failure:
                 ZStack {
                     Circle()
                         .fill(AppTheme.Colors.purple200.opacity(0.15))
                         .frame(width: size, height: size)
-                        .appShadow(opacity: 0.15, radius: 5, y: 2)
+                        .appShadow(opacity: 0.18, radius: 10, y: 0)
                     
                     Text(name.prefix(2).uppercased())
                         .font(AppTheme.textStyle(size: size * 0.35, weight: .medium))
