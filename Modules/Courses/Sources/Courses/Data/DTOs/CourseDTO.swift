@@ -20,7 +20,8 @@ struct CourseDTO: Codable {
     let startDate: String?
     let endDate: String?
     let examDate: String?
-    let hasMaterials: Bool?
+    let courseType: String?
+    let materialUrl: String?
     let completionPercentage: Double?
     let isHidden: Bool?
     let materialCount: Int?
@@ -38,7 +39,8 @@ struct CourseDTO: Codable {
         case startDate = "start_date"
         case endDate = "end_date"
         case examDate = "exam_date"
-        case hasMaterials = "has_materials"
+        case courseType = "course_type"
+        case materialUrl = "material_url"
         case completionPercentage = "completion_percentage"
         case isHidden = "is_hidden"
         case materialCount = "material_count"
@@ -65,7 +67,8 @@ struct CourseDTO: Codable {
         startDate = try container.decodeIfPresent(String.self, forKey: .startDate)
         endDate = try container.decodeIfPresent(String.self, forKey: .endDate)
         examDate = try container.decodeIfPresent(String.self, forKey: .examDate)
-        hasMaterials = try container.decodeIfPresent(Bool.self, forKey: .hasMaterials)
+        courseType = try container.decodeIfPresent(String.self, forKey: .courseType)
+        materialUrl = try container.decodeIfPresent(String.self, forKey: .materialUrl)
         completionPercentage = try container.decodeIfPresent(Double.self, forKey: .completionPercentage)
         isHidden = try container.decodeIfPresent(Bool.self, forKey: .isHidden)
         materialCount = try container.decodeIfPresent(Int.self, forKey: .materialCount)
@@ -84,7 +87,8 @@ struct CourseDTO: Codable {
         try container.encodeIfPresent(startDate, forKey: .startDate)
         try container.encodeIfPresent(endDate, forKey: .endDate)
         try container.encodeIfPresent(examDate, forKey: .examDate)
-        try container.encodeIfPresent(hasMaterials, forKey: .hasMaterials)
+        try container.encodeIfPresent(courseType, forKey: .courseType)
+        try container.encodeIfPresent(materialUrl, forKey: .materialUrl)
         try container.encodeIfPresent(completionPercentage, forKey: .completionPercentage)
         try container.encodeIfPresent(isHidden, forKey: .isHidden)
         try container.encodeIfPresent(materialCount, forKey: .materialCount)
@@ -113,7 +117,8 @@ struct CourseDTO: Codable {
             startDate: parseDate(startDate) ?? Date(),
             endDate: parseDate(endDate),
             examDate: parseDate(examDate) ?? Date(),
-            hasMaterials: hasMaterials ?? false,
+            courseType: CourseType(rawValue: courseType ?? "MATERIAL_COURSE") ?? .materialCourse,
+            materialUrl: materialUrl,
             completionPercentage: completionPercentage ?? 0.0,
             isHidden: isHidden ?? false,
             materialCount: materialCount ?? 0
@@ -126,26 +131,33 @@ struct CreateCourseRequestDTO: Codable {
     let courseCode: String?
     let imageUrl: String?
     let startDate: String
-    let endDate: String?
     let examDate: String
-    let hasMaterials: Bool
+    let courseType: String
+    let materialUrl: String?
 
     enum CodingKeys: String, CodingKey {
         case name
         case courseCode = "course_code"
         case imageUrl = "image_url"
         case startDate = "start_date"
-        case endDate = "end_date"
         case examDate = "exam_date"
-        case hasMaterials = "has_materials"
+        case courseType = "course_type"
+        case materialUrl = "material_url"
     }
 }
 
-struct AddCourseFromURLRequestDTO: Codable {
-    let url: String
+struct UpdateCourseRequestDTO: Codable {
+    let name: String?
+    let imageUrl: String?
+    let isHidden: Bool?
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case imageUrl = "image_url"
+        case isHidden = "is_hidden"
+    }
 }
 
 struct DeleteCourseResponseDTO: Codable {
     let message: String?
 }
-

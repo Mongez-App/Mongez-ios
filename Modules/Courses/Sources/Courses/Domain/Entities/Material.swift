@@ -7,7 +7,6 @@ public struct Material: Identifiable, Equatable {
     public let fileSizeBytes: Int
     public let pageCount: Int?
     public let courseId: String
-    public let uploadId: String?
     public let createdAt: Date?
 
     public init(
@@ -17,7 +16,6 @@ public struct Material: Identifiable, Equatable {
         fileSizeBytes: Int,
         pageCount: Int? = nil,
         courseId: String = "",
-        uploadId: String? = nil,
         createdAt: Date? = nil
     ) {
         self.id = id
@@ -26,8 +24,6 @@ public struct Material: Identifiable, Equatable {
         self.fileSizeBytes = fileSizeBytes
         self.pageCount = pageCount
         self.courseId = courseId
-        self.uploadId = uploadId
         self.createdAt = createdAt
     }
 }
-

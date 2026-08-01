@@ -1,14 +1,13 @@
 import Foundation
 
-public class AddCourseFromURLUseCase {
+public class ListMaterialsUseCase {
     private let repository: CoursesRepositoryProtocol
 
     public init(repository: CoursesRepositoryProtocol) {
         self.repository = repository
     }
 
-    public func execute(url: String) async throws -> Course {
-        return try await repository.addCourseFromURL(url: url)
+    public func execute(courseId: String) async throws -> [Material] {
+        return try await repository.listMaterials(courseId: courseId)
     }
 }
-
