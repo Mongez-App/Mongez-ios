@@ -7,9 +7,9 @@ enum CoursesEndPoint: EndPoint {
     case getCourse(id: String)
     case updateCourse(id: String, body: Data)
     case deleteCourse(id: String)
-    case addMaterialMetadata(courseId: String, body: Data)
-    case uploadMaterialFile(uploadId: String, body: Data, boundary: String)
-    case addCourseFromURL(body: Data)
+    case addMaterial(courseId: String, body: Data, boundary: String, dailyStudyMinutes: Int, preferredDays: String)
+    case listMaterials(courseId: String)
+    case deleteMaterial(courseId: String, materialId: String)
 
     var baseURL: String {
         return "https://api-gateway-production-3fd0.up.railway.app/api/v1/"
@@ -27,24 +27,24 @@ enum CoursesEndPoint: EndPoint {
             return "courses/\(id)"
         case .deleteCourse(let id):
             return "courses/\(id)"
-        case .addMaterialMetadata(let courseId, _):
+        case .addMaterial(let courseId, _, _, _, _):
             return "courses/\(courseId)/materials"
-        case .uploadMaterialFile(let uploadId, _, _):
-            return "upload/\(uploadId)"
-        case .addCourseFromURL:
-            return "courses/url"
+        case .listMaterials(let courseId):
+            return "courses/\(courseId)/materials"
+        case .deleteMaterial(let courseId, let materialId):
+            return "courses/\(courseId)/materials/\(materialId)"
         }
     }
 
     var method: HTTPMethod {
         switch self {
-        case .listCourses, .getCourse:
+        case .listCourses, .getCourse, .listMaterials:
             return .get
-        case .createCourse, .addMaterialMetadata, .uploadMaterialFile, .addCourseFromURL:
+        case .createCourse, .addMaterial:
             return .post
         case .updateCourse:
             return .patch
-        case .deleteCourse:
+        case .deleteCourse, .deleteMaterial:
             return .delete
         }
     }
@@ -62,8 +62,10 @@ enum CoursesEndPoint: EndPoint {
         }
 
         switch self {
-        case .uploadMaterialFile(_, _, let boundary):
+        case .addMaterial(_, _, let boundary, let dailyStudyMinutes, let preferredDays):
             headers["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
+            headers["X-Daily-Study-Minutes"] = "\(dailyStudyMinutes)"
+            headers["X-Preferred-Days"] = preferredDays
         default:
             headers["Content-Type"] = "application/json"
         }
@@ -74,12 +76,10 @@ enum CoursesEndPoint: EndPoint {
     var body: Data? {
         switch self {
         case .createCourse(let body), .updateCourse(_, let body),
-             .addMaterialMetadata(_, let body), .addCourseFromURL(let body),
-             .uploadMaterialFile(_, let body, _):
+             .addMaterial(_, let body, _, _, _):
             return body
         default:
             return nil
         }
     }
 }
-
