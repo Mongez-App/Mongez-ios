@@ -189,21 +189,25 @@ struct MockCoursesRepository: CoursesRepositoryProtocol {
         ]
     }
 
-    func createCourse(name: String, courseCode: String, imageUrl: String?, startDate: Date, endDate: Date?, examDate: Date, hasMaterials: Bool) async throws -> Course {
-        return Course(name: name, courseCode: courseCode)
+    func createCourse(name: String, courseCode: String, imageUrl: String?, startDate: Date, endDate: Date?, examDate: Date, courseType: CourseType, materialUrl: String?) async throws -> Course {
+        return Course(name: name, courseCode: courseCode, courseType: courseType, materialUrl: materialUrl)
+    }
+
+    func updateCourse(id: String, name: String?, imageUrl: String?, isHidden: Bool?) async throws -> Course {
+        return Course(name: name ?? "Updated Course")
     }
 
     func deleteCourse(id: String) async throws {}
 
-    func addMaterialMetadata(courseId: String, fileName: String, contentType: String, fileSizeBytes: Int, pageCount: Int?) async throws -> Material {
-        return Material(fileName: fileName, contentType: contentType, fileSizeBytes: fileSizeBytes)
+    func addMaterial(courseId: String, fileData: Data, fileName: String, contentType: String, dailyStudyMinutes: Int, preferredDays: String) async throws -> Material {
+        return Material(fileName: fileName, contentType: contentType, fileSizeBytes: fileData.count, courseId: courseId)
     }
 
-    func uploadMaterialFile(uploadId: String, fileData: Data, fileName: String, contentType: String) async throws {}
-
-    func addCourseFromURL(url: String) async throws -> Course {
-        return Course(name: "Online Course")
+    func listMaterials(courseId: String) async throws -> [Material] {
+        return []
     }
+
+    func deleteMaterial(courseId: String, materialId: String) async throws {}
 }
 
 struct MockCloudinaryService: CloudinaryServiceProtocol {
@@ -219,8 +223,7 @@ extension CoursesViewModel {
         return CoursesViewModel(
             fetchCoursesUseCase: FetchCoursesUseCase(repository: repo),
             addCourseUseCase: AddCourseUseCase(repository: repo, cloudinaryService: cloudinary),
-            deleteCourseUseCase: DeleteCourseUseCase(repository: repo),
-            addCourseFromURLUseCase: AddCourseFromURLUseCase(repository: repo)
+            deleteCourseUseCase: DeleteCourseUseCase(repository: repo)
         )
     }
 }
@@ -231,4 +234,6 @@ struct CoursesView_Previews: PreviewProvider {
     }
 }
 #endif
+
+
 

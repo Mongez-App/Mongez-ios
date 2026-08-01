@@ -137,6 +137,12 @@ struct AddCourseSheet: View {
 
     private var onlineCourseForm: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.small) {
+            formLabel("Course Name")
+            formTextField("e.g. Operating Systems", text: $viewModel.courseName)
+
+            formLabel("Course Code (Optional)")
+            formTextField("e.g. CS301", text: $viewModel.courseCode)
+
             formLabel("Course URL")
 
             TextField("https://example.com/course-link", text: $viewModel.courseURL)
@@ -150,9 +156,14 @@ struct AddCourseSheet: View {
                 .autocapitalization(.none)
                 .keyboardType(.URL)
 
+            datePicker(label: "Start Date", selection: $viewModel.courseStartDate, minDate: Date())
             deadlinePicker
+            
+            formLabel("Thumbnail")
+            thumbnailPicker
         }
     }
+
 
     private var uploadMaterialForm: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.small) {
@@ -164,10 +175,7 @@ struct AddCourseSheet: View {
                 formLabel("Course Code (Optional)")
                 formTextField("e.g. CS301", text: $viewModel.courseCode)
 
-                formLabel("Description (Optional)")
-                formTextField("Brief description of the course", text: $viewModel.courseDescription)
-
-                datePicker(label: "Start Date", selection: $viewModel.courseStartDate)
+                datePicker(label: "Start Date", selection: $viewModel.courseStartDate, minDate: Date())
                 deadlinePicker
             }
 
@@ -317,21 +325,36 @@ struct AddCourseSheet: View {
     }
 
     private var deadlinePicker: some View {
-        datePicker(label: "Deadline (Exam Date)", selection: $viewModel.courseDeadline)
+        datePicker(label: "Deadline (Exam Date)", selection: $viewModel.courseDeadline, minDate: minDeadline)
     }
 
-    private func datePicker(label: String, selection: Binding<Date>) -> some View {
+    private var minDeadline: Date {
+        Calendar.current.date(byAdding: .day, value: 1, to: viewModel.courseStartDate) ?? viewModel.courseStartDate
+    }
+
+    private func datePicker(label: String, selection: Binding<Date>, minDate: Date? = nil) -> some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.xxSmall) {
             formLabel(label)
 
             HStack {
-                DatePicker(
-                    "",
-                    selection: selection,
-                    displayedComponents: .date
-                )
-                .labelsHidden()
-                .accentColor(AppTheme.Colors.purple200)
+                if let min = minDate {
+                    DatePicker(
+                        "",
+                        selection: selection,
+                        in: min...,
+                        displayedComponents: .date
+                    )
+                    .labelsHidden()
+                    .accentColor(AppTheme.Colors.purple200)
+                } else {
+                    DatePicker(
+                        "",
+                        selection: selection,
+                        displayedComponents: .date
+                    )
+                    .labelsHidden()
+                    .accentColor(AppTheme.Colors.purple200)
+                }
 
                 Spacer()
 
