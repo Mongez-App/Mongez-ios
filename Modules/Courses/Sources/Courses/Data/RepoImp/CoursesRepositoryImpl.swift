@@ -13,7 +13,7 @@ final class CoursesRepositoryImpl: CoursesRepositoryProtocol {
         return dtos.map { $0.toDomain() }
     }
 
-    func createCourse(name: String, courseCode: String, imageUrl: String?, startDate: Date, endDate: Date?, examDate: Date, hasMaterials: Bool) async throws -> Course {
+    func createCourse(name: String, courseCode: String, imageUrl: String?, startDate: Date, endDate: Date?, examDate: Date, courseType: CourseType, materialUrl: String?) async throws -> Course {
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.formatOptions = [.withInternetDateTime]
 
@@ -22,12 +22,22 @@ final class CoursesRepositoryImpl: CoursesRepositoryProtocol {
             courseCode: courseCode.isEmpty ? nil : courseCode,
             imageUrl: imageUrl,
             startDate: dateFormatter.string(from: startDate),
-            endDate: endDate.map { dateFormatter.string(from: $0) },
             examDate: dateFormatter.string(from: examDate),
-            hasMaterials: hasMaterials
+            courseType: courseType.rawValue,
+            materialUrl: materialUrl
         )
 
         let courseDTO = try await remoteDataSource.createCourse(requestDTO: requestDTO)
+        return courseDTO.toDomain()
+    }
+
+    func updateCourse(id: String, name: String?, imageUrl: String?, isHidden: Bool?) async throws -> Course {
+        let requestDTO = UpdateCourseRequestDTO(
+            name: name,
+            imageUrl: imageUrl,
+            isHidden: isHidden
+        )
+        let courseDTO = try await remoteDataSource.updateCourse(id: id, requestDTO: requestDTO)
         return courseDTO.toDomain()
     }
 
@@ -35,53 +45,24 @@ final class CoursesRepositoryImpl: CoursesRepositoryProtocol {
         try await remoteDataSource.deleteCourse(id: id)
     }
 
-    func addMaterialMetadata(courseId: String, fileName: String, contentType: String, fileSizeBytes: Int, pageCount: Int?) async throws -> Material {
-        let requestDTO = AddMaterialMetadataRequestDTO(
+    func addMaterial(courseId: String, fileData: Data, fileName: String, contentType: String, dailyStudyMinutes: Int, preferredDays: String) async throws -> Material {
+        let materialDTO = try await remoteDataSource.addMaterial(
+            courseId: courseId,
+            fileData: fileData,
             fileName: fileName,
             contentType: contentType,
-            fileSizeBytes: fileSizeBytes,
-            pageCount: pageCount
+            dailyStudyMinutes: dailyStudyMinutes,
+            preferredDays: preferredDays
         )
-
-        guard let body = try? JSONEncoder().encode(requestDTO) else {
-            throw URLError(.cannotParseResponse)
-        }
-
-        let (data, _) = try await NetworkManger.shared.requestRaw(
-            endpoint: CoursesEndPoint.addMaterialMetadata(courseId: courseId, body: body)
-        )
-
-        let rawJsonStr = String(data: data, encoding: .utf8) ?? "unknown"
-
-        do {
-            let response = try JSONDecoder().decode(AddMaterialResponseDTO.self, from: data)
-            if let materialId = response.materialId {
-
-                return Material(
-                    id: materialId,
-                    fileName: fileName,
-                    contentType: contentType,
-                    fileSizeBytes: fileSizeBytes,
-                    pageCount: pageCount ?? 0,
-                    courseId: courseId,
-                    uploadId: response.materialId ?? materialId
-                )
-            }
-        } catch {
-
-        }
-
-        throw NSError(domain: "AddMaterial", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to parse material ID. Raw JSON: \(rawJsonStr)"])
+        return materialDTO.toDomain()
     }
 
-    func uploadMaterialFile(uploadId: String, fileData: Data, fileName: String, contentType: String) async throws {
-        try await remoteDataSource.uploadMaterialFile(uploadId: uploadId, fileData: fileData, fileName: fileName, contentType: contentType)
+    func listMaterials(courseId: String) async throws -> [Material] {
+        let dtos = try await remoteDataSource.listMaterials(courseId: courseId)
+        return dtos.map { $0.toDomain() }
     }
 
-    func addCourseFromURL(url: String) async throws -> Course {
-        let requestDTO = AddCourseFromURLRequestDTO(url: url)
-        let courseDTO = try await remoteDataSource.addCourseFromURL(requestDTO: requestDTO)
-        return courseDTO.toDomain()
+    func deleteMaterial(courseId: String, materialId: String) async throws {
+        try await remoteDataSource.deleteMaterial(courseId: courseId, materialId: materialId)
     }
 }
-

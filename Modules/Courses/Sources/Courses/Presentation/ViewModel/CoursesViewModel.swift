@@ -39,6 +39,8 @@ public class CoursesViewModel: ObservableObject {
     @Published public var isCreatingCourse: Bool = false
     @Published public var createError: String?
     @Published public var showFileImporter: Bool = false
+    @Published public var dailyStudyMinutes: Int = 30
+    @Published public var preferredDays: String = "Mon,Tue,Wed,Thu,Fri"
 
     public enum AddCourseTab {
         case onlineCourse
@@ -48,7 +50,6 @@ public class CoursesViewModel: ObservableObject {
     private let fetchCoursesUseCase: FetchCoursesUseCase
     private let addCourseUseCase: AddCourseUseCase
     private let deleteCourseUseCase: DeleteCourseUseCase
-    private let addCourseFromURLUseCase: AddCourseFromURLUseCase
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -57,7 +58,8 @@ public class CoursesViewModel: ObservableObject {
     public var canAddCourse: Bool {
         switch addCourseTab {
         case .onlineCourse:
-            return !courseURL.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            return !courseName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                && !courseURL.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         case .uploadMaterial:
             return !courseName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                 && !selectedMaterials.isEmpty
@@ -73,13 +75,11 @@ public class CoursesViewModel: ObservableObject {
     public init(
         fetchCoursesUseCase: FetchCoursesUseCase,
         addCourseUseCase: AddCourseUseCase,
-        deleteCourseUseCase: DeleteCourseUseCase,
-        addCourseFromURLUseCase: AddCourseFromURLUseCase
+        deleteCourseUseCase: DeleteCourseUseCase
     ) {
         self.fetchCoursesUseCase = fetchCoursesUseCase
         self.addCourseUseCase = addCourseUseCase
         self.deleteCourseUseCase = deleteCourseUseCase
-        self.addCourseFromURLUseCase = addCourseFromURLUseCase
 
         setupSearchSubscription()
         setupImageSelectionSubscription()
@@ -142,31 +142,31 @@ public class CoursesViewModel: ObservableObject {
         createError = nil
 
         do {
-            switch addCourseTab {
-            case .uploadMaterial:
-                let materialInfos = selectedMaterials.map { material in
-                    MaterialFileInfo(
-                        fileName: material.fileName,
-                        contentType: material.contentType,
-                        fileSizeBytes: material.fileSizeBytes,
-                        fileData: material.fileData
-                    )
-                }
+            let courseType: CourseType = addCourseTab == .onlineCourse ? .urlCourse : .materialCourse
 
-                let _ = try await addCourseUseCase.execute(
-                    name: courseName,
-                    courseCode: courseCode,
-                    description: courseDescription.isEmpty ? nil : courseDescription,
-                    imageData: selectedImageData,
-                    startDate: courseStartDate,
-                    endDate: nil,
-                    examDate: courseDeadline,
-                    materials: materialInfos
+            let materialInfos = selectedMaterials.map { material in
+                MaterialFileInfo(
+                    fileName: material.fileName,
+                    contentType: material.contentType,
+                    fileSizeBytes: material.fileSizeBytes,
+                    fileData: material.fileData
                 )
-
-            case .onlineCourse:
-                let _ = try await addCourseFromURLUseCase.execute(url: courseURL)
             }
+
+            let _ = try await addCourseUseCase.execute(
+                name: courseName,
+                courseCode: courseCode,
+                description: courseDescription.isEmpty ? nil : courseDescription,
+                imageData: selectedImageData,
+                startDate: courseStartDate,
+                endDate: nil,
+                examDate: courseDeadline,
+                courseType: courseType,
+                materialUrl: addCourseTab == .onlineCourse ? courseURL : nil,
+                materials: addCourseTab == .uploadMaterial ? materialInfos : [],
+                dailyStudyMinutes: dailyStudyMinutes,
+                preferredDays: preferredDays
+            )
 
             resetAddCourseForm()
             showAddCourseSheet = false
@@ -221,6 +221,8 @@ public class CoursesViewModel: ObservableObject {
         selectedImageData = nil
         selectedMaterials = []
         createError = nil
+        dailyStudyMinutes = 30
+        preferredDays = "Mon,Tue,Wed,Thu,Fri"
     }
 
     private func setupSearchSubscription() {

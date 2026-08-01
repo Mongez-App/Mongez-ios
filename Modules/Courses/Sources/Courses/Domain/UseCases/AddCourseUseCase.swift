@@ -17,7 +17,11 @@ public class AddCourseUseCase {
         startDate: Date,
         endDate: Date?,
         examDate: Date,
-        materials: [MaterialFileInfo]
+        courseType: CourseType,
+        materialUrl: String?,
+        materials: [MaterialFileInfo],
+        dailyStudyMinutes: Int,
+        preferredDays: String
     ) async throws -> Course {
 
         var imageUrl: String? = nil
@@ -25,7 +29,6 @@ public class AddCourseUseCase {
             imageUrl = try await cloudinaryService.uploadImage(imageData: imageData)
         }
 
-        let hasMaterials = !materials.isEmpty
         let course = try await repository.createCourse(
             name: name,
             courseCode: courseCode,
@@ -33,31 +36,26 @@ public class AddCourseUseCase {
             startDate: startDate,
             endDate: endDate,
             examDate: examDate,
-            hasMaterials: hasMaterials
+            courseType: courseType,
+            materialUrl: materialUrl
         )
 
-        try await withThrowingTaskGroup(of: Void.self) { group in
-            for material in materials {
-                group.addTask {
-                    let materialResult = try await self.repository.addMaterialMetadata(
-                        courseId: course.id ?? "",
-                        fileName: material.fileName,
-                        contentType: material.contentType,
-                        fileSizeBytes: material.fileSizeBytes,
-                        pageCount: material.pageCount
-                    )
-
-                    if let uploadId = materialResult.uploadId ?? Optional(materialResult.id) {
-                        try await self.repository.uploadMaterialFile(
-                            uploadId: uploadId,
+        if courseType == .materialCourse {
+            try await withThrowingTaskGroup(of: Void.self) { group in
+                for material in materials {
+                    group.addTask {
+                        let _ = try await self.repository.addMaterial(
+                            courseId: course.id,
                             fileData: material.fileData,
                             fileName: material.fileName,
-                            contentType: material.contentType
+                            contentType: material.contentType,
+                            dailyStudyMinutes: dailyStudyMinutes,
+                            preferredDays: preferredDays
                         )
                     }
                 }
+                try await group.waitForAll()
             }
-            try await group.waitForAll()
         }
 
         return course
@@ -79,4 +77,3 @@ public struct MaterialFileInfo {
         self.fileData = fileData
     }
 }
-

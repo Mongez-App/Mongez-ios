@@ -35,21 +35,34 @@ public final class CoursesAssembly: Assembly {
             return DeleteCourseUseCase(repository: repository)
         }
 
-        container.register(AddCourseFromURLUseCase.self) { resolver in
+        container.register(AddMaterialUseCase.self) { resolver in
             let repository = resolver.resolve(CoursesRepositoryProtocol.self)!
-            return AddCourseFromURLUseCase(repository: repository)
+            return AddMaterialUseCase(repository: repository)
+        }
+
+        container.register(ListMaterialsUseCase.self) { resolver in
+            let repository = resolver.resolve(CoursesRepositoryProtocol.self)!
+            return ListMaterialsUseCase(repository: repository)
+        }
+
+        container.register(DeleteMaterialUseCase.self) { resolver in
+            let repository = resolver.resolve(CoursesRepositoryProtocol.self)!
+            return DeleteMaterialUseCase(repository: repository)
+        }
+
+        container.register(UpdateCourseUseCase.self) { resolver in
+            let repository = resolver.resolve(CoursesRepositoryProtocol.self)!
+            return UpdateCourseUseCase(repository: repository)
         }
 
         container.register(CoursesViewModel.self) { resolver in
             let fetchCoursesUseCase = resolver.resolve(FetchCoursesUseCase.self)!
             let addCourseUseCase = resolver.resolve(AddCourseUseCase.self)!
             let deleteCourseUseCase = resolver.resolve(DeleteCourseUseCase.self)!
-            let addCourseFromURLUseCase = resolver.resolve(AddCourseFromURLUseCase.self)!
             return CoursesViewModel(
                 fetchCoursesUseCase: fetchCoursesUseCase,
                 addCourseUseCase: addCourseUseCase,
-                deleteCourseUseCase: deleteCourseUseCase,
-                addCourseFromURLUseCase: addCourseFromURLUseCase
+                deleteCourseUseCase: deleteCourseUseCase
             )
         }.inObjectScope(.container)
     }
