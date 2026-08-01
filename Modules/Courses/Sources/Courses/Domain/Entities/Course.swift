@@ -1,5 +1,10 @@
 import Foundation
 
+public enum CourseType: String, Codable, Equatable {
+    case materialCourse = "MATERIAL_COURSE"
+    case urlCourse = "URL_COURSE"
+}
+
 public struct Course: Identifiable, Equatable {
     public let id: String
     public var name: String
@@ -9,7 +14,8 @@ public struct Course: Identifiable, Equatable {
     public var startDate: Date
     public var endDate: Date?
     public var examDate: Date
-    public var hasMaterials: Bool
+    public var courseType: CourseType
+    public var materialUrl: String?
     public var completionPercentage: Double
     public var isHidden: Bool
     public var imageData: Data?
@@ -24,7 +30,8 @@ public struct Course: Identifiable, Equatable {
         startDate: Date = Date(),
         endDate: Date? = nil,
         examDate: Date = Date(),
-        hasMaterials: Bool = false,
+        courseType: CourseType = .materialCourse,
+        materialUrl: String? = nil,
         completionPercentage: Double = 0.0,
         isHidden: Bool = false,
         imageData: Data? = nil,
@@ -38,11 +45,11 @@ public struct Course: Identifiable, Equatable {
         self.startDate = startDate
         self.endDate = endDate
         self.examDate = examDate
-        self.hasMaterials = hasMaterials
+        self.courseType = courseType
+        self.materialUrl = materialUrl
         self.completionPercentage = completionPercentage
         self.isHidden = isHidden
         self.imageData = imageData
         self.materialCount = materialCount
     }
 }
-
