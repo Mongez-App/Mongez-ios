@@ -10,11 +10,11 @@ import Common
 
 /// UI only — submitting just dismisses the sheet until AddEventUseCase is wired up.
 enum RoadmapEventType: String, CaseIterable {
-    case exam = "Exam"
     case quiz = "Quiz"
     case assignment = "Assignment"
-    case studySession = "Study Session"
-    case deadline = "Deadline"
+    case midterm = "Midterm"
+    case project = "Project"
+    case exam = "Exam"
 }
 
 struct AddEventSheetView: View {
@@ -23,7 +23,7 @@ struct AddEventSheetView: View {
     @ObservedObject var viewModel: RoadmapViewmodel
 
     @State private var title: String = ""
-    @State private var eventType: String = RoadmapEventType.exam.rawValue
+    @State private var eventType: String = RoadmapEventType.quiz.rawValue
     @State private var courseName: String = ""
     @State private var eventDate: Date = Date()
     @State private var validationError: String?
@@ -82,16 +82,20 @@ struct AddEventSheetView: View {
                 courseName = "No courses added yet"
             }
         }
-        .alert("Validation Error", isPresented: $showValidationError) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text(validationError ?? "")
-        }
-        .alert("Status", isPresented: $viewModel.isAddEventAlertPresented) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text(viewModel.addEventErrorMessage ?? "")
-        }
+        .overlay(
+            Group {
+                if showValidationError {
+                    ZStack {
+                        Color.black.opacity(0.3).ignoresSafeArea()
+                        ValidationAlert(
+                            isPresented: $showValidationError,
+                            title: "Validation Error",
+                            description: validationError ?? ""
+                        )
+                    }
+                }
+            }
+        )
     }
 
     private var dragHandle: some View {

@@ -53,6 +53,9 @@ public struct DashboardCoordinatorView: View {
                             viewModel.onViewAllUpcomingDeadlines = { [weak coordinator] in
                                 coordinator?.selectedTab = .roadmap
                             }
+                            viewModel.onNavigateToProfile = { [weak coordinator] in
+                                coordinator?.selectedTab = .profile
+                            }
                         }
                 
                 case .courses:

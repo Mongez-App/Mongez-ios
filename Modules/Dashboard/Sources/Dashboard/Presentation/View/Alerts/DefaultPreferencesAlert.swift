@@ -56,7 +56,6 @@ public struct DefaultPreferencesAlert: View {
                     }
                 }
                 
-                // Row 2: Study Days
                 HStack(alignment: .top, spacing: AppTheme.Spacing.medium) {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(AppTheme.Colors.gray100, lineWidth: 1)
@@ -73,7 +72,6 @@ public struct DefaultPreferencesAlert: View {
                             .font(AppTheme.textStyle(size: 12, weight: .regular))
                             .foregroundColor(AppTheme.Colors.gray300)
                         
-                        // Days layout (split into two HStacks to mimic wrapping)
                         VStack(alignment: .leading, spacing: 6) {
                             HStack(spacing: 6) {
                                 DayPillView(day: "Sun")
@@ -90,7 +88,7 @@ public struct DefaultPreferencesAlert: View {
                     
                 }
             }
-            .padding(.horizontal, AppTheme.Spacing.xSmall)
+            .padding(.horizontal, AppTheme.Spacing.xxSmall)
             .padding(.vertical, AppTheme.Spacing.xSmall)
             .frame(maxWidth: .infinity)
             .background(
@@ -108,7 +106,7 @@ public struct DefaultPreferencesAlert: View {
                         .foregroundColor(AppTheme.Colors.white100)
                         .frame(maxWidth: .infinity)
                         .frame(height: 48)
-                        .background(AppTheme.Colors.purple200) // Replace with AppTheme
+                        .background(AppTheme.Colors.purple200)
                         .cornerRadius(AppTheme.radius.small)
                 }
                 

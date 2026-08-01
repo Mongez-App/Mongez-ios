@@ -125,6 +125,22 @@ struct DashboardView: View {
                 }
             }
         )
+        .overlay(
+            Group {
+                if viewModel.showDefaultPreferencesAlert {
+                    ZStack {
+                        Color.black.opacity(0.3).ignoresSafeArea()
+                        DefaultPreferencesAlert(
+                            isPresented: $viewModel.showDefaultPreferencesAlert,
+                            gotItAction: {},
+                            settingsAction: {
+                                viewModel.onNavigateToProfile?()
+                            }
+                        )
+                    }
+                }
+            }
+        )
         .task {
             await viewModel.fetchUser()
             await viewModel.fetchDashboardDetails()

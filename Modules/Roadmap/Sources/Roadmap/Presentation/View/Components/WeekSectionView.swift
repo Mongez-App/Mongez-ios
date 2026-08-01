@@ -38,14 +38,21 @@ struct WeekSectionView: View {
                         .foregroundColor(AppTheme.Colors.gray300)
                 }
 
-                ForEach(week.studyBlocks, id: \.blockId) { block in
-                    StudyBlockCardView(
-                        block: block,
-                        isExpanded: expandedBlockId == block.blockId,
-                        selectedTab: selectedTab(block.blockId),
-                        onToggle: { onToggleBlock(block.blockId) },
-                        onSelectTab: { onSelectTab($0, block.blockId) }
-                    )
+                if week.studyBlocks.isEmpty {
+                    Text("No study blocks yet. Add an event or task to get started!")
+                        .font(AppTheme.textStyle(size: 14, weight: .regular))
+                        .foregroundColor(AppTheme.Colors.gray300)
+                        .padding(.vertical, AppTheme.Spacing.small)
+                } else {
+                    ForEach(week.studyBlocks, id: \.blockId) { block in
+                        StudyBlockCardView(
+                            block: block,
+                            isExpanded: expandedBlockId == block.blockId,
+                            selectedTab: selectedTab(block.blockId),
+                            onToggle: { onToggleBlock(block.blockId) },
+                            onSelectTab: { onSelectTab($0, block.blockId) }
+                        )
+                    }
                 }
             }
             .padding(.bottom, AppTheme.Spacing.medium)
