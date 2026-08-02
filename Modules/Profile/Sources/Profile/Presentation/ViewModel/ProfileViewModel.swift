@@ -13,6 +13,7 @@
 //
 
 import Combine
+import Common
 import Foundation
 
 @MainActor
@@ -36,15 +37,18 @@ class ProfileViewModel: ObservableObject {
     private let getProfileUseCase: GetProfileUseCaseProtocol
     private let updateProfileUseCase: UpdateProfileUseCaseProtocol
     private let updatePreferencesUseCase: UpdatePreferencesUseCaseProtocol
+    private let calendarSync: CalendarSyncManaging
 
     init(
         getProfileUseCase: GetProfileUseCaseProtocol,
         updateProfileUseCase: UpdateProfileUseCaseProtocol,
-        updatePreferencesUseCase: UpdatePreferencesUseCaseProtocol
+        updatePreferencesUseCase: UpdatePreferencesUseCaseProtocol,
+        calendarSync: CalendarSyncManaging = CalendarSyncManager.shared
     ) {
         self.getProfileUseCase = getProfileUseCase
         self.updateProfileUseCase = updateProfileUseCase
         self.updatePreferencesUseCase = updatePreferencesUseCase
+        self.calendarSync = calendarSync
     }
 
     func loadProfile() {
@@ -119,6 +123,9 @@ class ProfileViewModel: ObservableObject {
             showDisableCalendarSyncAlert = true
         } else {
             isCalendarSyncEnabled = newValue
+            if newValue {
+                enableCalendarSync()
+            }
             updateProfileOnServer()
         }
     }
@@ -126,7 +133,20 @@ class ProfileViewModel: ObservableObject {
     func confirmDisableCalendarSync() {
         isCalendarSyncEnabled = false
         showDisableCalendarSyncAlert = false
+        calendarSync.stopContinuousSync()
         updateProfileOnServer()
+    }
+
+    private func enableCalendarSync() {
+        Task {
+            do {
+                _ = try await calendarSync.requestAccess()
+                calendarSync.startContinuousSync()
+            } catch {
+                print("Error enabling calendar sync: \(error)")
+                isCalendarSyncEnabled = false
+            }
+        }
     }
 
     func cancelDisableCalendarSync() {

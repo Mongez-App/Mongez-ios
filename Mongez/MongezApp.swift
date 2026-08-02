@@ -26,6 +26,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         CourseDetailsAssembly().assemble(container: container)
         AppAssembly().assemble(container: container)
 
+        CalendarSyncManager.shared.registerBackgroundTask()
+
         return true
     }
 
