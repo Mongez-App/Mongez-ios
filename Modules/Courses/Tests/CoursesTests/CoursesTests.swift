@@ -6,3 +6,4 @@ final class CoursesTests: XCTestCase {
         XCTAssertTrue(true)
     }
 }
+

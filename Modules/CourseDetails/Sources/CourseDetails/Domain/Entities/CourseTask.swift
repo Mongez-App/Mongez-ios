@@ -6,26 +6,31 @@
 //
 
 import Foundation
-public enum TaskPriority: String {
-    case high = "HIGH"
-    case medium = "MEDIUM"
-    case low = "LOW"
-}
 
-public enum TaskGroup: String {
-    case today = "Today Tasks"
-    case upcoming = "Upcoming Tasks"
-}
-
-public struct CourseTask: Identifiable {
+public struct CourseTask: Identifiable, Equatable {
     public let id: String
     public let title: String
     public let durationMinutes: Int
-    public let priority: TaskPriority
+    public let priority: Priority
     public let isCompleted: Bool
-    public let group: TaskGroup
+    public let group: Group
     
-    public init(id: String, title: String, durationMinutes: Int, priority: TaskPriority, isCompleted: Bool, group: TaskGroup) {
+    public enum Priority: String, Equatable {
+        case high, medium, low
+    }
+    
+    public enum Group: String, Equatable {
+        case today, upcoming
+    }
+    
+    public init(
+        id: String,
+        title: String,
+        durationMinutes: Int,
+        priority: Priority,
+        isCompleted: Bool,
+        group: Group
+    ) {
         self.id = id
         self.title = title
         self.durationMinutes = durationMinutes

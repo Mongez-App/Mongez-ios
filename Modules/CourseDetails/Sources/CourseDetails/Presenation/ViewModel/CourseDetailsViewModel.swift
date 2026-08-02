@@ -13,6 +13,9 @@ public class CourseDetailsViewModel: ObservableObject {
     @Published public var selectedTab: Int = 0
     @Published public var materials: [CourseMaterial] = []
     @Published public var tasks: [CourseTask] = []
+    @Published public var courseName: String
+    @Published public var showFileImporter: Bool = false
+    @Published public var isUploading: Bool = false
     
     public var onTaskSelected: ((String, String) -> Void)?
     public var completedTasksCount: Int { tasks.filter { $0.isCompleted }.count }
@@ -25,11 +28,29 @@ public class CourseDetailsViewModel: ObservableObject {
     private let courseId: String
     private let getMaterialsUseCase: GetCourseMaterialsUseCase
     private let getTasksUseCase: GetCourseTasksUseCase
+    private let uploadMaterialUseCase: UploadCourseMaterialUseCase
+    private let updateCourseUseCase: UpdateCourseUseCase
+    private let deleteCourseUseCase: DeleteCourseUseCase
+    private let deleteCourseMaterialUseCase: DeleteCourseMaterialUseCase
     
-    public init(courseId: String, getMaterialsUseCase: GetCourseMaterialsUseCase, getTasksUseCase: GetCourseTasksUseCase) {
+    nonisolated public init(
+        courseId: String,
+        courseName: String,
+        getMaterialsUseCase: GetCourseMaterialsUseCase,
+        getTasksUseCase: GetCourseTasksUseCase,
+        uploadMaterialUseCase: UploadCourseMaterialUseCase,
+        updateCourseUseCase: UpdateCourseUseCase,
+        deleteCourseUseCase: DeleteCourseUseCase,
+        deleteCourseMaterialUseCase: DeleteCourseMaterialUseCase
+    ) {
         self.courseId = courseId
+        self._courseName = Published(wrappedValue: courseName)
         self.getMaterialsUseCase = getMaterialsUseCase
         self.getTasksUseCase = getTasksUseCase
+        self.uploadMaterialUseCase = uploadMaterialUseCase
+        self.updateCourseUseCase = updateCourseUseCase
+        self.deleteCourseUseCase = deleteCourseUseCase
+        self.deleteCourseMaterialUseCase = deleteCourseMaterialUseCase
     }
     
     public func loadData() async {
@@ -46,6 +67,55 @@ public class CourseDetailsViewModel: ObservableObject {
     public func selectTask(_ task: CourseTask) {
         if !task.isCompleted {
             onTaskSelected?(courseId, task.title)
+        }
+    }
+    
+    public func uploadMaterial(fileURL: URL) async {
+        guard fileURL.startAccessingSecurityScopedResource() else { return }
+        defer { fileURL.stopAccessingSecurityScopedResource() }
+        
+        do {
+            isUploading = true
+            let fileData = try Data(contentsOf: fileURL)
+            let fileName = fileURL.lastPathComponent
+            
+            let newMaterial = try await uploadMaterialUseCase.execute(
+                courseId: courseId,
+                fileData: fileData,
+                fileName: fileName
+            )
+            
+            materials.append(newMaterial)
+            isUploading = false
+        } catch {
+            print("Error uploading material: \(error)")
+            isUploading = false
+        }
+    }
+    
+    public func updateCourse(name: String) async {
+        do {
+            let updatedCourse = try await updateCourseUseCase.execute(courseId: courseId, name: name, imageUrl: nil, isHidden: nil)
+            self.courseName = updatedCourse.name
+        } catch {
+            print("Error updating course: \(error)")
+        }
+    }
+    
+    public func deleteCourse() async {
+        do {
+            try await deleteCourseUseCase.execute(courseId: courseId)
+        } catch {
+            print("Error deleting course: \(error)")
+        }
+    }
+    
+    public func deleteMaterial(materialId: String) async {
+        do {
+            try await deleteCourseMaterialUseCase.execute(courseId: courseId, materialId: materialId)
+            self.materials.removeAll { $0.id == materialId }
+        } catch {
+            print("Error deleting material: \(error)")
         }
     }
 }

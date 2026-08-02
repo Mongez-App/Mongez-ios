@@ -9,7 +9,7 @@ import SwiftUI
 import Common
 
 struct TaskCard: View {
-    var task: Task?
+    var task: TodayTask?
     var onTaskTap: (() -> Void)?
     private var priorityColor: Color {
         switch task!.priority.uppercased() {

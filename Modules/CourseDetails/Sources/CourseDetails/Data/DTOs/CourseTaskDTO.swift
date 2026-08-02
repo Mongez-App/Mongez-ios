@@ -7,24 +7,43 @@
 
 import Foundation
 
-public struct CourseTaskDTO: Decodable {
+public struct CourseTaskDTO: Codable {
     public let task_id: String
     public let title: String
     public let duration_minutes: Int
     public let priority: String
     public let is_completed: Bool
-    public let task_start_date: String
+    public let date: String?
+    public let course_id: String?
+    public let sequence_order: Int?
 }
 
 public extension CourseTaskDTO {
-    func toDomain(group: TaskGroup) -> CourseTask {
+    func toDomain() -> CourseTask {
+        let mappedPriority: CourseTask.Priority
+        switch priority.uppercased() {
+        case "HIGH": mappedPriority = .high
+        case "MEDIUM": mappedPriority = .medium
+        case "LOW": mappedPriority = .low
+        default: mappedPriority = .medium
+        }
+
+        var mappedGroup: CourseTask.Group = .upcoming
+        if let dateString = date {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            if let taskDate = formatter.date(from: dateString), Calendar.current.isDateInToday(taskDate) {
+                mappedGroup = .today
+            }
+        }
+        
         return CourseTask(
             id: task_id,
             title: title,
             durationMinutes: duration_minutes,
-            priority: TaskPriority(rawValue: priority) ?? .medium,
+            priority: mappedPriority,
             isCompleted: is_completed,
-            group: group
+            group: mappedGroup
         )
     }
 }

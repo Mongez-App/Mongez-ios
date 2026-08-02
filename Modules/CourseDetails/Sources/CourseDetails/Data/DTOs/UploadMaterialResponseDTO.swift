@@ -7,12 +7,12 @@
 
 import Foundation
 
-public struct UploadMaterialResponseDTO: Decodable {
+public struct UploadMaterialResponseDTO: Codable {
     public let material_id: String
     public let upload_url: String
     public let alert: AlertDTO?
 }
 
-public struct AlertDTO: Decodable {
+public struct AlertDTO: Codable {
     public let message: String
 }

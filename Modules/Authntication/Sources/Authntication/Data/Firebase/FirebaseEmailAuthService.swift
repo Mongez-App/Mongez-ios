@@ -27,4 +27,11 @@ public final class FirebaseEmailAuthService {
  
         return try await result.user.getIDToken()
     }
+    
+    public func updateProfile(name: String) async throws {
+        guard let user = Auth.auth().currentUser else { return }
+        let changeRequest = user.createProfileChangeRequest()
+        changeRequest.displayName = name
+        try await changeRequest.commitChanges()
+    }
 }

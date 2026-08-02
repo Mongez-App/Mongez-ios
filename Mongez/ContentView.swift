@@ -15,13 +15,25 @@ import Preferences
 import Courses
 import CourseDetails
 import Profile
+import Roadmap
 
 struct ContentView: View {
     @StateObject private var appCoordinator = AppCoordinator()
+    @AppStorage("user_appearance") private var userAppearance: String = "Light Mode"
     
     var body: some View {
         Group {
             switch appCoordinator.state {
+                
+            case .splash:
+                SplashScreenView(
+                    logoImageName: "logo",
+                    sloganImageName: "slogan",
+                    onSplashFinished: {
+                        appCoordinator.finishSplash()
+                    }
+                )
+                .transition(.opacity)
                 
             case .onboarding:
                 if let coordinator = appCoordinator.onboardingCoordinator {
@@ -54,7 +66,18 @@ struct ContentView: View {
                 if let coordinator = appCoordinator.dashboardCoordinator {
                     DashboardCoordinatorView(
                         coordinator: coordinator,
-                        viewModel: DashboardViewModel(),
+                        viewModel: DashboardViewModel(
+                            getDashboardDetailsUseCase: GetDashboardDetailsUseCase(
+                                dashboardRepository: DashboardRepository(
+                                    remoteDataSource: DashboardRemoteDataSource()
+                                )
+                            ),
+                            getUserUseCase: GetUserUseCase(
+                                dashboardRepository: DashboardRepository(
+                                    remoteDataSource: DashboardRemoteDataSource()
+                                )
+                            )
+                        ),
                         studyRoomFactory: { courseId, taskTitle in
                             let chatRepository = MockChatRepository()
                             let studyViewModel = StudyRoomViewModel(
@@ -70,14 +93,9 @@ struct ContentView: View {
                                 )
                             )
                         },
-                        courseDetailsFactory: { courseId in
-                            let courseDetailsRepository = MockCourseDetailsRepository()
+                        courseDetailsFactory: { courseId, courseName in
                             let detailsCoordinator = CourseDetailsCoordinator()
-                            let detailsViewModel = CourseDetailsViewModel(
-                                courseId: courseId,
-                                getMaterialsUseCase: GetCourseMaterialsUseCase(repository: courseDetailsRepository),
-                                getTasksUseCase: GetCourseTasksUseCase(repository: courseDetailsRepository)
-                            )
+                            let detailsViewModel = ServiceLocator.resolve(CourseDetailsViewModel.self, arguments: courseId, courseName)!
                             
                             return AnyView(
                                 CourseDetailsCoordinatorView(
@@ -91,7 +109,15 @@ struct ContentView: View {
                         },
                         coursesFactory: {
                             AnyView(
-                                DashboardCoursesContainer(coordinator: coordinator)
+                                DashboardCoursesContainer(
+                                    coordinator: coordinator,
+                                    viewModel: appCoordinator.makeCoursesViewModel()
+                                )
+                            )
+                        },
+                        roadmapFactory: {
+                            AnyView(
+                                RoadmapView(viewModel: RoadmapViewmodel())
                             )
                         },
                         profileFactory: {
@@ -106,23 +132,17 @@ struct ContentView: View {
                 if let coordinator = appCoordinator.coursesCoordinator {
                     CoursesCoordinatorView(
                         coordinator: coordinator,
-                        viewModel: CoursesViewModel(),
-                        courseDetailsFactory: { courseId in
-                            
-                            let courseDetailsRepository = MockCourseDetailsRepository()
+                        viewModel: appCoordinator.makeCoursesViewModel(),
+                        courseDetailsFactory: { courseId, courseName in
                             let detailsCoordinator = CourseDetailsCoordinator()
-                            let detailsViewModel = CourseDetailsViewModel(
-                                courseId: courseId,
-                                getMaterialsUseCase: GetCourseMaterialsUseCase(repository: courseDetailsRepository),
-                                getTasksUseCase: GetCourseTasksUseCase(repository: courseDetailsRepository)
-                            )
+                            let detailsViewModel = ServiceLocator.resolve(CourseDetailsViewModel.self, arguments: courseId, courseName)!
                             
                             return AnyView(
                                 CourseDetailsCoordinatorView(
                                     coordinator: detailsCoordinator,
                                     viewModel: detailsViewModel,
                                     onStudyRoomSelected: { roomId, taskTitle in
-                                        coordinator.push(.details(courseId: roomId))
+                                        coordinator.push(.details(courseId: roomId, courseName: courseName))
                                     }
                                 )
                             )
@@ -133,18 +153,23 @@ struct ContentView: View {
             }
         }
         .animation(.easeInOut, value: appCoordinator.state)
+        .preferredColorScheme(
+            userAppearance == "Dark Mode" ? .dark :
+            userAppearance == "Light Mode" ? .light :
+            nil 
+        )
     }
 }
 
 struct DashboardCoursesContainer: View {
     let coordinator: DashboardCoordinator
-    @StateObject private var viewModel = CoursesViewModel()
+    let viewModel: CoursesViewModel
     
     var body: some View {
         CoursesView(viewModel: viewModel)
             .onAppear {
-                viewModel.onCourseSelected = { [weak coordinator] courseId in
-                    coordinator?.push(.courseDetails(courseId: courseId))
+                viewModel.onCourseSelected = { [weak coordinator] courseId, courseName in
+                    coordinator?.push(.courseDetails(courseId: courseId, courseName: courseName))
                 }
             }
     }

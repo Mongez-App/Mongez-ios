@@ -3,24 +3,48 @@ import Common
 
 public struct CoursesView: View {
     @ObservedObject public var viewModel: CoursesViewModel
-        
+
     public init(viewModel: CoursesViewModel) {
         self.viewModel = viewModel
     }
-    
+
     public var body: some View {
         ZStack {
             AppTheme.Colors.white100.ignoresSafeArea()
-            
+
             VStack(alignment: .leading, spacing: 0) {
-                
                 headerSection
-                
-                
+                    .zIndex(1)
                 searchSection
-                
-                
-                if viewModel.courses.isEmpty && !viewModel.isLoading {
+
+                if viewModel.isLoading && viewModel.courses.isEmpty {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                            .scaleEffect(1.2)
+                        Spacer()
+                    }
+                    Spacer()
+                } else if let error = viewModel.errorMessage, viewModel.courses.isEmpty {
+                    Spacer()
+                    VStack(spacing: AppTheme.Spacing.small) {
+                        Image(systemName: "wifi.exclamationmark")
+                            .font(.system(size: 40))
+                            .foregroundColor(AppTheme.Colors.gray200)
+                        Text(error)
+                            .font(AppTheme.textStyle(size: 14, weight: .regular))
+                            .foregroundColor(AppTheme.Colors.gray200)
+                            .multilineTextAlignment(.center)
+                        Button("Retry") {
+                            Task { await viewModel.loadCourses() }
+                        }
+                        .font(AppTheme.textStyle(size: 14, weight: .semibold))
+                        .foregroundColor(AppTheme.Colors.purple200)
+                    }
+                    .padding()
+                    Spacer()
+                } else if viewModel.filteredCourses.isEmpty && !viewModel.isLoading {
                     EmptyCoursesView(
                         isSearching: !viewModel.searchText.isEmpty,
                         onAddCourse: {
@@ -46,17 +70,32 @@ public struct CoursesView: View {
                 )
             }
         }
+        .task {
+            await viewModel.loadCourses()
+        }
+        .refreshable {
+            await viewModel.loadCourses()
+        }
+        .alert("Error", isPresented: Binding(
+            get: { viewModel.errorMessage != nil },
+            set: { if !$0 { viewModel.errorMessage = nil } }
+        )) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+            }
+        }
     }
-    
-    
+
     private var headerSection: some View {
         HStack {
             Text("My Courses")
                 .font(AppTheme.textStyle(size: 28, weight: .bold))
                 .foregroundColor(AppTheme.Colors.black100)
-            
+
             Spacer()
-            
+
             Button(action: {
                 viewModel.resetAddCourseForm()
                 viewModel.showAddCourseSheet = true
@@ -73,21 +112,30 @@ public struct CoursesView: View {
             }
         }
         .padding(.horizontal, AppTheme.Spacing.large)
-        .padding(.top, AppTheme.Spacing.medium)
+        .padding(.top, AppTheme.Spacing.xSmall)
         .padding(.bottom, AppTheme.Spacing.small)
+        .background(
+            AppTheme.Colors.white100
+                .ignoresSafeArea(edges: .top)
+                .appShadow(
+                    opacity: 0.2,
+                    radius: 3,
+                    y: 1
+                )
+        )
+        .padding(.bottom, AppTheme.Spacing.medium)
     }
-    
-    
+
     private var searchSection: some View {
         HStack(spacing: AppTheme.Spacing.xxSmall) {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(AppTheme.Colors.gray200)
                 .font(.system(size: 16))
-            
+
             TextField("Search courses...", text: $viewModel.searchText)
                 .font(AppTheme.textStyle(size: 14, weight: .regular))
                 .foregroundColor(AppTheme.Colors.black100)
-            
+
             if !viewModel.searchText.isEmpty {
                 Button(action: { viewModel.searchText = "" }) {
                     Image(systemName: "xmark.circle.fill")
@@ -102,17 +150,16 @@ public struct CoursesView: View {
             RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
                 .stroke(AppTheme.Colors.gray100, lineWidth: 1)
         )
-        .padding(.horizontal, AppTheme.Spacing.large)
+        .padding(.horizontal, AppTheme.Spacing.medium)
         .padding(.bottom, AppTheme.Spacing.small)
     }
-    
-    
+
     private var coursesList: some View {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVStack(spacing: AppTheme.Spacing.medium) {
-                ForEach(viewModel.courses) { course in
+                ForEach(viewModel.filteredCourses) { course in
                     Button(action: {
-                        viewModel.selectCourse(id: course.id)
+                        viewModel.selectCourse(course: course)
                     }) {
                         CourseCardView(
                             course: course,
@@ -123,7 +170,6 @@ public struct CoursesView: View {
                         .contentShape(Rectangle())
                     }
                     .buttonStyle(PlainButtonStyle())
-                    
                 }
             }
             .padding(.horizontal, AppTheme.Spacing.large)
@@ -131,12 +177,63 @@ public struct CoursesView: View {
             .padding(.bottom, AppTheme.Spacing.large)
         }
     }
-    
+}
 
+#if DEBUG
+struct MockCoursesRepository: CoursesRepositoryProtocol {
+    func fetchCourses() async throws -> [Course] {
+        return [
+            Course(id: "1", name: "Operating Systems", courseCode: "CS301", description: "Introduction to OS", completionPercentage: 75.0, materialCount: 5),
+            Course(id: "2", name: "Data Structures", courseCode: "CS201", description: "Learn about trees and graphs", completionPercentage: 30.0, materialCount: 3),
+            Course(id: "3", name: "Algorithms", courseCode: "CS202", description: "Design and analysis", completionPercentage: 10.0, materialCount: 10)
+        ]
+    }
+
+    func createCourse(name: String, courseCode: String, imageUrl: String?, startDate: Date, endDate: Date?, examDate: Date, courseType: CourseType, materialUrl: String?) async throws -> Course {
+        return Course(name: name, courseCode: courseCode, courseType: courseType, materialUrl: materialUrl)
+    }
+
+    func updateCourse(id: String, name: String?, imageUrl: String?, isHidden: Bool?) async throws -> Course {
+        return Course(name: name ?? "Updated Course")
+    }
+
+    func deleteCourse(id: String) async throws {}
+
+    func addMaterial(courseId: String, fileData: Data, fileName: String, contentType: String, dailyStudyMinutes: Int, preferredDays: String) async throws -> Material {
+        return Material(fileName: fileName, contentType: contentType, fileSizeBytes: fileData.count, courseId: courseId)
+    }
+
+    func listMaterials(courseId: String) async throws -> [Material] {
+        return []
+    }
+
+    func deleteMaterial(courseId: String, materialId: String) async throws {}
+}
+
+struct MockCloudinaryService: CloudinaryServiceProtocol {
+    func uploadImage(imageData: Data) async throws -> String {
+        return "https://mock-image-url.com/image.jpg"
+    }
+}
+
+extension CoursesViewModel {
+    static var preview: CoursesViewModel {
+        let repo = MockCoursesRepository()
+        let cloudinary = MockCloudinaryService()
+        return CoursesViewModel(
+            fetchCoursesUseCase: FetchCoursesUseCase(repository: repo),
+            addCourseUseCase: AddCourseUseCase(repository: repo, cloudinaryService: cloudinary),
+            deleteCourseUseCase: DeleteCourseUseCase(repository: repo)
+        )
+    }
 }
 
 struct CoursesView_Previews: PreviewProvider {
     static var previews: some View {
-        CoursesView(viewModel: CoursesViewModel())
+        CoursesView(viewModel: CoursesViewModel.preview)
     }
 }
+#endif
+
+
+
