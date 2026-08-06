@@ -18,11 +18,7 @@ struct TodayFocusCard: View {
             AsyncImage(url: URL(string: imageUrl)) { phase in
                 switch phase {
                 case .empty:
-                    RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
-                        .fill(Color.white.opacity(0.2))
-                        .frame(width: 160, height: 160)
-                        .overlay(Image(systemName: "photo").foregroundColor(.white))
-                        //.overlay(ProgressView())
+                    initialsView
                 case .success(let image):
                     image
                         .resizable()
@@ -30,10 +26,7 @@ struct TodayFocusCard: View {
                         .frame(width: 160, height: 160)
                         .clipShape(RoundedRectangle(cornerRadius: AppTheme.radius.meduim))
                 case .failure:
-                    RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
-                        .fill(AppTheme.Colors.white100.opacity(0.2))
-                        .frame(width: 160, height: 160)
-                        .overlay(Image(systemName: "photo").foregroundColor(AppTheme.Colors.white100))
+                    initialsView
                 @unknown default:
                     EmptyView()
                 }
@@ -95,6 +88,28 @@ struct TodayFocusCard: View {
         .appShadow(opacity: 0.5, radius: 15/2)
     }
     
+    private var courseInitials: String {
+        guard let name = todayFocus?.courseName, !name.isEmpty else { return "" }
+        let components = name.components(separatedBy: " ").filter { !$0.isEmpty }
+        if components.count >= 2 {
+            let first = components[0].prefix(1)
+            let second = components[1].prefix(1)
+            return "\(first)\(second)".uppercased()
+        } else {
+            return String(name.prefix(2)).uppercased()
+        }
+    }
+    
+    private var initialsView: some View {
+        RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
+            .fill(Color.white.opacity(0.2))
+            .frame(width: 160, height: 160)
+            .overlay(
+                Text(courseInitials)
+                    .font(AppTheme.textStyle(size: 48, weight: .semibold))
+                    .foregroundColor(.white)
+            )
+    }
 }
 
 //#Preview {

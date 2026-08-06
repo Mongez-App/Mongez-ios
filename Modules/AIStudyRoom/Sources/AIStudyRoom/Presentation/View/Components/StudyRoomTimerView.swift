@@ -57,7 +57,7 @@ public struct StudyRoomTimerView: View {
             Spacer()
         }
         .padding(.horizontal, AppTheme.Spacing.small)
-        .padding(.top, AppTheme.Spacing.xSmall)
-        .padding(.bottom, AppTheme.Spacing.small)
+        .padding(.top, AppTheme.Spacing.xxSmall)
+        .padding(.bottom, AppTheme.Spacing.xxxSmall)
     }
 }
