@@ -19,4 +19,13 @@ public class ServiceLocator {
     ) -> Service? {
         return DIContainer.shared.resolve(serviceType, arguments: arg1, arg2)
     }
+    
+    public static func resolve<Service, Arg1, Arg2, Arg3>(
+        _ serviceType: Service.Type,
+        arguments arg1: Arg1,
+        _ arg2: Arg2,
+        _ arg3: Arg3
+    ) -> Service? {
+        return DIContainer.shared.resolve(serviceType, arguments: arg1, arg2, arg3)
+    }
 }

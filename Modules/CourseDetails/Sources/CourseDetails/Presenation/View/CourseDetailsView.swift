@@ -46,6 +46,7 @@ public struct CourseDetailsView: View {
             if viewModel.selectedTab == 0 {
                 CourseMaterialsTabView(
                     materials: viewModel.materials,
+                    courseType: viewModel.courseType,
                     onUploadAction: {
                         viewModel.showFileImporter = true
                     },
