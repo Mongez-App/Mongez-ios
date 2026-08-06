@@ -10,7 +10,7 @@ public enum AuthEndpoint: EndPoint {
     case handshake(idToken: String, name: String, appearance: String, language: String)
     case me(idToken: String)
     
-    public var baseURL: String { "https://api-gateway-production-3fd0.up.railway.app/api/v1" }
+    public var baseURL: String { "https://api-gateway-production-5110.up.railway.app/api/v1" }
     
     public var path: String {
         switch self {
@@ -39,7 +39,8 @@ public enum AuthEndpoint: EndPoint {
             token = idToken
         }
         
-        let lang = UserDefaults.standard.string(forKey: "selected_language")?.lowercased() ?? "en"
+        let rawLang = UserDefaults.standard.string(forKey: "selected_language")?.uppercased() ?? "EN"
+        let lang = (rawLang == "AR" || rawLang == "ARABIC") ? "ar" : "en"
         
         return [
             "Content-Type": "application/json",
