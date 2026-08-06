@@ -59,6 +59,15 @@ public struct TaskRowView: View {
                     Text(task.priority.rawValue)
                         .font(AppTheme.textStyle(size: 12, weight: .bold))
                         .foregroundColor(getPriorityColor(for: task.priority))
+                    
+                    if let dateString = task.date {
+                        Text("•")
+                            .font(AppTheme.textStyle(size: 14))
+                            .foregroundColor(AppTheme.Colors.gray300)
+                        Text(formatDate(dateString))
+                            .font(AppTheme.textStyle(size: 14))
+                            .foregroundColor(AppTheme.Colors.gray300)
+                    }
                 }
             }
             Spacer()
@@ -73,5 +82,15 @@ public struct TaskRowView: View {
                         .stroke(AppTheme.Colors.gray100, lineWidth: 1.5)
                 )
         )
+    }
+    
+    private func formatDate(_ dateString: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        if let date = formatter.date(from: dateString) {
+            formatter.dateFormat = "MMM d"
+            return formatter.string(from: date)
+        }
+        return dateString
     }
 }

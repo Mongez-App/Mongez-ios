@@ -54,7 +54,8 @@ public extension CourseTaskDTO {
             durationMinutes: duration_minutes,
             priority: mappedPriority,
             isCompleted: is_completed,
-            group: mappedGroup
+            group: mappedGroup,
+            date: date
         )
     }
 }
