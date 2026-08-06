@@ -46,6 +46,7 @@ public class DashboardViewModel : ObservableObject {
     @MainActor
     func fetchUser() async {
         do {
+
             let fetchedUser = try await getUserUseCase.execute()
             var newUser = fetchedUser
             if let existingUser = self.user {
@@ -53,6 +54,10 @@ public class DashboardViewModel : ObservableObject {
             }
             self.user = newUser
             print("User fetched successfully: \(fetchedUser.name)")
+            let token = SessionManager.sessionToken ?? UserDefaults.standard.string(forKey: "main_token") ?? ""
+            print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+            print(token)
+            print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
         } catch let decodingError as DecodingError {
             print("User decoding error: \(decodingError)")
         } catch {

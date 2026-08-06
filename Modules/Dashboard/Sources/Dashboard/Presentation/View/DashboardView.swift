@@ -64,7 +64,7 @@ struct DashboardView: View {
                             } else {
                                 TasksList(todayTasks: $viewModel.todayTasks) { selectedTask in
                                     viewModel.selectTask(
-                                        courseId: viewModel.todayFocus?.courseId ?? "",
+                                        courseId: selectedTask.courseId ?? viewModel.todayFocus?.courseId ?? "",
                                         taskTitle: selectedTask.title,
                                         isCompleted: selectedTask.isCompleted
                                     )

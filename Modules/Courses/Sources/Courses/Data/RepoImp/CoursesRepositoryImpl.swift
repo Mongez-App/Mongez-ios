@@ -23,6 +23,7 @@ final class CoursesRepositoryImpl: CoursesRepositoryProtocol {
         let requestDTO = CreateCourseRequestDTO(
             courseId: courseId,
             courseName: name,
+            code: courseCode,
             startDate: dateFormatter.string(from: startDate),
             endDate: endDate.map { dateFormatter.string(from: $0) }
         )

@@ -55,6 +55,10 @@ public class StudyRoomViewModel: ObservableObject {
     }
     
     func loadHistory() async {
+        guard !courseId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            print("Study room skipped: no courseId was provided")
+            return
+        }
         isLoading = true
         do {
             messages = try await getChatHistoryUseCase.execute(courseId: courseId)
@@ -66,6 +70,10 @@ public class StudyRoomViewModel: ObservableObject {
     
     func sendMessage() {
         guard !inputText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+        guard !courseId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            print("Send skipped: no courseId was provided")
+            return
+        }
         
         let userText = inputText
         inputText = ""

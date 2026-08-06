@@ -87,12 +87,14 @@ struct CourseDTO: Decodable {
 struct CreateCourseRequestDTO: Codable {
     let courseId: String
     let courseName: String
+    let code: String
     let startDate: String
     let endDate: String?
 
     enum CodingKeys: String, CodingKey {
         case courseId = "courseId"
         case courseName = "courseName"
+        case code = "code"
         case startDate = "startDate"
         case endDate = "endDate"
     }
