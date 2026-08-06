@@ -23,7 +23,7 @@ public struct RoadmapView: View {
             )
             .zIndex(1)
 
-            if let roadmap = viewModel.roadmap {
+            if let roadmap = viewModel.displayedRoadmap {
                 if roadmap.weeks.allSatisfy({ $0.studyBlocks.isEmpty }) {
                     VStack(alignment: .center, spacing: AppTheme.Spacing.xLarge) {
                         Image("empty-tasks")
@@ -81,7 +81,7 @@ public struct RoadmapView: View {
             AddEventSheetView(viewModel: viewModel)
         }
         .sheet(isPresented: $viewModel.isFilterSheetPresented) {
-            FilterRoadmapSheetView()
+            FilterRoadmapSheetView(viewModel: viewModel)
         }
         .overlay(
             Group {
