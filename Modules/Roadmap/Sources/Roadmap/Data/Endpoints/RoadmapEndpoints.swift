@@ -14,7 +14,7 @@ public enum RoadmapEndpoints: EndPoint {
     case courses(method: HTTPMethod, path: String)
     
     public var baseURL: String {
-        "https://api-gateway-production-3fd0.up.railway.app/api/v1"
+        "https://api-gateway-production-5110.up.railway.app/api/v1"
     }
     
     public var path: String {
