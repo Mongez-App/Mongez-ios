@@ -53,40 +53,60 @@ public struct CourseTasksTabView: View {
                     }
                 )
                 
-                VStack(alignment: .leading, spacing: AppTheme.Spacing.medium) {
-                    let todayTasks = filteredTasks.filter { $0.group == .today }
-                    if !todayTasks.isEmpty {
-                        Text("Today Tasks")
-                            .font(AppTheme.textStyle(size: 16, weight: .bold))
-                            .foregroundColor(AppTheme.Colors.black100)
-                            .padding(.horizontal, AppTheme.Spacing.small)
+                if filteredTasks.isEmpty {
+                    VStack(spacing: AppTheme.Spacing.small) {
+                        Spacer()
                         
-                        ForEach(todayTasks) { task in
-                            Button {
-                                viewModel.selectTask(task)
-                            } label: {
-                                TaskRowView(task: task)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                            .padding(.horizontal, AppTheme.Spacing.small)
-                        }
+                        Image("online_material")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100, height: 100)
+                            .padding(.bottom, AppTheme.Spacing.small)
+                        
+                        Text("No tasks found in this course.")
+                            .font(AppTheme.textStyle(size: 16, weight: .medium))
+                            .foregroundColor(AppTheme.Colors.gray300)
+                            .multilineTextAlignment(.center)
+                        
+                        Spacer()
                     }
-                    
-                    let upcomingTasks = filteredTasks.filter { $0.group == .upcoming }
-                    if !upcomingTasks.isEmpty {
-                        Text("Upcoming Tasks")
-                            .font(AppTheme.textStyle(size: 16, weight: .bold))
-                            .foregroundColor(AppTheme.Colors.black100)
-                            .padding(.horizontal, AppTheme.Spacing.small)
-                        
-                        ForEach(upcomingTasks) { task in
-                            Button {
-                                viewModel.selectTask(task)
-                            } label: {
-                                TaskRowView(task: task)
+                    .frame(maxWidth: .infinity, minHeight: 250, alignment: .center)
+                } else {
+                    VStack(alignment: .leading, spacing: AppTheme.Spacing.medium) {
+                        let todayTasks = filteredTasks.filter { $0.group == .today }
+                        if !todayTasks.isEmpty {
+                            Text("Today Tasks")
+                                .font(AppTheme.textStyle(size: 16, weight: .bold))
+                                .foregroundColor(AppTheme.Colors.black100)
+                                .padding(.horizontal, AppTheme.Spacing.small)
+                            
+                            ForEach(todayTasks) { task in
+                                Button {
+                                    viewModel.selectTask(task)
+                                } label: {
+                                    TaskRowView(task: task)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                .padding(.horizontal, AppTheme.Spacing.small)
                             }
-                            .buttonStyle(PlainButtonStyle())
-                            .padding(.horizontal, AppTheme.Spacing.small)
+                        }
+                        
+                        let upcomingTasks = filteredTasks.filter { $0.group == .upcoming }
+                        if !upcomingTasks.isEmpty {
+                            Text("Upcoming Tasks")
+                                .font(AppTheme.textStyle(size: 16, weight: .bold))
+                                .foregroundColor(AppTheme.Colors.black100)
+                                .padding(.horizontal, AppTheme.Spacing.small)
+                            
+                            ForEach(upcomingTasks) { task in
+                                Button {
+                                    viewModel.selectTask(task)
+                                } label: {
+                                    TaskRowView(task: task)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                .padding(.horizontal, AppTheme.Spacing.small)
+                            }
                         }
                     }
                 }

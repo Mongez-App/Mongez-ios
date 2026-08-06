@@ -27,7 +27,7 @@ public struct CourseMaterialsTabView: View {
             if courseType == "URL_COURSE" {
                 VStack(spacing: AppTheme.Spacing.small) {
                     Spacer()
-    
+                    
                     Image("online_material")
                         .resizable()
                         .scaledToFit()
@@ -43,6 +43,29 @@ public struct CourseMaterialsTabView: View {
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                
+            } else if materials.isEmpty {
+                VStack(spacing: AppTheme.Spacing.small) {
+                    Spacer()
+                    
+                    Image("online_material")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
+                        .padding(.bottom, AppTheme.Spacing.small)
+                    
+                    Text("No materials have been uploaded yet.")
+                        .font(AppTheme.textStyle(size: 16, weight: .medium))
+                        .foregroundColor(AppTheme.Colors.gray300)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, AppTheme.Spacing.large)
+                    
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                
+                UploadMaterialButtonView(action: onUploadAction)
+                    .padding(AppTheme.Spacing.small)
                 
             } else {
                 ScrollView {
