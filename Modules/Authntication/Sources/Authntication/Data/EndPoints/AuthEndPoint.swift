@@ -10,7 +10,7 @@ public enum AuthEndpoint: EndPoint {
     case handshake(idToken: String, name: String, appearance: String, language: String)
     case me(idToken: String)
     
-    public var baseURL: String { "https://api-gateway-production-3fd0.up.railway.app/api/v1" }
+    public var baseURL: String { "https://api-gateway-production-5110.up.railway.app/api/v1" }
     
     public var path: String {
         switch self {

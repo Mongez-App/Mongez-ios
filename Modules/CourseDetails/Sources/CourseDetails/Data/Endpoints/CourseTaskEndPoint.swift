@@ -12,7 +12,7 @@ public enum CourseTaskEndPoint: EndPoint {
     case getTasks(courseId: String)
     
     public var baseURL: String {
-        return "https://api-gateway-production-3fd0.up.railway.app/api/v1"
+        return "https://api-gateway-production-5110.up.railway.app/api/v1"
     }
     
     public var path: String {
