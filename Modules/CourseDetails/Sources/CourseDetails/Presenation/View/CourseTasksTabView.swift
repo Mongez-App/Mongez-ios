@@ -87,6 +87,7 @@ public struct CourseTasksTabView: View {
                                     TaskRowView(task: task)
                                 }
                                 .buttonStyle(PlainButtonStyle())
+                                .disabled(task.isCompleted)
                                 .padding(.horizontal, AppTheme.Spacing.small)
                             }
                         }
@@ -105,6 +106,7 @@ public struct CourseTasksTabView: View {
                                     TaskRowView(task: task)
                                 }
                                 .buttonStyle(PlainButtonStyle())
+                                .disabled(task.isCompleted)
                                 .padding(.horizontal, AppTheme.Spacing.small)
                             }
                         }
@@ -112,6 +114,9 @@ public struct CourseTasksTabView: View {
                 }
             }
             .padding(.vertical, AppTheme.Spacing.small)
+        }
+        .refreshable {
+            await viewModel.loadData()
         }
     }
 }
