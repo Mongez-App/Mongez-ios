@@ -23,36 +23,80 @@ public struct RoadmapView: View {
             )
             .zIndex(1)
 
-            ScrollView(.vertical, showsIndicators: false) {
-                if let roadmap = viewModel.roadmap {
-                    VStack(alignment: .leading, spacing: AppTheme.Spacing.xxSmall) {
-                        ForEach(roadmap.weeks, id: \.weekNumber) { week in
-                            WeekSectionView(
-                                week: week,
-                                expandedBlockId: viewModel.expandedBlockId,
-                                selectedTab: viewModel.selectedTab(for:),
-                                onToggleBlock: viewModel.toggleBlock,
-                                onSelectTab: { tab, blockId in
-                                    viewModel.selectTab(tab, for: blockId)
-                                }
-                            )
-                        }
+            if let roadmap = viewModel.displayedRoadmap {
+                if roadmap.weeks.allSatisfy({ $0.studyBlocks.isEmpty }) {
+                    VStack(alignment: .center, spacing: AppTheme.Spacing.xLarge) {
+                        Image("empty-tasks")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 120, height: 120)
+                        
+                        Text("No study blocks generated yet \n Start by adding some courses and events!")
+                            .font(AppTheme.textStyle(size: 16, weight: .medium))
+                            .foregroundColor(AppTheme.Colors.gray300)
+                            .multilineTextAlignment(.center)
                     }
-                    .padding(.horizontal, AppTheme.Spacing.small)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.bottom, 85)
+                } else {
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack(alignment: .leading, spacing: AppTheme.Spacing.xxSmall) {
+                            ForEach(roadmap.weeks, id: \.weekNumber) { week in
+                                WeekSectionView(
+                                    week: week,
+                                    expandedBlockId: viewModel.expandedBlockId,
+                                    selectedTab: viewModel.selectedTab(for:),
+                                    onToggleBlock: viewModel.toggleBlock,
+                                    onSelectTab: { tab, blockId in
+                                        viewModel.selectTab(tab, for: blockId)
+                                    }
+                                )
+                            }
+                        }
+                        .padding(.horizontal, AppTheme.Spacing.small)
+                    }
+                    .padding(.bottom, 85)
                 }
+            } else {
+                Spacer()
             }
-            .padding(.bottom, 85)
         }
         .background(AppTheme.Colors.white100)
+        .overlay(
+            Group {
+                if viewModel.isLoading {
+                    ZStack {
+                        Color.black.opacity(0.15).ignoresSafeArea()
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.Colors.purple200))
+                            .scaleEffect(1.5)
+                    }
+                }
+            }
+        )
         .onAppear {
             viewModel.loadRoadmap()
         }
         .sheet(isPresented: $viewModel.isAddEventSheetPresented) {
-            AddEventSheetView()
+            AddEventSheetView(viewModel: viewModel)
         }
         .sheet(isPresented: $viewModel.isFilterSheetPresented) {
-            FilterRoadmapSheetView()
+            FilterRoadmapSheetView(viewModel: viewModel)
         }
+        .overlay(
+            Group {
+                if viewModel.isAddEventAlertPresented {
+                    ZStack {
+                        Color.black.opacity(0.3).ignoresSafeArea()
+                        ValidationAlert(
+                            isPresented: $viewModel.isAddEventAlertPresented,
+                            title: "Status",
+                            description: viewModel.addEventErrorMessage ?? ""
+                        )
+                    }
+                }
+            }
+        )
     }
 }
 

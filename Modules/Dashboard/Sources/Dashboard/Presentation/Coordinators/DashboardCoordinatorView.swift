@@ -50,6 +50,12 @@ public struct DashboardCoordinatorView: View {
                             viewModel.onViewAllTodayTasks = { [weak coordinator] in
                                 coordinator?.push(.todayTasks)
                             }
+                            viewModel.onViewAllUpcomingDeadlines = { [weak coordinator] in
+                                coordinator?.selectedTab = .roadmap
+                            }
+                            viewModel.onNavigateToProfile = { [weak coordinator] in
+                                coordinator?.selectedTab = .profile
+                            }
                         }
                 
                 case .courses:

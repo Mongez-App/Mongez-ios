@@ -82,7 +82,7 @@ struct DashboardView: View {
                                 Spacer()
                                 
                                 Button(action: {
-                                    print("View all tapped")
+                                    viewModel.onViewAllUpcomingDeadlines?()
                                 }) {
                                     Text("View all")
                                         .font(AppTheme.textStyle(size: 12, weight: .semibold))
@@ -121,6 +121,22 @@ struct DashboardView: View {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.Colors.purple200))
                             .scaleEffect(1.5)
+                    }
+                }
+            }
+        )
+        .overlay(
+            Group {
+                if viewModel.showDefaultPreferencesAlert {
+                    ZStack {
+                        Color.black.opacity(0.3).ignoresSafeArea()
+                        DefaultPreferencesAlert(
+                            isPresented: $viewModel.showDefaultPreferencesAlert,
+                            gotItAction: {},
+                            settingsAction: {
+                                viewModel.onNavigateToProfile?()
+                            }
+                        )
                     }
                 }
             }

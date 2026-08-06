@@ -27,7 +27,7 @@ struct TodayTasksView: View {
                 }
                 .padding(.trailing, 2)
                 
-                Text(viewModel.todayFocus?.courseName ?? "Today's Tasks")
+                Text("Today's Tasks")
                     .font(AppTheme.textStyle(size: 24, weight: .bold))
                     .foregroundColor(AppTheme.Colors.black100)
                     .lineLimit(1)
@@ -61,7 +61,7 @@ struct TodayTasksView: View {
                     
                 } else {
                     ScrollView(.vertical, showsIndicators: false) {
-                        TasksList(todayTasks: $viewModel.todayTasks) { selectedTask in
+                        TasksList(todayTasks: $viewModel.todayTasks, limit: nil) { selectedTask in
                             viewModel.selectTask(
                                 courseId: selectedTask.taskId,
                                 taskTitle: selectedTask.title,

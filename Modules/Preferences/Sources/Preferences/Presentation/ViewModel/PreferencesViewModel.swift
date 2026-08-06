@@ -58,7 +58,12 @@ public final class PreferencesViewModel: ObservableObject {
     }
 
     public func skip() async {
-        await finish()
+        if currentStep < totalSteps - 1 {
+            UserDefaults.standard.set(true, forKey: "showDefaultPreferencesAlert")
+            currentStep = totalSteps - 1
+        } else {
+            await finish()
+        }
     }
 
     public func syncCalendar() async {

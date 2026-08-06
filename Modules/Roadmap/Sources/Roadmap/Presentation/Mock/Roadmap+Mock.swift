@@ -22,8 +22,8 @@ extension Roadmap {
                         courseId: "course_algorithms",
                         courseName: "Algorithms",
                         tasks: [
-                            Task(topic: "Finish Graph Assignment", durationMinutes: 90, taskDate: "May 7 - 11:59 PM"),
-                            Task(topic: "Review DFS/BFS", durationMinutes: 45, taskDate: "May 6 - 8:00 PM")
+                            CourseTask(topic: "Finish Graph Assignment", durationMinutes: 90, taskDate: "May 7 - 11:59 PM"),
+                            CourseTask(topic: "Review DFS/BFS", durationMinutes: 45, taskDate: "May 6 - 8:00 PM")
                         ],
                         isCompleted: true,
                         events: [
@@ -42,7 +42,7 @@ extension Roadmap {
                         courseId: "course_database",
                         courseName: "Database Systems",
                         tasks: [
-                            Task(topic: "Normalize Schema Exercise", durationMinutes: 60, taskDate: "May 14 - 6:00 PM")
+                            CourseTask(topic: "Normalize Schema Exercise", durationMinutes: 60, taskDate: "May 14 - 6:00 PM")
                         ],
                         isCompleted: true,
                         events: []
@@ -52,7 +52,7 @@ extension Roadmap {
                         courseId: "course_networks",
                         courseName: "Networks",
                         tasks: [
-                            Task(topic: "Read TCP/IP Chapter", durationMinutes: 50, taskDate: "May 17 - 7:00 PM")
+                            CourseTask(topic: "Read TCP/IP Chapter", durationMinutes: 50, taskDate: "May 17 - 7:00 PM")
                         ],
                         isCompleted: false,
                         events: []
@@ -69,7 +69,7 @@ extension Roadmap {
                         courseId: "course_os",
                         courseName: "Operating Systems",
                         tasks: [
-                            Task(topic: "Scheduling Algorithms Lab", durationMinutes: 75, taskDate: "May 21 - 5:00 PM")
+                            CourseTask(topic: "Scheduling Algorithms Lab", durationMinutes: 75, taskDate: "May 21 - 5:00 PM")
                         ],
                         isCompleted: false,
                         events: [

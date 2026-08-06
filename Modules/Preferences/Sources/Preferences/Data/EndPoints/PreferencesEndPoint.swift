@@ -11,7 +11,7 @@ import Foundation
 public enum PreferencesEndpoint: EndPoint {
     case updatePreferences(dailyStudyHours: Int, availableDays: [String])
 
-    public var baseURL: String { "https://api.smartstudy.app/v3" }
+    public var baseURL: String { "https://api-gateway-production-5110.up.railway.app/api/v1" }
 
     public var path: String {
         switch self {
