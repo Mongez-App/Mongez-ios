@@ -26,6 +26,10 @@ public class CourseDetailsRepositoryImpl: CourseDetailsRepository {
         )
     }
 
+    public func deleteMaterial(courseId: String, materialId: String) async throws {
+        try await remoteDataSource.deleteMaterial(courseId: courseId, materialId: materialId)
+    }
+
     public func generateTasks(courseId: String) async throws {
         try await remoteDataSource.createTasks(courseId: courseId)
     }

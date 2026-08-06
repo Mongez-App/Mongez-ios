@@ -17,11 +17,13 @@ struct AddEventSheetView: View {
     @State private var selectedCourseId: String
     @State private var eventDate: Date = Date()
     @State private var isSubmitting = false
+    @State private var errorMessage: String? = nil
+    @State private var showError = false
 
     private let courses: [Course]
-    private let onSubmit: (String, String, String, String, Int) async -> Void
+    private let onSubmit: (String, String, String, String, Int) async -> Bool
 
-    init(courses: [Course], onSubmit: @escaping (String, String, String, String, Int) async -> Void) {
+    init(courses: [Course], onSubmit: @escaping (String, String, String, String, Int) async -> Bool) {
         self.courses = courses
         self.onSubmit = onSubmit
         _selectedCourseId = State(initialValue: courses.first?.courseId ?? "")
@@ -71,6 +73,11 @@ struct AddEventSheetView: View {
         .presentationDetents([.height(560), .large])
         .presentationDragIndicator(.hidden)
         .disabled(isSubmitting)
+        .alert("Error", isPresented: $showError, presenting: errorMessage) { _ in
+            Button("OK", role: .cancel) {}
+        } message: { msg in
+            Text(msg)
+        }
     }
 
     private var dragHandle: some View {
@@ -182,8 +189,16 @@ struct AddEventSheetView: View {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let dateString = dateFormatter.string(from: eventDate)
         Task {
-            await onSubmit(selectedCourseId, eventType.lowercased(), title, dateString, 0)
-            await MainActor.run { dismiss() }
+            let success = await onSubmit(selectedCourseId, eventType.lowercased(), title, dateString, 0)
+            await MainActor.run {
+                isSubmitting = false
+                if success {
+                    dismiss()
+                } else {
+                    errorMessage = "Failed to add event. Please try again."
+                    showError = true
+                }
+            }
         }
     }
 }

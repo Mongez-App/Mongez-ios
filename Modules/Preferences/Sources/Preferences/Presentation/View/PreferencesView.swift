@@ -88,6 +88,9 @@ public struct PreferencesView: View {
             }
         }
         .background(AppTheme.Colors.white100.ignoresSafeArea())
+        .task {
+            await viewModel.loadCurrentPreferences()
+        }
     }
 }
 

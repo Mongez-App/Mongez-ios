@@ -8,6 +8,7 @@
 import Foundation
 protocol ProfileRepositoryProtocol {
     func fetchProfile() async throws -> UserProfile
+    func fetchPreferences() async throws -> ProfilePreferencesDTO
     func updateProfile(name: String, avatarUrl: String, appearance: String, language: String, calendarSyncConnected: Bool) async throws -> UserProfile
-    func updatePreferences(dailyStudyHours: Int, availableDays: [String]) async throws -> UserProfile
+    func updatePreferences(dailyStudyHours: Float, availableDays: [Int]) async throws -> UserProfile
 }

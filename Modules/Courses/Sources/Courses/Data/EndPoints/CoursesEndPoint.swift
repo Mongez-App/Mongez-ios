@@ -44,7 +44,7 @@ enum CoursesEndPoint: EndPoint {
         case .listEvents(let courseId):
             return "rag/courses/\(courseId)/events"
         case .addCourseFromURL:
-            return "rag/courses/url"
+            return "imports"
         }
     }
 
@@ -65,8 +65,11 @@ enum CoursesEndPoint: EndPoint {
         var headers: [String: String] = [:]
         headers["Content-Type"] = "application/json"
 
-        if let userId = UserDefaults.standard.string(forKey: "current_user_id") {
+        if let userId = SessionManager.userId {
             headers["x-user-id"] = userId
+        }
+        if let auth = SessionManager.authorizationHeader {
+            headers["Authorization"] = auth["Authorization"]
         }
 
         switch self {

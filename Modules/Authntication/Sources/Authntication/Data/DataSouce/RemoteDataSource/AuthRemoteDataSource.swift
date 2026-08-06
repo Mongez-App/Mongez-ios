@@ -6,27 +6,41 @@
 //
 import Foundation
 import Common
+
 public protocol AuthRemoteDataSourceProtocol {
-    func handshake(idToken: String, name: String, appearance: String, language: String) async throws -> (dto: AuthResponseDTO, statusCode: Int)
-    func getMe(idToken: String) async throws -> AuthResponseDTO
+    func studentLogin(idToken: String) async throws -> (dto: AuthStudentResponseDTO, statusCode: Int)
+    func studentRegister(idToken: String) async throws -> (dto: AuthStudentResponseDTO, statusCode: Int)
+    func getMe() async throws -> AuthStudentResponseDTO
+    func logout() async throws
 }
- 
+
 public class AuthRemoteDataSource: AuthRemoteDataSourceProtocol {
     public init() {}
- 
-    public func handshake(idToken: String, name: String, appearance: String, language: String) async throws -> (dto: AuthResponseDTO, statusCode: Int) {
+
+    public func studentLogin(idToken: String) async throws -> (dto: AuthStudentResponseDTO, statusCode: Int) {
         let result = try await NetworkManger.shared.requestWithStatus(
-            endpoint: AuthEndpoint.handshake(idToken: idToken, name: name, appearance: appearance, language: language),
-            responseType: AuthResponseDTO.self
+            endpoint: AuthEndpoint.studentLogin(idToken: idToken),
+            responseType: AuthStudentResponseDTO.self
         )
         return (dto: result.decoded, statusCode: result.statusCode)
     }
-    
-    public func getMe(idToken: String) async throws -> AuthResponseDTO {
+
+    public func studentRegister(idToken: String) async throws -> (dto: AuthStudentResponseDTO, statusCode: Int) {
+        let result = try await NetworkManger.shared.requestWithStatus(
+            endpoint: AuthEndpoint.studentRegister(idToken: idToken),
+            responseType: AuthStudentResponseDTO.self
+        )
+        return (dto: result.decoded, statusCode: result.statusCode)
+    }
+
+    public func getMe() async throws -> AuthStudentResponseDTO {
         try await NetworkManger.shared.request(
-            endpoint: AuthEndpoint.me(idToken: idToken),
-            responseType: AuthResponseDTO.self
+            endpoint: AuthEndpoint.studentMe,
+            responseType: AuthStudentResponseDTO.self
         )
     }
+
+    public func logout() async throws {
+        _ = try await NetworkManger.shared.requestRaw(endpoint: AuthEndpoint.studentLogout)
+    }
 }
- 

@@ -14,7 +14,12 @@ public class PreferencesRepository: PreferencesRepositoryProtocol {
         self.remote = remote
     }
 
-    public func updatePreferences(studyDays: [Weekday], dailyStudyHours: Int) async throws -> StudyPreferences {
+    public func fetchPreferences() async throws -> StudyPreferences {
+        let dto = try await remote.fetchPreferences()
+        return dto.mapToStudyPreferences()
+    }
+
+    public func updatePreferences(studyDays: [Weekday], dailyStudyHours: Double) async throws -> StudyPreferences {
         let dto = try await remote.updatePreferences(
             studyDays: studyDays.map(\.index),
             dailyStudyHours: dailyStudyHours

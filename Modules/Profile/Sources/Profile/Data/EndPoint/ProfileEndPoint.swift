@@ -10,27 +10,30 @@ import Common
 
 enum ProfileEndpoint: EndPoint {
     case getProfile
+    case fetchPreferences
     case updateProfile(name: String, avatarUrl: String, appearance: String, language: String, calendarSyncConnected: Bool)
-    case updatePreferences(dailyStudyHours: Int, availableDays: [String])
+    case updatePreferences(dailyStudyHours: Float, availableDays: [Int])
     
     var baseURL: String {
-        return "https://api-gateway-production-3fd0.up.railway.app/api/v1"
+        return "https://course-import-service.vercel.app/api/v1"
     }
     
     var path: String {
         switch self {
         case .getProfile:
-            return "/users/me/profile"
+            return "/auth/student/me"
+        case .fetchPreferences:
+            return "/rag/preferences"
         case .updateProfile:
             return "/users/me/profile"
         case .updatePreferences:
-            return "/users/me/preferences"
+            return "/rag/preferences"
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .getProfile:
+        case .getProfile, .fetchPreferences:
             return .get
         case .updateProfile:
             return .patch
@@ -40,19 +43,24 @@ enum ProfileEndpoint: EndPoint {
     }
     
     var headers: [String : String]? {
-        let token = UserDefaults.standard.string(forKey: "main_token") ?? ""
+        let token = SessionManager.sessionToken ?? UserDefaults.standard.string(forKey: "main_token") ?? ""
         let lang = UserDefaults.standard.string(forKey: "selected_language")?.lowercased() ?? "en"
-        return [
+        var h = [
             "Authorization": "Bearer \(token)",
             "Accept-Language": lang,
             "Content-Type": "application/json",
             "Accept": "application/json"
         ]
+        if let userId = SessionManager.userId {
+            h["x-user-id"] = userId
+            h["X-User-Id"] = userId
+        }
+        return h
     }
     
     var body: Data? {
         switch self {
-        case .getProfile:
+        case .getProfile, .fetchPreferences:
             return nil
         case .updateProfile(let name, let avatarUrl, let appearance, let language, let calendarSyncConnected):
             let structBody = UpdateProfileBody(
@@ -65,8 +73,8 @@ enum ProfileEndpoint: EndPoint {
             return try? JSONEncoder().encode(structBody)
         case .updatePreferences(let dailyStudyHours, let availableDays):
             let structBody = UpdatePreferencesBody(
-                dailyStudyHours: dailyStudyHours,
-                availableDays: availableDays
+                studyDays: availableDays,
+                dailyStudyHours: dailyStudyHours
             )
             return try? JSONEncoder().encode(structBody)
         }
@@ -90,11 +98,11 @@ struct UpdateProfileBody: Encodable {
 }
 
 struct UpdatePreferencesBody: Encodable {
-    let dailyStudyHours: Int
-    let availableDays: [String]
+    let studyDays: [Int]
+    let dailyStudyHours: Float
     
     enum CodingKeys: String, CodingKey {
-        case dailyStudyHours = "daily_study_hours"
-        case availableDays = "available_days"
+        case studyDays = "studyDays"
+        case dailyStudyHours = "dailyStudyHours"
     }
 }

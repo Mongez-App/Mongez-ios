@@ -5,10 +5,12 @@
 //  Created by Shady Eldakrory on 18/07/2026.
 //
 
+import Common
+
 public class AuthRepository: AuthRepositoryProtocol {
     private let remote: AuthRemoteDataSourceProtocol
     private let keychain: KeychainManager
- 
+
     public init(
         remote: AuthRemoteDataSourceProtocol = AuthRemoteDataSource(),
         keychain: KeychainManager = .shared
@@ -16,30 +18,67 @@ public class AuthRepository: AuthRepositoryProtocol {
         self.remote = remote
         self.keychain = keychain
     }
-    
-    public func handshake(idToken: String, name: String, appearance: String, language: String) async throws -> (user: User, isNewUser: Bool) {
-        let (dto, statusCode) = try await remote.handshake(idToken: idToken, name: name, appearance: appearance, language: language)
-        keychain.saveToken(idToken)
-        
-        UserDefaults.standard.set(dto.userId, forKey: "current_user_id")
-        print("\(UserDefaults.standard.string(forKey: "current_user_id") ?? "No id Found")")
-        UserDefaults.standard.set(keychain.getToken(), forKey: "main_token")
-        print("\(UserDefaults.standard.string(forKey: "main_token") ?? "No token Found")")
-        
-        // Persist appearance & language so the app can restore user preferences
-        if let appearance = dto.appearance {
-            UserDefaults.standard.set(appearance, forKey: "user_appearance")
-        }
-        if let lang = dto.language {
-            UserDefaults.standard.set(lang.uppercased(), forKey: "selected_language")
-        }
-        
-        let isNewUser = (statusCode == 201)
-        return (dto.mapToUserEntity(firebaseToken: idToken), isNewUser)
+
+    public func login(idToken: String) async throws -> (user: User, isNewUser: Bool) {
+        let (dto, statusCode) = try await remote.studentLogin(idToken: idToken)
+        return try persistSession(dto: dto, statusCode: statusCode)
     }
 
-    public func getMe(idToken: String) async throws -> User {
-        let dto = try await remote.getMe(idToken: idToken)
-        return dto.mapToUserEntity(firebaseToken: idToken)
+    public func register(idToken: String) async throws -> (user: User, isNewUser: Bool) {
+        let (dto, statusCode) = try await remote.studentRegister(idToken: idToken)
+        return try persistSession(dto: dto, statusCode: statusCode)
+    }
+
+    public func getMe() async throws -> User {
+        let dto = try await remote.getMe()
+        let user = dto.mapToUserEntity(sessionToken: SessionManager.sessionToken ?? "")
+        // Keep the locally cached user id in sync with the server response.
+        if !dto.resolvedUid.isEmpty {
+            SessionManager.userId = dto.resolvedUid
+        }
+        if !dto.resolvedDisplayName.isEmpty {
+            SessionManager.displayName = dto.resolvedDisplayName
+        }
+        return user
+    }
+
+    public func logout() async throws {
+        // Best-effort server-side invalidation; the local session must always be discarded.
+        try? await remote.logout()
+        discardSession()
+    }
+
+    // MARK: - Helpers
+
+    /// Extracts the backend JWT from the response, persists it securely and returns
+    /// the mapped user. A 201 response means the user was just created.
+    private func persistSession(dto: AuthStudentResponseDTO, statusCode: Int) throws -> (user: User, isNewUser: Bool) {
+        let sessionToken = dto.resolvedSessionToken
+        guard !sessionToken.isEmpty else {
+            throw NSError(
+                domain: "Auth",
+                code: -1,
+                userInfo: [NSLocalizedDescriptionKey: "No session token was returned by the server."]
+            )
+        }
+
+        keychain.saveToken(sessionToken)
+        SessionManager.sessionToken = sessionToken
+
+        if !dto.resolvedUid.isEmpty {
+            SessionManager.userId = dto.resolvedUid
+        }
+        if !dto.resolvedDisplayName.isEmpty {
+            SessionManager.displayName = dto.resolvedDisplayName
+        }
+
+        let user = dto.mapToUserEntity(sessionToken: sessionToken)
+        let isNewUser = (statusCode == 201)
+        return (user, isNewUser)
+    }
+
+    private func discardSession() {
+        keychain.deleteToken()
+        SessionManager.clear()
     }
 }

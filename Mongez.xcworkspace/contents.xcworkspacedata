@@ -29,6 +29,9 @@
       location = "group:Modules/Authntication">
    </FileRef>
    <FileRef
+      location = "group:Modules/Organization">
+   </FileRef>
+   <FileRef
       location = "container:Mongez.xcodeproj">
    </FileRef>
 </Workspace>

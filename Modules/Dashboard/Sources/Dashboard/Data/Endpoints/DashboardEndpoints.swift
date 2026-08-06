@@ -4,6 +4,7 @@ import Common
 public enum DashboardEndpoints : EndPoint {
     case dashboard(method: HTTPMethod, path: String)
     case user(method: HTTPMethod, path: String)
+    case delayed(method: HTTPMethod, path: String, body: Data?)
 
     public var baseURL: String {
         switch self {
@@ -11,23 +12,21 @@ public enum DashboardEndpoints : EndPoint {
             return "https://course-import-service.vercel.app/api/v1/"
         case .user:
             return "https://api-gateway-production-3fd0.up.railway.app/api/v1/"
+        case .delayed:
+            return "https://course-import-service.vercel.app/api/v1/"
         }
     }
 
     public var path: String {
         switch self {
-        case .dashboard(_, let pathValue):
-            return pathValue
-        case .user(_, let pathValue):
+        case .dashboard(_, let pathValue), .user(_, let pathValue), .delayed(_, let pathValue, _):
             return pathValue
         }
     }
 
     public var method: HTTPMethod {
         switch self {
-        case .dashboard(let methodValue, _):
-            return methodValue
-        case .user(let methodValue, _):
+        case .dashboard(let methodValue, _), .user(let methodValue, _), .delayed(let methodValue, _, _):
             return methodValue
         }
     }
@@ -39,15 +38,13 @@ public enum DashboardEndpoints : EndPoint {
         ]
 
         switch self {
-        case .user:
-            if let token = UserDefaults.standard.string(forKey: "main_token") {
-                headers["Authorization"] = "Bearer \(token)"
-            }
-            headers["x-user-id"] = UserDefaults.standard.string(forKey: "current_user_id") ?? ""
-            headers["X-User-Id"] = UserDefaults.standard.string(forKey: "current_user_id") ?? ""
-        case .dashboard:
-            if let userId = UserDefaults.standard.string(forKey: "current_user_id") {
+        case .user, .dashboard, .delayed:
+            if let userId = SessionManager.userId {
                 headers["x-user-id"] = userId
+                headers["X-User-Id"] = userId
+            }
+            if let auth = SessionManager.authorizationHeader {
+                headers["Authorization"] = auth["Authorization"]
             }
         }
 
@@ -55,6 +52,11 @@ public enum DashboardEndpoints : EndPoint {
     }
 
     public var body: Data? {
-        nil
+        switch self {
+        case .delayed(_, _, let bodyValue):
+            return bodyValue
+        case .dashboard, .user:
+            return nil
+        }
     }
 }

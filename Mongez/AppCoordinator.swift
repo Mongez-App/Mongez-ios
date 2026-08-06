@@ -58,14 +58,34 @@ public final class AppCoordinator: ObservableObject, Coordinator {
     
     public func finishSplash() {
         let hasCompletedOnboarding = UserDefaults.standard.bool(forKey: "hasCompletedOnboarding")
-        let isLoggedIn = UserDefaults.standard.string(forKey: "main_token") != nil
+        let isLoggedIn = SessionManager.hasActiveSession
         
         if isLoggedIn {
-            startDashboard()
+            restoreSession()
         } else if hasCompletedOnboarding {
             startAuth()
         } else {
             startOnboarding()
+        }
+    }
+
+    /// Verifies the stored session token against `GET /api/v1/auth/student/me`
+    /// on app launch. An invalid/expired session (401/403) returns the user to login.
+    private func restoreSession() {
+        Task { @MainActor in
+            do {
+                _ = try await AuthUseCase().executeGetMe()
+                startDashboard()
+            } catch {
+                if let apiError = error as? APIError, [401, 403].contains(apiError.statusCode) {
+                    // Session token is no longer valid.
+                    SessionManager.clear()
+                    startAuth()
+                } else {
+                    // Network/other failure: proceed with the cached session.
+                    startDashboard()
+                }
+            }
         }
     }
     
@@ -98,7 +118,13 @@ public final class AppCoordinator: ObservableObject, Coordinator {
     
     private func handleLogout() {
         GoogleAuthService.shared.signOut()
-        
+
+        // Inform the backend that the session should be revoked, then discard
+        // the session token locally. This is best-effort and never blocks logout.
+        Task {
+            try? await AuthUseCase().executeLogout()
+        }
+
         // Clear all child coordinators
         childCoordinators.removeAll()
         dashboardCoordinator = nil

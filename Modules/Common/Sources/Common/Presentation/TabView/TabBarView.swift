@@ -18,11 +18,18 @@ public struct TabBarView: View {
                     }
                 }) {
                     VStack(spacing: 6) {
-                        Image(tab.iconName, bundle: .main)
-                            .renderingMode(.template)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
+                        if let systemImage = tab.systemImageName {
+                            Image(systemName: systemImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                        } else {
+                            Image(tab.iconName, bundle: .main)
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                        }
                         
                         Circle()
                             .frame(width: 4.5, height: 4.5)

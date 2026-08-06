@@ -22,6 +22,11 @@ public struct ProfileView: View {
                 remoteDataSource: ProfileRemoteDataSource()
             )
         ),
+        getPreferencesUseCase: GetPreferencesUseCase(
+            repository: ProfileRepository(
+                remoteDataSource: ProfileRemoteDataSource()
+            )
+        ),
         updateProfileUseCase: UpdateProfileUseCase(
             repository: ProfileRepository(
                 remoteDataSource: ProfileRemoteDataSource()
@@ -249,7 +254,20 @@ public struct ProfileView: View {
             viewModel.loadProfile()
         }
         .overlay {
-            if viewModel.showDisableCalendarSyncAlert || viewModel.showLogoutAlert {
+            if viewModel.isLoadingPreferencesUpdate {
+                ZStack {
+                    Color.black.opacity(0.3).ignoresSafeArea()
+                    VStack {
+                        ProgressView()
+                            .scaleEffect(1.5)
+                            .tint(AppTheme.Colors.white100)
+                        Text("Regenerating Study Plan...")
+                            .font(AppTheme.textStyle(size: 16, weight: .semibold))
+                            .foregroundColor(AppTheme.Colors.white100)
+                            .padding(.top, 8)
+                    }
+                }
+            } else if viewModel.showDisableCalendarSyncAlert || viewModel.showLogoutAlert {
                 Color.black.opacity(0.3).ignoresSafeArea()
             }
             if viewModel.showDisableCalendarSyncAlert {
@@ -275,6 +293,11 @@ public struct ProfileView: View {
                     }
                 )
             }
+        }
+        .alert("Success", isPresented: $viewModel.showPreferencesUpdateSuccess) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Study schedules have been successfully updated and recalculated.")
         }
         .sheet(isPresented: $viewModel.isEditPreferencesPresented) {
             EditPreferencesSheet(

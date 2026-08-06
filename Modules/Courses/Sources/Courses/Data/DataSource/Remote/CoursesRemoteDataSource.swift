@@ -57,6 +57,20 @@ final class CoursesRemoteDataSource: CoursesRemoteDataSourceProtocol {
     }
 
     func createCourse(requestDTO: CreateCourseRequestDTO) async throws -> CourseDTO {
+        do {
+            return try await performCreateCourse(requestDTO: requestDTO)
+        } catch let error as NSError where error.code == 400 {
+            let responseBody = error.userInfo[NSLocalizedDescriptionKey] as? String ?? ""
+            if responseBody.contains("MISSING_PREFERENCES") {
+                print("Missing study preferences. Saving defaults and retrying course creation.")
+                try await saveDefaultPreferences()
+                return try await performCreateCourse(requestDTO: requestDTO)
+            }
+            throw error
+        }
+    }
+
+    private func performCreateCourse(requestDTO: CreateCourseRequestDTO) async throws -> CourseDTO {
         let body = try JSONEncoder().encode(requestDTO)
         let bodyStr = String(data: body, encoding: .utf8) ?? "?"
         let endpoint = CoursesEndPoint.createCourse(body: body)
@@ -103,6 +117,35 @@ final class CoursesRemoteDataSource: CoursesRemoteDataSourceProtocol {
 
         let str = String(data: data, encoding: .utf8) ?? "Unreadable data"
         throw NSError(domain: "CreateCourse", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid response: \(str)"])
+    }
+
+    /// Saves default study preferences (`POST /api/v1/rag/preferences`) so the
+    /// backend no longer rejects course creation with `MISSING_PREFERENCES`.
+    private func saveDefaultPreferences() async throws {
+        let payload: [String: Any] = [
+            "studyDays": [0, 1, 2, 3, 4, 5, 6],
+            "dailyStudyHours": 6
+        ]
+        let body = try JSONSerialization.data(withJSONObject: payload)
+
+        var headers: [String: String] = ["Content-Type": "application/json"]
+        if let userId = UserDefaults.standard.string(forKey: "current_user_id") {
+            headers["x-user-id"] = userId
+        }
+
+        guard let url = URL(string: "https://course-import-service.vercel.app/api/v1/rag/preferences") else {
+            throw URLError(.badURL)
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = headers
+        request.httpBody = body
+
+        let (_, response) = try await URLSession.shared.data(for: request)
+        let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
+        guard (200...299).contains(statusCode) else {
+            throw NSError(domain: "SavePreferences", code: statusCode, userInfo: [NSLocalizedDescriptionKey: "Failed to save default preferences"])
+        }
     }
 
     func deleteCourse(id: String) async throws {
@@ -235,6 +278,19 @@ final class CoursesRemoteDataSource: CoursesRemoteDataSourceProtocol {
     }
 
     func addCourseFromURL(requestDTO: AddCourseFromURLRequestDTO) async throws -> CourseDTO {
+        do {
+            return try await performAddCourseFromURL(requestDTO: requestDTO)
+        } catch let error as APIError where error.statusCode == 400 {
+            if error.message.contains("MISSING_PREFERENCES") {
+                print("Missing study preferences. Saving defaults and retrying URL course import.")
+                try await saveDefaultPreferences()
+                return try await performAddCourseFromURL(requestDTO: requestDTO)
+            }
+            throw error
+        }
+    }
+
+    private func performAddCourseFromURL(requestDTO: AddCourseFromURLRequestDTO) async throws -> CourseDTO {
         let body = try JSONEncoder().encode(requestDTO)
         let response: CreateCourseResponseDTO = try await NetworkManger.shared.request(
             endpoint: CoursesEndPoint.addCourseFromURL(body: body),

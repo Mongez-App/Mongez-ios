@@ -8,6 +8,11 @@
 import Foundation
 
 public struct StudyPreferences {
-    public let dailyStudyHours: Int
+    public let dailyStudyHours: Double
     public let studyDays: [Weekday]
+
+    public init(dailyStudyHours: Double, studyDays: [Weekday]) {
+        self.dailyStudyHours = dailyStudyHours
+        self.studyDays = studyDays
+    }
 }

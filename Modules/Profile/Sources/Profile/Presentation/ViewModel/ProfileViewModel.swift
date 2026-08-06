@@ -29,20 +29,25 @@ class ProfileViewModel: ObservableObject {
     @Published var showLogoutAlert: Bool = false
     @Published var isEditPreferencesPresented: Bool = false
     @Published var isEditProfilePresented: Bool = false
-    @Published var dailyStudyHours: Int = 4
-    @Published var availableDays: Set<String> = ["Mon", "Wed", "Fri"]
+    @Published var dailyStudyHours: Float = 4.0
+    @Published var availableDays: Set<Int> = [0, 1, 2, 3, 4]
     @Published var localSelectedImageData: Data? = nil
+    @Published var isLoadingPreferencesUpdate: Bool = false
+    @Published var showPreferencesUpdateSuccess: Bool = false
 
     private let getProfileUseCase: GetProfileUseCaseProtocol
+    private let getPreferencesUseCase: GetPreferencesUseCaseProtocol
     private let updateProfileUseCase: UpdateProfileUseCaseProtocol
     private let updatePreferencesUseCase: UpdatePreferencesUseCaseProtocol
 
     init(
         getProfileUseCase: GetProfileUseCaseProtocol,
+        getPreferencesUseCase: GetPreferencesUseCaseProtocol,
         updateProfileUseCase: UpdateProfileUseCaseProtocol,
         updatePreferencesUseCase: UpdatePreferencesUseCaseProtocol
     ) {
         self.getProfileUseCase = getProfileUseCase
+        self.getPreferencesUseCase = getPreferencesUseCase
         self.updateProfileUseCase = updateProfileUseCase
         self.updatePreferencesUseCase = updatePreferencesUseCase
     }
@@ -50,7 +55,10 @@ class ProfileViewModel: ObservableObject {
     func loadProfile() {
         Task {
             do {
-                let fetchedProfile = try await getProfileUseCase.execute()
+                async let profileTask = getProfileUseCase.execute()
+                async let preferencesTask = getPreferencesUseCase.execute()
+                
+                let (fetchedProfile, fetchedPreferences) = try await (profileTask, preferencesTask)
                 self.profile = fetchedProfile
                 
                 // Sync UI fields
@@ -68,10 +76,10 @@ class ProfileViewModel: ObservableObject {
                 if let calendarConnected = fetchedProfile.calendarSyncConnected {
                     self.isCalendarSyncEnabled = calendarConnected
                 }
-                if let dailyHours = fetchedProfile.stats?.dailyStudyHours {
+                if let dailyHours = fetchedPreferences.dailyStudyHours {
                     self.dailyStudyHours = dailyHours
                 }
-                if let days = fetchedProfile.stats?.availableDays {
+                if let days = fetchedPreferences.studyDays {
                     self.availableDays = Set(days)
                 }
             } catch {
@@ -137,10 +145,14 @@ class ProfileViewModel: ObservableObject {
         isEditPreferencesPresented = true
     }
 
-    func saveEditPreferences(hours: Int, days: Set<String>) {
+    func saveEditPreferences(hours: Float, days: Set<Int>) {
         isEditPreferencesPresented = false
         Task {
-            guard let currentProfile = self.profile else { return }
+            isLoadingPreferencesUpdate = true
+            guard let currentProfile = self.profile else {
+                isLoadingPreferencesUpdate = false
+                return
+            }
             do {
                 let updated = try await updatePreferencesUseCase.execute(
                     dailyStudyHours: hours,
@@ -149,7 +161,10 @@ class ProfileViewModel: ObservableObject {
                 self.profile = currentProfile.merged(with: updated)
                 self.dailyStudyHours = hours
                 self.availableDays = days
+                isLoadingPreferencesUpdate = false
+                showPreferencesUpdateSuccess = true
             } catch {
+                isLoadingPreferencesUpdate = false
                 print("Error updating preferences: \(error)")
             }
         }
@@ -199,6 +214,10 @@ class ProfileViewModel: ObservableObject {
                 )
                 
                 self.profile = optimisticallyUpdatedProfile.merged(with: serverResponse)
+                
+                if !name.isEmpty {
+                    UserDefaults.standard.set(name, forKey: "user_display_name")
+                }
                 
                 NotificationCenter.default.post(name: NSNotification.Name("UserDidUpdateProfileNotification"), object: nil, userInfo: ["name": name])
             } catch {

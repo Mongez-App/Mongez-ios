@@ -36,6 +36,10 @@ public class MockCourseDetailsRepository: CourseDetailsRepository {
         // no-op for mock
     }
 
+    public func deleteMaterial(courseId: String, materialId: String) async throws {
+        // no-op for mock
+    }
+
     public func generateTasks(courseId: String) async throws {
         // no-op for mock
     }

@@ -11,11 +11,13 @@ import Common
 
 public struct MaterialRowView: View {
     public let material: CourseMaterial
-    
-    public init(material: CourseMaterial) {
+    public let onDelete: (CourseMaterial) -> Void
+
+    public init(material: CourseMaterial, onDelete: @escaping (CourseMaterial) -> Void = { _ in }) {
         self.material = material
+        self.onDelete = onDelete
     }
-    
+
     public var body: some View {
         HStack(spacing: AppTheme.Spacing.small) {
             Text("PDF")
@@ -26,22 +28,27 @@ public struct MaterialRowView: View {
                     RoundedRectangle(cornerRadius: AppTheme.radius.small)
                         .fill(AppTheme.Colors.red100)
                 )
-            
+
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xxxSmall) {
                 Text(material.name)
                     .font(AppTheme.textStyle(size: 16, weight: .semibold))
                     .foregroundColor(AppTheme.Colors.black100)
                     .lineLimit(1)
-                
+
                 Text("\(material.pageCount) Pages • \(String(format: "%.1f", material.fileSizeMB)) MB")
                     .font(AppTheme.textStyle(size: 14))
                     .foregroundColor(AppTheme.Colors.gray300)
             }
             Spacer(minLength: AppTheme.Spacing.small)
-            
-            Image(systemName: "ellipsis")
-                .font(.system(size: 20, weight: .regular))
-                .foregroundColor(AppTheme.Colors.black100)
+
+            Button {
+                onDelete(material)
+            } label: {
+                Image(systemName: "trash")
+                    .font(.system(size: 18, weight: .regular))
+                    .foregroundColor(AppTheme.Colors.red100)
+            }
+            .buttonStyle(PlainButtonStyle())
         }
         .padding(AppTheme.Spacing.small)
         .background(

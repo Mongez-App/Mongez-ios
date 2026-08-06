@@ -41,8 +41,11 @@ public enum RoadmapEndpoints: EndPoint {
         var headers: [String: String] = [
             "Content-Type": "application/json"
         ]
-        if let userId = UserDefaults.standard.string(forKey: "current_user_id") {
+        if let userId = SessionManager.userId {
             headers["x-user-id"] = userId
+        }
+        if let auth = SessionManager.authorizationHeader {
+            headers["Authorization"] = auth["Authorization"]
         }
         return headers
     }

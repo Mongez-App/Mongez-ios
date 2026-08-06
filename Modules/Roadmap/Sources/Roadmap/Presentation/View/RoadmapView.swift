@@ -51,7 +51,7 @@ public struct RoadmapView: View {
             AddEventSheetView(
                 courses: viewModel.courses,
                 onSubmit: { courseId, eventType, title, dueDate, weight in
-                    await viewModel.addEvent(courseId: courseId, eventType: eventType, title: title, dueDate: dueDate, weight: weight)
+                    return await viewModel.addEvent(courseId: courseId, eventType: eventType, title: title, dueDate: dueDate, weight: weight)
                 }
             )
         }

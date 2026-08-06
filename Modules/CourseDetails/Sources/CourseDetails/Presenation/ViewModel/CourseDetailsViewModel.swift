@@ -10,6 +10,9 @@ public class CourseDetailsViewModel: ObservableObject {
     @Published public var showFileImporter = false
     @Published public var uploadError: String?
     @Published public var uploadSuccess = false
+    @Published public var isDeletingMaterialId: String?
+    @Published public var deleteError: String?
+    @Published public var materialPendingDeletion: CourseMaterial?
     
     public var onTaskSelected: ((String, String) -> Void)?
     public var completedTasksCount: Int { tasks.filter { $0.isCompleted }.count }
@@ -89,6 +92,33 @@ public class CourseDetailsViewModel: ObservableObject {
     public func selectTask(_ task: CourseTask) {
         if !task.isCompleted {
             onTaskSelected?(courseId, task.title)
+        }
+    }
+
+    // MARK: - Delete material
+
+    /// Asks the UI to confirm deletion of the given material.
+    public func requestDeleteMaterial(_ material: CourseMaterial) {
+        materialPendingDeletion = material
+    }
+
+    public func confirmDeleteMaterial() {
+        guard let material = materialPendingDeletion, isDeletingMaterialId == nil else { return }
+        materialPendingDeletion = nil
+        isDeletingMaterialId = material.id
+
+        Task {
+            do {
+                try await repository.deleteMaterial(courseId: courseId, materialId: material.id)
+                materials = try await getMaterialsUseCase.execute(courseId: courseId)
+                // Deleting material regenerates the task plan on the backend,
+                // so refresh the tasks too.
+                tasks = try await getTasksUseCase.execute(courseId: courseId)
+            } catch {
+                print("Delete material error: \(error)")
+                deleteError = error.localizedDescription
+            }
+            isDeletingMaterialId = nil
         }
     }
     

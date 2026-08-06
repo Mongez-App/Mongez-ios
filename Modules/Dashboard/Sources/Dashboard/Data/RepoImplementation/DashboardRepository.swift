@@ -30,4 +30,14 @@ public class DashboardRepository : DashboardRepositoryProtocol {
         
         return user
     }
+
+    public func fetchDelayedTasks() async throws -> (tasks: [DelayedTask], totalDelayed: Int) {
+        let dto = try await remoteDataSource.fetchDelayedTasks()
+        let tasks = dto.tasks.compactMap { $0.toDomain() }
+        return (tasks: tasks, totalDelayed: dto.totalDelayed)
+    }
+
+    public func rescheduleDelayedTasks(tasks: [DelayedTaskActionDTO]) async throws {
+        try await remoteDataSource.rescheduleDelayedTasks(tasks)
+    }
 }

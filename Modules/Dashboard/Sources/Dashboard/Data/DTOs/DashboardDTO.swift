@@ -158,7 +158,8 @@ extension DashboardDTO {
             todayFocus: dashboard.todayFocus.map { TodayFocusDTO.mapToEntity(todayFocus: $0) } ?? TodayFocus(courseId: nil, courseName: nil, allocatedDuration: "0m", durationMinutes: 0),
             progressMetrics: dashboard.progressMetrics.map { ProgressMetricsDTO.mapToEntity(progressMetrics: $0) } ?? ProgressMetrics(todayCompletedTasks: 0, todayTotalTasks: 0, weeklyHoursCompleted: 0, weeklyHoursGoal: 0, monthlyHoursCompleted: 0, monthlyHoursGoal: 0),
             todayTasks: dashboard.todayTasks.map { TodayTaskDTO.mapToEntity(task: $0) },
-            upcomingDeadlines: dashboard.upcomingDeadlines.map { UpcomingDeadlineDTO.mapToEntity(upcomingDeadline: $0) }
+            upcomingDeadlines: dashboard.upcomingDeadlines.map { UpcomingDeadlineDTO.mapToEntity(upcomingDeadline: $0) },
+            streakCount: dashboard.streak?.currentStreakDays ?? 0
         )
         
         return dashboardEntity

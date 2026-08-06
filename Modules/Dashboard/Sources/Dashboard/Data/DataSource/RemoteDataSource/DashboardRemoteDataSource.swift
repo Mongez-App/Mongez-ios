@@ -11,6 +11,8 @@ import Common
 public protocol DashboardRemoteDataSourceProtocol {
     func fetchDashboard() async throws -> DashboardDTO
     func fetchUser() async throws -> UserDTO
+    func fetchDelayedTasks() async throws -> DelayedTasksResponseDTO
+    func rescheduleDelayedTasks(_ tasks: [DelayedTaskActionDTO]) async throws
 }
 
 
@@ -48,7 +50,31 @@ public class DashboardRemoteDataSource : DashboardRemoteDataSourceProtocol {
     }
     
     public func fetchUser() async throws -> UserDTO {
-        try await NetworkManger.shared.request(endpoint: DashboardEndpoints.user(method: .get, path: "users/me/profile"),
-                                               responseType: UserDTO.self)
+        let authResponse = try await NetworkManger.shared.request(
+            endpoint: DashboardEndpoints.dashboard(method: .get, path: "auth/student/me"),
+            responseType: AuthStudentMeResponseDTO.self
+        )
+        
+        return UserDTO(
+            userId: authResponse.data?.uid ?? "",
+            name: authResponse.data?.displayName ?? "Student",
+            email: authResponse.data?.email ?? "",
+            avatarUrl: nil,
+            stats: Stats(totalStudyHours: 0, completedTasksCount: 0, streakCount: 0)
+        )
+    }
+
+    public func fetchDelayedTasks() async throws -> DelayedTasksResponseDTO {
+        try await NetworkManger.shared.request(
+            endpoint: DashboardEndpoints.delayed(method: .get, path: "rag/tasks/delayed", body: nil),
+            responseType: DelayedTasksResponseDTO.self
+        )
+    }
+
+    public func rescheduleDelayedTasks(_ tasks: [DelayedTaskActionDTO]) async throws {
+        let body = try JSONEncoder().encode(RescheduleDelayedTasksRequest(tasks: tasks))
+        _ = try await NetworkManger.shared.requestRaw(
+            endpoint: DashboardEndpoints.delayed(method: .post, path: "rag/tasks/delayed", body: body)
+        )
     }
 }

@@ -8,5 +8,6 @@
 import Foundation
 
 public protocol PreferencesRepositoryProtocol {
-    func updatePreferences(studyDays: [Weekday], dailyStudyHours: Int) async throws -> StudyPreferences
+    func fetchPreferences() async throws -> StudyPreferences
+    func updatePreferences(studyDays: [Weekday], dailyStudyHours: Double) async throws -> StudyPreferences
 }

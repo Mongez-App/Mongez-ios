@@ -8,10 +8,11 @@
 import Foundation
 
 public struct Dashboard {
-    var todayFocus: TodayFocus
-    var progressMetrics: ProgressMetrics
-    var todayTasks: [TodayTask]
-    var upcomingDeadlines: [UpcomingDeadline]
+    public var todayFocus: TodayFocus
+    public var progressMetrics: ProgressMetrics
+    public var todayTasks: [TodayTask]
+    public var upcomingDeadlines: [UpcomingDeadline]
+    public var streakCount: Int
 }
     
 public struct TodayFocus {
@@ -106,7 +107,8 @@ extension Dashboard {
                     dueText: "Tomorrow",
                     dueDate: "2026-07-15T23:59:59Z"
                 )
-            ]
+            ],
+            streakCount: 5
         )
         
         return dashboard

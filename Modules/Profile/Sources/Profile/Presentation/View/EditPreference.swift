@@ -12,22 +12,21 @@ import Common
 struct EditPreferencesSheet: View {
     @Environment(\.dismiss) private var dismiss
 
-    let onSave: (Int, Set<String>) -> Void
+    let onSave: (Float, Set<Int>) -> Void
     let onCancel: () -> Void
 
-    @State private var hours: Int
-    @State private var selectedDays: Set<String>
+    @State private var hours: Float
+    @State private var selectedDays: Set<Int>
 
-    private let hoursRange = Array(1...12)
-    private let weekdays: [(key: String, label: String)] = [
-        ("Sun", "S"), ("Mon", "M"), ("Tue", "T"),
-        ("Wed", "W"), ("Thu", "T"), ("Fri", "F"), ("Sat", "S")
+    private let weekdays: [(key: Int, label: String)] = [
+        (0, "S"), (1, "M"), (2, "T"),
+        (3, "W"), (4, "T"), (5, "F"), (6, "S")
     ]
 
     init(
-        initialHours: Int,
-        initialDays: Set<String>,
-        onSave: @escaping (Int, Set<String>) -> Void,
+        initialHours: Float,
+        initialDays: Set<Int>,
+        onSave: @escaping (Float, Set<Int>) -> Void,
         onCancel: @escaping () -> Void
     ) {
         self.onSave = onSave
@@ -70,15 +69,17 @@ struct EditPreferencesSheet: View {
                 .foregroundColor(AppTheme.Colors.black100)
                 .multilineTextAlignment(.center)
 
-            Picker("Hours", selection: $hours) {
-                ForEach(hoursRange, id: \.self) { value in
-                    Text("\(value)h")
-                        .font(AppTheme.textStyle(size: 20, weight: .bold))
-                        .tag(value)
-                }
+            HStack {
+                Text(String(format: "%.1f h", hours))
+                    .font(AppTheme.textStyle(size: 24, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.purple200)
+                    .frame(width: 80, alignment: .leading)
+                
+                Stepper("", value: $hours, in: 0.5...16.0, step: 0.5)
+                    .labelsHidden()
             }
-            .pickerStyle(.wheel)
-            .frame(height: 120)
+            .padding(.horizontal, AppTheme.Spacing.large)
+            .frame(height: 80)
             .background(
                 RoundedRectangle(cornerRadius: 24)
                     .fill(AppTheme.Colors.white100)
@@ -116,7 +117,7 @@ struct EditPreferencesSheet: View {
         }
     }
 
-    private func dayChip(key: String, label: String) -> some View {
+    private func dayChip(key: Int, label: String) -> some View {
         let isSelected = selectedDays.contains(key)
         return Button {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.6, blendDuration: 0.5)) {

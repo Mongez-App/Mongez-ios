@@ -89,14 +89,13 @@ public final class AuthViewModel: ObservableObject {
                 idToken = try await FirebaseEmailAuthService.shared.register(name: name, email: email, password: password)
             }
             
-            let currentUser = Auth.auth().currentUser
-            let displayName = currentUser?.displayName ?? self.name
+            let result: (user: User, isNewUser: Bool)
+            if mode == .login {
+                result = try await useCase.executeLogin(idToken: idToken)
+            } else {
+                result = try await useCase.executeRegister(idToken: idToken)
+            }
             
-            // Use saved preferences; default to system values on first launch
-            let appearance = UserDefaults.standard.string(forKey: "user_appearance") ?? "Light Mode"
-            let language  = UserDefaults.standard.string(forKey: "selected_language")?.lowercased() ?? "en"
-            
-            let result = try await useCase.executeHandshake(idToken: idToken, name: displayName, appearance: appearance, language: language)
             self.user = result.user
             onAuthSuccess?(result.isNewUser)
             
@@ -112,14 +111,7 @@ public final class AuthViewModel: ObservableObject {
         do {
             let firebaseIDToken = try await GoogleAuthService.shared.signInAndGetFirebaseIDToken()
             
-            let currentUser = Auth.auth().currentUser
-            let displayName = currentUser?.displayName ?? ""
-            
-            // Use saved preferences; default to system values on first launch
-            let appearance = UserDefaults.standard.string(forKey: "user_appearance") ?? "Light Mode"
-            let language  = UserDefaults.standard.string(forKey: "selected_language")?.lowercased() ?? "en"
-            
-            let result = try await useCase.executeHandshake(idToken: firebaseIDToken, name: displayName, appearance: appearance, language: language)
+            let result = try await useCase.executeLogin(idToken: firebaseIDToken)
             self.user = result.user
             onAuthSuccess?(result.isNewUser)
             

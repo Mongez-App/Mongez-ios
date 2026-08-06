@@ -8,8 +8,10 @@
 import Foundation
 
 public protocol AuthUseCaseProtocol {
-    func executeHandshake(idToken: String, name: String, appearance: String, language: String) async throws -> (user: User, isNewUser: Bool)
-    func executeGetMe(idToken: String) async throws -> User
+    func executeLogin(idToken: String) async throws -> (user: User, isNewUser: Bool)
+    func executeRegister(idToken: String) async throws -> (user: User, isNewUser: Bool)
+    func executeGetMe() async throws -> User
+    func executeLogout() async throws
 }
 
 public class AuthUseCase: AuthUseCaseProtocol {
@@ -19,11 +21,19 @@ public class AuthUseCase: AuthUseCaseProtocol {
         self.repository = repository
     }
     
-    public func executeHandshake(idToken: String, name: String, appearance: String, language: String) async throws -> (user: User, isNewUser: Bool) {
-        return try await repository.handshake(idToken: idToken, name: name, appearance: appearance, language: language)
+    public func executeLogin(idToken: String) async throws -> (user: User, isNewUser: Bool) {
+        return try await repository.login(idToken: idToken)
     }
 
-    public func executeGetMe(idToken: String) async throws -> User {
-        return try await repository.getMe(idToken: idToken)
+    public func executeRegister(idToken: String) async throws -> (user: User, isNewUser: Bool) {
+        return try await repository.register(idToken: idToken)
+    }
+
+    public func executeGetMe() async throws -> User {
+        return try await repository.getMe()
+    }
+
+    public func executeLogout() async throws {
+        try await repository.logout()
     }
 }

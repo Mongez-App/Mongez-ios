@@ -16,6 +16,7 @@ import Courses
 import CourseDetails
 import Profile
 import Roadmap
+import Organization
 
 struct ContentView: View {
     @StateObject private var appCoordinator = AppCoordinator()
@@ -86,6 +87,16 @@ struct ContentView: View {
                             dashboardRepository: DashboardRepository(
                                 remoteDataSource: DashboardRemoteDataSource()
                             )
+                        ),
+                        getDelayedTasksUseCase: GetDelayedTasksUseCase(
+                            dashboardRepository: DashboardRepository(
+                                remoteDataSource: DashboardRemoteDataSource()
+                            )
+                        ),
+                        rescheduleDelayedTasksUseCase: RescheduleDelayedTasksUseCase(
+                            dashboardRepository: DashboardRepository(
+                                remoteDataSource: DashboardRemoteDataSource()
+                            )
                         )
                     ),
                     studyRoomFactory: { courseId, taskTitle in
@@ -128,6 +139,43 @@ struct ContentView: View {
                             DashboardCoursesContainer(
                                 coordinator: coordinator,
                                 viewModel: appCoordinator.makeCoursesViewModel()
+                            )
+                        )
+                    },
+                    organizationFactory: {
+                        let organizationRepository = OrganizationRepository(
+                            remoteDataSource: OrganizationRemoteDataSource(),
+                            localDataSource: OrganizationLocalDataSource()
+                        )
+                        let organizationCoordinator = OrganizationCoordinator()
+                        let organizationViewModel = OrganizationViewModel(
+                            getMyTeamsUseCase: GetMyTeamsUseCase(
+                                organizationRepository: organizationRepository
+                            ),
+                            getMyCoursesUseCase: GetMyCoursesUseCase(
+                                organizationRepository: organizationRepository
+                            ),
+                            getOrganizationScreenUseCase: GetOrganizationScreenUseCase(
+                                organizationRepository: organizationRepository
+                            ),
+                            searchTeamsUseCase: SearchTeamsUseCase(
+                                organizationRepository: organizationRepository
+                            ),
+                            joinTeamUseCase: JoinTeamUseCase(
+                                organizationRepository: organizationRepository
+                            ),
+                            getTeamCoursesUseCase: GetTeamCoursesUseCase(
+                                organizationRepository: organizationRepository
+                            ),
+                            getTeamEventsUseCase: GetTeamEventsUseCase(
+                                organizationRepository: organizationRepository
+                            )
+                        )
+
+                        return AnyView(
+                            OrganizationCoordinatorView(
+                                coordinator: organizationCoordinator,
+                                viewModel: organizationViewModel
                             )
                         )
                     },

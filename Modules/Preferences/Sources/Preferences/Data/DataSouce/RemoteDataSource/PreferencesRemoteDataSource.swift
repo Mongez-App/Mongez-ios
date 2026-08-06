@@ -9,13 +9,21 @@ import Common
 import Foundation
 
 public protocol PreferencesRemoteDataSourceProtocol {
-    func updatePreferences(studyDays: [Int], dailyStudyHours: Int) async throws -> PreferencesDTO
+    func fetchPreferences() async throws -> PreferencesDTO
+    func updatePreferences(studyDays: [Int], dailyStudyHours: Double) async throws -> PreferencesDTO
 }
 
 public class PreferencesRemoteDataSource: PreferencesRemoteDataSourceProtocol {
     public init() {}
 
-    public func updatePreferences(studyDays: [Int], dailyStudyHours: Int) async throws -> PreferencesDTO {
+    public func fetchPreferences() async throws -> PreferencesDTO {
+        try await NetworkManger.shared.request(
+            endpoint: PreferencesEndpoint.fetchPreferences,
+            responseType: PreferencesDTO.self
+        )
+    }
+
+    public func updatePreferences(studyDays: [Int], dailyStudyHours: Double) async throws -> PreferencesDTO {
         try await NetworkManger.shared.request(
             endpoint: PreferencesEndpoint.updatePreferences(studyDays: studyDays, dailyStudyHours: dailyStudyHours),
             responseType: PreferencesDTO.self

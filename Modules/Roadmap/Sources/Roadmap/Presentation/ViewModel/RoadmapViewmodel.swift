@@ -58,15 +58,17 @@ public final class RoadmapViewmodel: ObservableObject {
         }
     }
 
-    func addEvent(courseId: String, eventType: String, title: String, dueDate: String, weight: Int) async {
+    func addEvent(courseId: String, eventType: String, title: String, dueDate: String, weight: Int) async -> Bool {
         isAddingEvent = true
+        defer { isAddingEvent = false }
         do {
             try await addEventUseCase.execute(courseId: courseId, eventType: eventType, title: title, dueDate: dueDate, weight: weight)
             isAddEventSheetPresented = false
+            return true
         } catch {
             errorMessage = error.localizedDescription
+            return false
         }
-        isAddingEvent = false
     }
 
     func isExpanded(_ blockId: String) -> Bool {

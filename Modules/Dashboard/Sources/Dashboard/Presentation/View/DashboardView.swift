@@ -125,9 +125,15 @@ struct DashboardView: View {
                 }
             }
         )
+        .sheet(isPresented: $viewModel.showDelayedTasksAlert) {
+            DelayedTasksSheet(viewModel: viewModel)
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        }
         .task {
             await viewModel.fetchUser()
             await viewModel.fetchDashboardDetails()
+            await viewModel.checkDelayedTasks()
         }
     }
 }

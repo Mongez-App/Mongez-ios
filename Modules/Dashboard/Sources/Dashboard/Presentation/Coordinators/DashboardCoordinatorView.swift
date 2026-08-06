@@ -15,6 +15,7 @@ public struct DashboardCoordinatorView: View {
     private let studyRoomFactory: (String, String) -> AnyView
     private let courseDetailsFactory: (String) -> AnyView
     private let coursesFactory: () -> AnyView
+    private let organizationFactory: () -> AnyView
     private let roadmapFactory: () -> AnyView
     private let profileFactory: () -> AnyView
 
@@ -24,6 +25,7 @@ public struct DashboardCoordinatorView: View {
         studyRoomFactory: @escaping (String, String) -> AnyView,
         courseDetailsFactory: @escaping (String) -> AnyView,
         coursesFactory: @escaping () -> AnyView,
+        organizationFactory: @escaping () -> AnyView,
         roadmapFactory: @escaping () -> AnyView,
         profileFactory: @escaping () -> AnyView
     ) {
@@ -32,6 +34,7 @@ public struct DashboardCoordinatorView: View {
         self.studyRoomFactory = studyRoomFactory
         self.courseDetailsFactory = courseDetailsFactory
         self.coursesFactory = coursesFactory
+        self.organizationFactory = organizationFactory
         self.roadmapFactory = roadmapFactory
         self.profileFactory = profileFactory
     }
@@ -54,6 +57,9 @@ public struct DashboardCoordinatorView: View {
                 
                 case .courses:
                     coursesFactory()
+                    
+                case .organization:
+                    organizationFactory()
                     
                 case .roadmap:
                     roadmapFactory()

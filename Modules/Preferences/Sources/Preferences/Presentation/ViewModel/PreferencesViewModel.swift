@@ -73,13 +73,25 @@ public final class PreferencesViewModel: ObservableObject {
         do {
             _ = try await useCase.executeUpdatePreferences(
                 studyDays: Array(selectedDays),
-                dailyStudyHours: studyHoursPerDay
+                dailyStudyHours: Double(studyHoursPerDay)
             )
         } catch {
             errorMessage = mapError(error)
         }
 
         onFinish?()
+    }
+
+    /// Loads the student's existing study preferences (if any) so returning users
+    /// see their previously saved plan instead of the defaults.
+    public func loadCurrentPreferences() async {
+        do {
+            let prefs = try await useCase.executeFetchPreferences()
+            studyHoursPerDay = max(1, Int(prefs.dailyStudyHours.rounded()))
+            selectedDays = Set(prefs.studyDays)
+        } catch {
+            // No saved preferences yet (e.g. brand-new user) — keep the defaults.
+        }
     }
 
     private func mapError(_ error: Error) -> String {
