@@ -26,23 +26,34 @@ public class CourseDetailsRepositoryImpl: CourseDetailsRepository {
     }
     
     
-public func uploadMaterial(
+    public func initializeUpload(
         courseId: String,
-        fileData: Data,
         fileName: String,
-        dailyStudyMinutes: Int? = nil,
-        preferredDays: String? = nil
-    ) async throws -> CourseMaterial {
-        
-        let dto = try await remoteDataSource.uploadMaterial(
-            courseId: courseId,
-            fileData: fileData,
-            fileName: fileName,
-            dailyStudyMinutes: dailyStudyMinutes,
-            preferredDays: preferredDays
+        contentType: String,
+        sizeBytes: Int,
+        pageCount: Int,
+        deviceUri: String
+    ) async throws -> UploadMaterialResponseDTO {
+        let request = InitUploadRequestDTO(
+            file_name: fileName,
+            content_type: contentType,
+            file_size_bytes: sizeBytes,
+            page_count: pageCount,
+            device_file_uri: deviceUri
         )
-        
-        return dto.toDomain()
+        return try await remoteDataSource.initializeUpload(courseId: courseId, request: request)
+    }
+    
+    public func uploadFile(
+        materialId: String,
+        fileData: Data,
+        fileName: String
+    ) async throws -> FinalizeUploadResponseDTO {
+        return try await remoteDataSource.uploadFile(
+            materialId: materialId,
+            fileData: fileData,
+            fileName: fileName
+        )
     }
     
     public func getTasks(courseId: String) async throws -> [CourseTask] {
