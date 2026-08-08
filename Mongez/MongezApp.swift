@@ -59,10 +59,11 @@ public class AppAssembly: DIAssembly {
     
     public func assemble(container: Container) {
         
-        container.register(CourseDetailsViewModel.self) { (resolver, courseId: String, courseName: String) in
+        container.register(CourseDetailsViewModel.self) { (resolver, courseId: String, courseName: String, courseType: String) in
             return CourseDetailsViewModel(
                 courseId: courseId,
                 courseName: courseName,
+                courseType: courseType,
                 getMaterialsUseCase: resolver.resolve(GetCourseMaterialsUseCase.self)!,
                 getTasksUseCase: resolver.resolve(GetCourseTasksUseCase.self)!,
                 uploadMaterialUseCase: resolver.resolve(UploadCourseMaterialUseCase.self)!,

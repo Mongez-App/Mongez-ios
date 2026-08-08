@@ -14,6 +14,8 @@ public struct CourseDetailsView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject var viewModel: CourseDetailsViewModel
     @State private var showEditSheet: Bool = false
+    @State private var showDeleteCourseWarning: Bool = false
+    @State private var materialToDelete: String? = nil
     
     public init(viewModel: CourseDetailsViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -26,10 +28,7 @@ public struct CourseDetailsView: View {
                 onBack: { dismiss() },
                 onEdit: { showEditSheet = true },
                 onDelete: {
-                    Task {
-                        await viewModel.deleteCourse()
-                        dismiss()
-                    }
+                    showDeleteCourseWarning = true
                 }
             )
             .sheet(isPresented: $showEditSheet) {
@@ -46,13 +45,12 @@ public struct CourseDetailsView: View {
             if viewModel.selectedTab == 0 {
                 CourseMaterialsTabView(
                     materials: viewModel.materials,
+                    courseType: viewModel.courseType,
                     onUploadAction: {
                         viewModel.showFileImporter = true
                     },
                     onDeleteMaterial: { materialId in
-                        Task {
-                            await viewModel.deleteMaterial(materialId: materialId)
-                        }
+                        materialToDelete = materialId
                     }
                 )
             } else {
@@ -90,6 +88,38 @@ public struct CourseDetailsView: View {
                         .background(Color.white)
                         .cornerRadius(10)
                 }
+            }
+            if showDeleteCourseWarning {
+                WarningAlertView(
+                    title: "Delete Course",
+                    subtitle: "Are you sure you want to delete this course?",
+                    onPrimaryAction: {
+                        showDeleteCourseWarning = false
+                        Task {
+                            await viewModel.deleteCourse()
+                            dismiss()
+                        }
+                    },
+                    onCancel: {
+                        showDeleteCourseWarning = false
+                    }
+                )
+            }
+            if let materialId = materialToDelete {
+                WarningAlertView(
+                    title: "Delete Material",
+                    subtitle: "Are you sure you want to delete this material?",
+                    onPrimaryAction: {
+                        let id = materialId
+                        materialToDelete = nil
+                        Task {
+                            await viewModel.deleteMaterial(materialId: id)
+                        }
+                    },
+                    onCancel: {
+                        materialToDelete = nil
+                    }
+                )
             }
         }
     }

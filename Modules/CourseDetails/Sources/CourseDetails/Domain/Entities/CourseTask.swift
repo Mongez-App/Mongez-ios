@@ -14,6 +14,7 @@ public struct CourseTask: Identifiable, Equatable {
     public let priority: Priority
     public let isCompleted: Bool
     public let group: Group
+    public let date: String?
     
     public enum Priority: String, Equatable {
         case high, medium, low
@@ -29,7 +30,8 @@ public struct CourseTask: Identifiable, Equatable {
         durationMinutes: Int,
         priority: Priority,
         isCompleted: Bool,
-        group: Group
+        group: Group,
+        date: String? = nil
     ) {
         self.id = id
         self.title = title
@@ -37,5 +39,6 @@ public struct CourseTask: Identifiable, Equatable {
         self.priority = priority
         self.isCompleted = isCompleted
         self.group = group
+        self.date = date
     }
 }
