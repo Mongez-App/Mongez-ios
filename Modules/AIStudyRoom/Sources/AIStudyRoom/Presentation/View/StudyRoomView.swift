@@ -40,12 +40,11 @@ public struct StudyRoomView: View {
                     .padding(.horizontal, AppTheme.Spacing.small)
                 }
                 .padding(.bottom, AppTheme.Spacing.small)
-                .background(AppTheme.Colors.white100)
-                .appShadow(
+                .background(AppTheme.Colors.white100.appShadow(
                     opacity: 0.15,
                     radius: 2.5,
                     y: 1
-                )
+                ))
                 .zIndex(1)
                 
                 ZStack {

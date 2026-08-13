@@ -10,26 +10,27 @@ import Common
 
 /// UI only — submitting just dismisses the sheet until AddEventUseCase is wired up.
 enum RoadmapEventType: String, CaseIterable {
-    case exam = "Exam"
     case quiz = "Quiz"
     case assignment = "Assignment"
-    case studySession = "Study Session"
-    case deadline = "Deadline"
+    case midterm = "Midterm"
+    case project = "Project"
+    case exam = "Exam"
 }
 
 struct AddEventSheetView: View {
     @Environment(\.dismiss) private var dismiss
 
+    @ObservedObject var viewModel: RoadmapViewmodel
+
     @State private var title: String = ""
-    @State private var eventType: String = RoadmapEventType.exam.rawValue
-    @State private var courseName: String
+    @State private var eventType: String = RoadmapEventType.quiz.rawValue
+    @State private var courseName: String = ""
     @State private var eventDate: Date = Date()
+    @State private var validationError: String?
+    @State private var showValidationError: Bool = false
 
-    private let courses: [Course]
-
-    init(courses: [Course] = Course.mockList) {
-        self.courses = courses
-        _courseName = State(initialValue: courses.first?.courseName ?? "")
+    init(viewModel: RoadmapViewmodel) {
+        self.viewModel = viewModel
     }
 
     var body: some View {
@@ -49,7 +50,7 @@ struct AddEventSheetView: View {
 
                     RoadmapDropdownField(
                         title: "Course",
-                        options: courses.map(\.courseName),
+                        options: viewModel.courses.isEmpty ? ["No courses added yet"] : viewModel.courses.map(\.courseName),
                         selection: $courseName
                     )
 
@@ -65,6 +66,36 @@ struct AddEventSheetView: View {
         .background(AppTheme.Colors.white100.ignoresSafeArea())
         .presentationDetents([.height(560), .large])
         .presentationDragIndicator(.hidden)
+        .onAppear {
+            if let firstCourse = viewModel.courses.first {
+                courseName = firstCourse.courseName
+            } else {
+                courseName = "No courses added yet"
+            }
+        }
+        .onChange(of: viewModel.courses.map(\.courseId)) { _ in
+            if let firstCourse = viewModel.courses.first {
+                if courseName.isEmpty || courseName == "No courses added yet" {
+                    courseName = firstCourse.courseName
+                }
+            } else {
+                courseName = "No courses added yet"
+            }
+        }
+        .overlay(
+            Group {
+                if showValidationError {
+                    ZStack {
+                        Color.black.opacity(0.3).ignoresSafeArea()
+                        ValidationAlert(
+                            isPresented: $showValidationError,
+                            title: "Validation Error",
+                            description: validationError ?? ""
+                        )
+                    }
+                }
+            }
+        )
     }
 
     private var dragHandle: some View {
@@ -150,7 +181,7 @@ struct AddEventSheetView: View {
     }
 
     private var addButton: some View {
-        Button(action: { dismiss() }) {
+        Button(action: submitEvent) {
             Text("Add Event")
                 .font(AppTheme.textStyle(size: 16, weight: .medium))
                 .foregroundColor(AppTheme.Colors.white100)
@@ -161,10 +192,31 @@ struct AddEventSheetView: View {
         }
         .padding(.top, AppTheme.Spacing.xxSmall)
     }
+
+    private func submitEvent() {
+        if title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            validationError = "Title is required"
+            showValidationError = true
+            return
+        }
+
+        guard let selectedCourse = viewModel.courses.first(where: { $0.courseName == courseName }) else {
+            validationError = "Please select a valid course"
+            showValidationError = true
+            return
+        }
+
+        viewModel.addEvent(
+            title: title,
+            eventType: eventType,
+            courseId: selectedCourse.courseId,
+            date: eventDate
+        )
+    }
 }
 
 struct AddEventSheetView_Previews: PreviewProvider {
     static var previews: some View {
-        AddEventSheetView()
+        AddEventSheetView(viewModel: RoadmapViewmodel())
     }
 }

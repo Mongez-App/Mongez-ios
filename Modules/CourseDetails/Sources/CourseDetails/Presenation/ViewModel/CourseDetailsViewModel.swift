@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import PDFKit
 
 @MainActor
 public class CourseDetailsViewModel: ObservableObject {
@@ -14,6 +15,7 @@ public class CourseDetailsViewModel: ObservableObject {
     @Published public var materials: [CourseMaterial] = []
     @Published public var tasks: [CourseTask] = []
     @Published public var courseName: String
+    @Published public var courseType: String
     @Published public var showFileImporter: Bool = false
     @Published public var isUploading: Bool = false
     
@@ -36,6 +38,7 @@ public class CourseDetailsViewModel: ObservableObject {
     nonisolated public init(
         courseId: String,
         courseName: String,
+        courseType: String,
         getMaterialsUseCase: GetCourseMaterialsUseCase,
         getTasksUseCase: GetCourseTasksUseCase,
         uploadMaterialUseCase: UploadCourseMaterialUseCase,
@@ -45,6 +48,7 @@ public class CourseDetailsViewModel: ObservableObject {
     ) {
         self.courseId = courseId
         self._courseName = Published(wrappedValue: courseName)
+        self._courseType = Published(wrappedValue: courseType)
         self.getMaterialsUseCase = getMaterialsUseCase
         self.getTasksUseCase = getTasksUseCase
         self.uploadMaterialUseCase = uploadMaterialUseCase
@@ -71,27 +75,35 @@ public class CourseDetailsViewModel: ObservableObject {
     }
     
     public func uploadMaterial(fileURL: URL) async {
-        guard fileURL.startAccessingSecurityScopedResource() else { return }
-        defer { fileURL.stopAccessingSecurityScopedResource() }
-        
-        do {
-            isUploading = true
-            let fileData = try Data(contentsOf: fileURL)
-            let fileName = fileURL.lastPathComponent
+            guard fileURL.startAccessingSecurityScopedResource() else { return }
+            defer { fileURL.stopAccessingSecurityScopedResource() }
             
-            let newMaterial = try await uploadMaterialUseCase.execute(
-                courseId: courseId,
-                fileData: fileData,
-                fileName: fileName
-            )
-            
-            materials.append(newMaterial)
-            isUploading = false
-        } catch {
-            print("Error uploading material: \(error)")
-            isUploading = false
+            do {
+                isUploading = true
+                
+                let fileData = try Data(contentsOf: fileURL)
+                let fileName = fileURL.lastPathComponent
+                let resources = try fileURL.resourceValues(forKeys: [.fileSizeKey])
+                let sizeBytes = resources.fileSize ?? fileData.count
+                var pageCount = 0
+                if let pdfDocument = PDFDocument(data: fileData) {
+                    pageCount = pdfDocument.pageCount
+                }
+                _ = try await uploadMaterialUseCase.execute(
+                    courseId: courseId,
+                    fileData: fileData,
+                    fileName: fileName,
+                    sizeBytes: sizeBytes,
+                    pageCount: pageCount
+                )
+                
+                await loadData()
+                isUploading = false
+            } catch {
+                print("Error uploading material: \(error)")
+                isUploading = false
+            }
         }
-    }
     
     public func updateCourse(name: String) async {
         do {

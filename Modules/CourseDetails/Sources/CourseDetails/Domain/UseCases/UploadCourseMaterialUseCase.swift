@@ -14,19 +14,23 @@ public class UploadCourseMaterialUseCase {
         self.repository = repository
     }
     
-    public func execute(
-        courseId: String,
-        fileData: Data,
-        fileName: String,
-        dailyStudyMinutes: Int? = nil,
-        preferredDays: String? = nil
-    ) async throws -> CourseMaterial {
-        return try await repository.uploadMaterial(
+    public func execute(courseId: String, fileData: Data, fileName: String, sizeBytes: Int,pageCount : Int) async throws -> FinalizeUploadResponseDTO {
+        
+        let initResponse = try await repository.initializeUpload(
             courseId: courseId,
-            fileData: fileData,
             fileName: fileName,
-            dailyStudyMinutes: dailyStudyMinutes,
-            preferredDays: preferredDays
+            contentType: "application/pdf",
+            sizeBytes: sizeBytes,
+            pageCount: pageCount,
+            deviceUri: "content://local/\(fileName)"
         )
+        
+        let finalResponse = try await repository.uploadFile(
+            materialId: initResponse.material_id,
+            fileData: fileData,
+            fileName: fileName
+        )
+        
+        return finalResponse
     }
 }

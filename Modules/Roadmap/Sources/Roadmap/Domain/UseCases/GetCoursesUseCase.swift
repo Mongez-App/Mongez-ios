@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol GetCoursesUseCaseProtocol {
-    func execute() async throws -> Course
+    func execute() async throws -> [Course]
 }
 
 
@@ -19,7 +19,11 @@ public class GetCoursesUseCase : GetCoursesUseCaseProtocol {
         self.roadmapRepository = roadmapRepository
     }
     
-    public func execute() async throws -> Course {
-        return Course(courseId: "", courseName: "")
+    public func execute() async throws -> [Course] {
+        let courses = try await roadmapRepository.getCourses()
+        
+        print(courses)
+        
+        return courses
     }
 }

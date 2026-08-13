@@ -93,9 +93,9 @@ struct ContentView: View {
                                 )
                             )
                         },
-                        courseDetailsFactory: { courseId, courseName in
+                        courseDetailsFactory: { courseId, courseName, courseType in
                             let detailsCoordinator = CourseDetailsCoordinator()
-                            let detailsViewModel = ServiceLocator.resolve(CourseDetailsViewModel.self, arguments: courseId, courseName)!
+                            let detailsViewModel = ServiceLocator.resolve(CourseDetailsViewModel.self, arguments: courseId, courseName, courseType)!
                             
                             return AnyView(
                                 CourseDetailsCoordinatorView(
@@ -133,16 +133,16 @@ struct ContentView: View {
                     CoursesCoordinatorView(
                         coordinator: coordinator,
                         viewModel: appCoordinator.makeCoursesViewModel(),
-                        courseDetailsFactory: { courseId, courseName in
+                        courseDetailsFactory: { courseId, courseName, courseType in
                             let detailsCoordinator = CourseDetailsCoordinator()
-                            let detailsViewModel = ServiceLocator.resolve(CourseDetailsViewModel.self, arguments: courseId, courseName)!
+                            let detailsViewModel = ServiceLocator.resolve(CourseDetailsViewModel.self, arguments: courseId, courseName, courseType)!
                             
                             return AnyView(
                                 CourseDetailsCoordinatorView(
                                     coordinator: detailsCoordinator,
                                     viewModel: detailsViewModel,
                                     onStudyRoomSelected: { roomId, taskTitle in
-                                        coordinator.push(.details(courseId: roomId, courseName: courseName))
+                                        coordinator.push(.details(courseId: roomId, courseName: courseName, courseType: courseType))
                                     }
                                 )
                             )
@@ -168,8 +168,8 @@ struct DashboardCoursesContainer: View {
     var body: some View {
         CoursesView(viewModel: viewModel)
             .onAppear {
-                viewModel.onCourseSelected = { [weak coordinator] courseId, courseName in
-                    coordinator?.push(.courseDetails(courseId: courseId, courseName: courseName))
+                viewModel.onCourseSelected = { [weak coordinator] courseId, courseName, courseType in
+                    coordinator?.push(.courseDetails(courseId: courseId, courseName: courseName, courseType: courseType))
                 }
             }
     }

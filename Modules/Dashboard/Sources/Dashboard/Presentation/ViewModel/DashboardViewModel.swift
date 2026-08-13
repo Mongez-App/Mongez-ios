@@ -15,6 +15,7 @@ public class DashboardViewModel : ObservableObject {
     @Published var upcomingDeadlines: [UpcomingDeadline] = []
     
     @Published var isLoading: Bool = false
+    @Published var showDefaultPreferencesAlert: Bool = false
     
     let getDashboardDetailsUseCase: GetDashboardDetailsUseCaseProtocol
     let getUserUseCase: GetUserUseCaseProtocol
@@ -29,6 +30,8 @@ public class DashboardViewModel : ObservableObject {
     
     public var onTaskSelected: ((String, String) -> Void)?
     public var onViewAllTodayTasks: (() -> Void)?
+    public var onViewAllUpcomingDeadlines: (() -> Void)?
+    public var onNavigateToProfile: (() -> Void)?
     var isEmpty: Bool = false
     
     @MainActor
@@ -47,6 +50,7 @@ public class DashboardViewModel : ObservableObject {
     @MainActor
     func fetchDashboardDetails() async {
         isLoading = true
+        checkPreferencesAlert()
         do {
             let dashboard = try await getDashboardDetailsUseCase.execute()
             self.todayFocus = dashboard.todayFocus
@@ -57,6 +61,13 @@ public class DashboardViewModel : ObservableObject {
         } catch {
             self.isLoading = false
             print("Error fetching dashboard details: \(error)")
+        }
+    }
+    
+    private func checkPreferencesAlert() {
+        if UserDefaults.standard.bool(forKey: "showDefaultPreferencesAlert") {
+            self.showDefaultPreferencesAlert = true
+            UserDefaults.standard.set(false, forKey: "showDefaultPreferencesAlert")
         }
     }
     

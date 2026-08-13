@@ -10,22 +10,19 @@ import Common
 
 public enum CourseMaterialEndPoint: EndPoint {
     case getMaterials(courseId: String)
-    case uploadMaterial(
-        courseId: String,
-        payload: Data,
-        boundary: String,
-        dailyStudyMinutes: Int?,
-        preferredDays: String?
-    )
+    case initializeUpload(courseId: String, payload: Data)
+    case uploadFile(materialId: String, payload: Data, boundary: String)
     
     public var baseURL: String {
-        return "https://api-gateway-production-3fd0.up.railway.app/api/v1"
+        return "https://api-gateway-production-5110.up.railway.app/api/v1"
     }
     
     public var path: String {
         switch self {
-        case .getMaterials(let courseId), .uploadMaterial(let courseId, _, _, _, _):
+        case .getMaterials(let courseId), .initializeUpload(let courseId, _):
             return "/courses/\(courseId)/materials"
+        case .uploadFile(let materialId, _, _):
+            return "/upload/\(materialId)"
         }
     }
     
@@ -33,7 +30,7 @@ public enum CourseMaterialEndPoint: EndPoint {
         switch self {
         case .getMaterials:
             return .get
-        case .uploadMaterial:
+        case .initializeUpload, .uploadFile:
             return .post
         }
     }
@@ -42,26 +39,16 @@ public enum CourseMaterialEndPoint: EndPoint {
         let userId = UserDefaults.standard.string(forKey: "current_user_id") ?? ""
         
         switch self {
-        case .getMaterials:
+        case .getMaterials, .initializeUpload:
             return [
                 "Content-Type": "application/json",
                 "X-User-Id": userId
             ]
-        case .uploadMaterial(_, _, let boundary, let dailyStudyMinutes, let preferredDays):
-            var requestHeaders = [
+        case .uploadFile(_, _, let boundary):
+            return [
                 "Content-Type": "multipart/form-data; boundary=\(boundary)",
                 "X-User-Id": userId
             ]
-            
-            if let minutes = dailyStudyMinutes {
-                requestHeaders["X-Daily-Study-Minutes"] = "\(minutes)"
-            }
-            
-            if let days = preferredDays {
-                requestHeaders["X-Preferred-Days"] = days
-            }
-            
-            return requestHeaders
         }
     }
     
@@ -69,7 +56,7 @@ public enum CourseMaterialEndPoint: EndPoint {
         switch self {
         case .getMaterials:
             return nil
-        case .uploadMaterial(_, let payload, _, _, _):
+        case .initializeUpload(_, let payload), .uploadFile(_, let payload, _):
             return payload
         }
     }
