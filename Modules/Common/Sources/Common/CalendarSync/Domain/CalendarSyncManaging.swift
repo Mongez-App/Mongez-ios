@@ -21,4 +21,9 @@ public protocol CalendarSyncManaging {
 
     func startContinuousSync(onSyncCompleted: ((Result<Int, Error>) -> Void)?)
     func stopContinuousSync()
+
+    func fetchStatus() async throws -> CalendarSyncStatus
+
+    @discardableResult
+    func updateFlags(calendarConnected: Bool, calendarSynced: Bool) async throws -> CalendarSyncStatus
 }

@@ -20,6 +20,9 @@ import Foundation
 class ProfileViewModel: ObservableObject {
     @Published var profile: UserProfile?
     @Published var isCalendarSyncEnabled: Bool = true
+    @Published var isCalendarSynced: Bool = false
+    @Published var lastCalendarSyncReadableDate: String = "Never"
+    @Published var isManualSyncInProgress: Bool = false
     @Published var appearanceMode: String = UserDefaults.standard.string(forKey: "user_appearance") ?? "System"
     @Published var selectedLanguage: String = UserDefaults.standard.string(forKey: "selected_language") ?? "EN" {
         didSet {
@@ -82,6 +85,29 @@ class ProfileViewModel: ObservableObject {
                 print("Error loading profile: \(error.localizedDescription)")
             }
         }
+        loadCalendarSyncStatus()
+    }
+
+    private func loadCalendarSyncStatus() {
+        Task {
+            do {
+                let status = try await calendarSync.fetchStatus()
+                applyCalendarSyncStatus(status)
+                if status.calendarConnected {
+                    // Resumes the change observer and background refresh scheduling after
+                    // an app relaunch, and enforces the 30-day automatic sync guarantee.
+                    calendarSync.startContinuousSync(onSyncCompleted: nil)
+                }
+            } catch {
+                print("Error loading calendar sync status: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func applyCalendarSyncStatus(_ status: CalendarSyncStatus) {
+        isCalendarSyncEnabled = status.calendarConnected
+        isCalendarSynced = status.calendarSynced
+        lastCalendarSyncReadableDate = status.lastSyncedReadableDate
     }
 
     private func updateProfileOnServer() {
@@ -126,7 +152,6 @@ class ProfileViewModel: ObservableObject {
             if newValue {
                 enableCalendarSync()
             }
-            updateProfileOnServer()
         }
     }
 
@@ -134,17 +159,41 @@ class ProfileViewModel: ObservableObject {
         isCalendarSyncEnabled = false
         showDisableCalendarSyncAlert = false
         calendarSync.stopContinuousSync()
-        updateProfileOnServer()
+        Task {
+            do {
+                let status = try await calendarSync.updateFlags(calendarConnected: false, calendarSynced: false)
+                applyCalendarSyncStatus(status)
+            } catch {
+                print("Error disabling calendar sync: \(error)")
+            }
+        }
     }
 
     private func enableCalendarSync() {
         Task {
             do {
                 _ = try await calendarSync.requestAccess()
-                calendarSync.startContinuousSync()
+                calendarSync.startContinuousSync(onSyncCompleted: nil)
+                let status = try await calendarSync.updateFlags(calendarConnected: true, calendarSynced: isCalendarSynced)
+                applyCalendarSyncStatus(status)
             } catch {
                 print("Error enabling calendar sync: \(error)")
                 isCalendarSyncEnabled = false
+            }
+        }
+    }
+
+    func manualSyncNow() {
+        guard !isManualSyncInProgress else { return }
+        isManualSyncInProgress = true
+        Task {
+            defer { isManualSyncInProgress = false }
+            do {
+                _ = try await calendarSync.syncNow()
+                let status = try await calendarSync.fetchStatus()
+                applyCalendarSyncStatus(status)
+            } catch {
+                print("Error manually syncing calendar: \(error)")
             }
         }
     }

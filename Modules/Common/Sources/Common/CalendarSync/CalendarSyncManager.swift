@@ -2,10 +2,11 @@ import BackgroundTasks
 import Foundation
 
 public final class CalendarSyncManager: CalendarSyncManaging {
-    public static let shared: CalendarSyncManaging = CalendarSyncManager()
+    public static let shared = CalendarSyncManager()
 
     private static let backgroundTaskIdentifier = "app.mongez.calendarSync.refresh"
     private static let syncWindow: TimeInterval = 30 * 24 * 60 * 60
+    private static let autoSyncStaleInterval: TimeInterval = 30 * 24 * 60 * 60
     private static let backgroundRefreshInterval: TimeInterval = 15 * 60
     private static let debounceInterval: UInt64 = 2_000_000_000
 
@@ -41,17 +42,48 @@ public final class CalendarSyncManager: CalendarSyncManaging {
         }
         let now = Date()
         let events = eventReader.fetchEvents(from: now, to: now.addingTimeInterval(Self.syncWindow))
-        guard !events.isEmpty else { return 0 }
-        return try await remoteDataSource.syncEvents(events)
+        let count = events.isEmpty ? 0 : try await remoteDataSource.syncEvents(events)
+        try await remoteDataSource.updateFlags(calendarConnected: true, calendarSynced: true)
+        return count
+    }
+
+    public func fetchStatus() async throws -> CalendarSyncStatus {
+        try await remoteDataSource.getStatus()
+    }
+
+    @discardableResult
+    public func updateFlags(calendarConnected: Bool, calendarSynced: Bool) async throws -> CalendarSyncStatus {
+        try await remoteDataSource.updateFlags(calendarConnected: calendarConnected, calendarSynced: calendarSynced)
     }
 
     public func startContinuousSync(onSyncCompleted: ((Result<Int, Error>) -> Void)? = nil) {
         self.onSyncCompleted = onSyncCompleted
+        syncNowIfStale()
         guard changeObserverToken == nil else { return }
         changeObserverToken = eventReader.observeChanges { [weak self] in
             self?.scheduleDebouncedSync()
         }
         scheduleNextBackgroundRefresh()
+    }
+
+    /// Guarantees a sync happens at least once every 30 days, even if no calendar
+    /// changes fired the change observer and background refresh never ran.
+    private func syncNowIfStale() {
+        guard authorizationStatus == .authorized else { return }
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let status = try await self.remoteDataSource.getStatus()
+                let isStale = status.lastCalendarSyncAt.map {
+                    Date().timeIntervalSince($0) >= Self.autoSyncStaleInterval
+                } ?? true
+                guard isStale else { return }
+                let count = try await self.syncNow()
+                self.onSyncCompleted?(.success(count))
+            } catch {
+                self.onSyncCompleted?(.failure(error))
+            }
+        }
     }
 
     public func stopContinuousSync() {

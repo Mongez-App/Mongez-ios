@@ -73,7 +73,7 @@ public final class PreferencesViewModel: ObservableObject {
 
         do {
             _ = try await useCase.executeSyncCalendar()
-            CalendarSyncManager.shared.startContinuousSync()
+            CalendarSyncManager.shared.startContinuousSync(onSyncCompleted: nil)
         } catch {
             errorMessage = error.localizedDescription
         }
