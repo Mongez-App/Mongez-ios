@@ -14,33 +14,31 @@ public class StudyRoomViewModel: ObservableObject {
     @Published public var inputText: String = ""
     @Published public var isLoading: Bool = false
     @Published public var elapsedTimeInSeconds: Int = 0
+    @Published public var taskTitle: String
     public let allocatedTimeInMinutes: Int = 25
     private var timerTask: Task<Void, Never>?
     private var currentSessionId: String? = nil
-    private let courseId: String
     private let taskId: String
     
+    private let getTaskUseCase: GetTaskUseCase
     private let getChatHistoryUseCase: GetChatHistoryUseCase
     private let sendMessageUseCase: SendMessageUseCase
     private let updateTaskUseCase: UpdateTaskUseCase
     
     nonisolated public init(
-        courseId: String,
         taskId: String,
-        activeSpentTime: Int,
+        taskTitle: String,
+        getTaskUseCase: GetTaskUseCase,
         getChatHistoryUseCase: GetChatHistoryUseCase,
         sendMessageUseCase: SendMessageUseCase,
         updateTaskUseCase: UpdateTaskUseCase
     ) {
-        self.courseId = courseId
         self.taskId = taskId
+        self._taskTitle = Published(wrappedValue: taskTitle)
+        self.getTaskUseCase = getTaskUseCase
         self.getChatHistoryUseCase = getChatHistoryUseCase
         self.sendMessageUseCase = sendMessageUseCase
         self.updateTaskUseCase = updateTaskUseCase
-        
-        Task { @MainActor in
-            self.elapsedTimeInSeconds = activeSpentTime
-        }
     }
     
     public var formattedElapsedTime: String {
@@ -92,9 +90,25 @@ public class StudyRoomViewModel: ObservableObject {
     public func loadHistory() async {
         isLoading = true
         do {
-            messages = try await getChatHistoryUseCase.execute(taskId: taskId, page: 0, size: 20)
+            let taskDetails = try await getTaskUseCase.execute(taskId: taskId)
+            elapsedTimeInSeconds = taskDetails.active_spent_time
+            taskTitle = taskDetails.title
+            
+            let history = try await getChatHistoryUseCase.execute(taskId: taskId, page: 0, size: 20)
+            
+            var initialMessageContent = "Task: \(taskDetails.title)"
+            if let desc = taskDetails.description, !desc.isEmpty {
+                initialMessageContent += "\n\nDescription: \(desc)"
+            }
+            if let sections = taskDetails.covered_sections, !sections.isEmpty {
+                initialMessageContent += "\n\nCovered Sections:\n- " + sections.components(separatedBy: ",").joined(separator: "\n- ")
+            }
+            
+            let systemMessage = ChatMessage(id: UUID().uuidString, role: .assistant, content: initialMessageContent, createdAt: Date(timeIntervalSince1970: 0))
+            
+            messages = [systemMessage] + history
         } catch {
-            print("Failed to load history: \(error)")
+            print("Failed to load history or task: \(error)")
         }
         isLoading = false
     }

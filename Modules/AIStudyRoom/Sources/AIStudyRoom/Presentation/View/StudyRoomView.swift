@@ -12,13 +12,11 @@ import Common
 public struct StudyRoomView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject var viewModel: StudyRoomViewModel
-    let taskTitle: String
     @State private var isPaused = false
     @State private var alertType: EndSessionAlertType? = nil
     
-    public init(viewModel: StudyRoomViewModel, taskTitle: String) {
+    public init(viewModel: StudyRoomViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
-        self.taskTitle = taskTitle
     }
     
     public var body: some View {
@@ -26,7 +24,7 @@ public struct StudyRoomView: View {
             VStack(spacing: 0) {
                 VStack {
                     StudyRoomHeaderView(
-                        taskTitle: taskTitle,
+                        taskTitle: viewModel.taskTitle,
                         isPaused: $isPaused,
                         onTogglePause: { isPaused ? viewModel.pauseTimer() : viewModel.startTimer() },
                         onDoneAction: {
