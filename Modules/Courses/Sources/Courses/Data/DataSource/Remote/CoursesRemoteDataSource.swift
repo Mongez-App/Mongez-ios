@@ -4,9 +4,11 @@ import Common
 protocol CoursesRemoteDataSourceProtocol {
     func fetchCourses() async throws -> [CourseDTO]
     func createCourse(requestDTO: CreateCourseRequestDTO) async throws -> CourseDTO
+    func createMaterialCourse(requestDTO: CreateMaterialCourseRequestDTO) async throws -> CourseDTO
     func updateCourse(id: String, requestDTO: UpdateCourseRequestDTO) async throws -> CourseDTO
     func deleteCourse(id: String) async throws
-    func addMaterial(courseId: String, fileData: Data, fileName: String, contentType: String, dailyStudyMinutes: Int, preferredDays: String) async throws -> MaterialDTO
+    func createMaterial(courseId: String, requestDTO: CreateMaterialRequestDTO) async throws -> MaterialDTO
+    func uploadMaterialPDF(materialId: String, fileData: Data, fileName: String, contentType: String) async throws -> MaterialDTO
     func listMaterials(courseId: String) async throws -> [MaterialDTO]
     func deleteMaterial(courseId: String, materialId: String) async throws
 }
@@ -52,6 +54,30 @@ final class CoursesRemoteDataSource: CoursesRemoteDataSourceProtocol {
         throw NSError(domain: "CreateCourse", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid response: \(str)"])
     }
 
+    func createMaterialCourse(requestDTO: CreateMaterialCourseRequestDTO) async throws -> CourseDTO {
+        let body = try JSONEncoder().encode(requestDTO)
+        let (data, _) = try await NetworkManger.shared.requestRaw(
+            endpoint: CoursesEndPoint.createCourse(body: body)
+        )
+
+        do {
+            let response = try JSONDecoder().decode(CreateCourseResponseDTO.self, from: data)
+            if let course = response.course, course.id != nil {
+                return course
+            }
+        } catch {}
+
+        do {
+            let directCourse = try JSONDecoder().decode(CourseDTO.self, from: data)
+            if directCourse.id != nil {
+                return directCourse
+            }
+        } catch {}
+
+        let str = String(data: data, encoding: .utf8) ?? "Unreadable data"
+        throw NSError(domain: "CreateMaterialCourse", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid response: \(str)"])
+    }
+
     func updateCourse(id: String, requestDTO: UpdateCourseRequestDTO) async throws -> CourseDTO {
         let body = try JSONEncoder().encode(requestDTO)
         let (data, _) = try await NetworkManger.shared.requestRaw(
@@ -82,19 +108,19 @@ final class CoursesRemoteDataSource: CoursesRemoteDataSourceProtocol {
         )
     }
 
-    func addMaterial(courseId: String, fileData: Data, fileName: String, contentType: String, dailyStudyMinutes: Int, preferredDays: String) async throws -> MaterialDTO {
-        let boundary = UUID().uuidString
-        let body = createMultipartBody(fileData: fileData, fileName: fileName, contentType: contentType, boundary: boundary)
-
-        let endpoint = CoursesEndPoint.addMaterial(
-            courseId: courseId,
-            body: body,
-            boundary: boundary,
-            dailyStudyMinutes: dailyStudyMinutes,
-            preferredDays: preferredDays
+    // Step 1: Create material metadata (JSON)
+    func createMaterial(courseId: String, requestDTO: CreateMaterialRequestDTO) async throws -> MaterialDTO {
+        let body = try JSONEncoder().encode(requestDTO)
+        let (data, _) = try await NetworkManger.shared.requestRaw(
+            endpoint: CoursesEndPoint.createMaterial(courseId: courseId, body: body)
         )
 
-        let (data, _) = try await NetworkManger.shared.requestRaw(endpoint: endpoint)
+        do {
+            let response = try JSONDecoder().decode(AddMaterialResponseDTO.self, from: data)
+            if let material = response.material, material.id != nil {
+                return material
+            }
+        } catch {}
 
         do {
             let material = try JSONDecoder().decode(MaterialDTO.self, from: data)
@@ -102,11 +128,44 @@ final class CoursesRemoteDataSource: CoursesRemoteDataSourceProtocol {
                 return material
             }
         } catch {
-            print("Failed to decode MaterialDTO: \(error)")
+            print("Failed to decode MaterialDTO from createMaterial: \(error)")
         }
 
         let str = String(data: data, encoding: .utf8) ?? "Unreadable data"
-        throw NSError(domain: "AddMaterial", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid response: \(str)"])
+        throw NSError(domain: "CreateMaterial", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid response: \(str)"])
+    }
+
+    // Step 2: Upload the actual PDF file
+    func uploadMaterialPDF(materialId: String, fileData: Data, fileName: String, contentType: String) async throws -> MaterialDTO {
+        let boundary = UUID().uuidString
+        let body = createMultipartBody(fileData: fileData, fileName: fileName, contentType: contentType, boundary: boundary)
+
+        let endpoint = CoursesEndPoint.uploadMaterialPDF(
+            materialId: materialId,
+            body: body,
+            boundary: boundary
+        )
+
+        let (data, _) = try await NetworkManger.shared.requestRaw(endpoint: endpoint)
+
+        do {
+            let response = try JSONDecoder().decode(UploadMaterialResponseDTO.self, from: data)
+            if let material = response.material, material.id != nil {
+                return material
+            }
+        } catch {}
+
+        do {
+            let material = try JSONDecoder().decode(MaterialDTO.self, from: data)
+            if material.id != nil {
+                return material
+            }
+        } catch {
+            print("Failed to decode MaterialDTO from uploadMaterialPDF: \(error)")
+        }
+
+        let str = String(data: data, encoding: .utf8) ?? "Unreadable data"
+        throw NSError(domain: "UploadMaterialPDF", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid response: \(str)"])
     }
 
     func listMaterials(courseId: String) async throws -> [MaterialDTO] {
@@ -148,6 +207,7 @@ final class CoursesRemoteDataSource: CoursesRemoteDataSourceProtocol {
 enum CoursesError: Error, LocalizedError {
     case invalidResponse
     case materialUploadFailed
+    case materialCreationFailed
     case courseCreationFailed
     case imageUploadFailed
 
@@ -155,6 +215,7 @@ enum CoursesError: Error, LocalizedError {
         switch self {
         case .invalidResponse: return "Invalid response from server"
         case .materialUploadFailed: return "Failed to upload material"
+        case .materialCreationFailed: return "Failed to create material"
         case .courseCreationFailed: return "Failed to create course"
         case .imageUploadFailed: return "Failed to upload image"
         }
