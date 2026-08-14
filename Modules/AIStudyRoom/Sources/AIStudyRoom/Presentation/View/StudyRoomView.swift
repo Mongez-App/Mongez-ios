@@ -14,7 +14,7 @@ public struct StudyRoomView: View {
     @StateObject var viewModel: StudyRoomViewModel
     let taskTitle: String
     @State private var isPaused = false
-    @State private var showAlert = false
+    @State private var alertType: EndSessionAlertType? = nil
     
     public init(viewModel: StudyRoomViewModel, taskTitle: String) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -29,8 +29,14 @@ public struct StudyRoomView: View {
                         taskTitle: taskTitle,
                         isPaused: $isPaused,
                         onTogglePause: { isPaused ? viewModel.pauseTimer() : viewModel.startTimer() },
-                        onDoneAction: { showAlert = true },
-                        onBackAction: { dismiss() }
+                        onDoneAction: {
+                            viewModel.pauseTimer()
+                            alertType = .complete
+                        },
+                        onBackAction: {
+                            viewModel.pauseTimer()
+                            alertType = .incomplete
+                        }
                     )
                     
                     StudyRoomTimerView(
@@ -87,17 +93,24 @@ public struct StudyRoomView: View {
             }
             .onDisappear {
                 viewModel.pauseTimer()
+                Task {
+                    await viewModel.endSession(isCompleted: false)
+                }
             }
             
-            if showAlert {
+            if let type = alertType {
                 EndSessionAlertView(
+                    type: type,
                     onEndSession: {
-                        showAlert = false
-                        viewModel.pauseTimer()
-                        dismiss()
+                        Task {
+                            await viewModel.endSession(isCompleted: type == .complete)
+                            alertType = nil
+                            dismiss()
+                        }
                     },
                     onKeepStudying: {
-                        showAlert = false
+                        alertType = nil
+                        viewModel.startTimer()
                     }
                 )
                 .zIndex(2)
