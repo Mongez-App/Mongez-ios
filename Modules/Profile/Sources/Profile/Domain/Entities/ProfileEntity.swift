@@ -45,6 +45,27 @@ struct UserProfile: Codable {
             calendarSyncConnected: updated.calendarSyncConnected ?? self.calendarSyncConnected
         )
     }
+
+    func merged(with preferences: UserPreferences) -> UserProfile {
+        let mergedStats = ProfileStats(
+            totalStudyHours: self.stats?.totalStudyHours,
+            completedTasksCount: self.stats?.completedTasksCount,
+            currentStreakDays: self.stats?.currentStreakDays,
+            dailyStudyHours: preferences.dailyStudyHours ?? self.stats?.dailyStudyHours,
+            availableDays: preferences.availableDays ?? self.stats?.availableDays
+        )
+        
+        return UserProfile(
+            userId: self.userId,
+            name: self.name,
+            email: self.email,
+            avatarUrl: self.avatarUrl,
+            stats: mergedStats,
+            appearance: self.appearance,
+            language: self.language,
+            calendarSyncConnected: self.calendarSyncConnected
+        )
+    }
 }
 
 struct ProfileStats: Codable {
@@ -73,5 +94,15 @@ struct ProfileStats: Codable {
             dailyStudyHours: updated.dailyStudyHours ?? self.dailyStudyHours,
             availableDays: updated.availableDays ?? self.availableDays
         )
+    }
+}
+
+struct UserPreferences: Codable {
+    let dailyStudyHours: Int?
+    let availableDays: [String]?
+    
+    enum CodingKeys: String, CodingKey {
+        case dailyStudyHours = "daily_study_hours"
+        case availableDays = "available_days"
     }
 }
