@@ -193,14 +193,22 @@ struct MockCoursesRepository: CoursesRepositoryProtocol {
         return Course(name: name, courseCode: courseCode, courseType: courseType, materialUrl: materialUrl)
     }
 
+    func createMaterialCourse(name: String, courseCode: String, imageUrl: String?, startDate: Date, examDate: Date) async throws -> Course {
+        return Course(name: name, courseCode: courseCode, hasMaterials: true)
+    }
+
     func updateCourse(id: String, name: String?, imageUrl: String?, isHidden: Bool?) async throws -> Course {
         return Course(name: name ?? "Updated Course")
     }
 
     func deleteCourse(id: String) async throws {}
 
-    func addMaterial(courseId: String, fileData: Data, fileName: String, contentType: String, dailyStudyMinutes: Int, preferredDays: String) async throws -> Material {
-        return Material(fileName: fileName, contentType: contentType, fileSizeBytes: fileData.count, courseId: courseId)
+    func createMaterial(courseId: String, fileName: String, contentType: String, fileSizeBytes: Int, pageCount: Int?, deviceFileUri: String) async throws -> Material {
+        return Material(fileName: fileName, contentType: contentType, fileSizeBytes: fileSizeBytes, courseId: courseId, deviceFileUri: deviceFileUri)
+    }
+
+    func uploadMaterialPDF(materialId: String, fileData: Data, fileName: String, contentType: String) async throws -> Material {
+        return Material(fileName: fileName, contentType: contentType, fileSizeBytes: fileData.count)
     }
 
     func listMaterials(courseId: String) async throws -> [Material] {
