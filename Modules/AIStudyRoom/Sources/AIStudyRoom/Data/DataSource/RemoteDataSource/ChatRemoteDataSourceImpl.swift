@@ -11,6 +11,11 @@ import Common
 public class ChatRemoteDataSourceImpl: ChatRemoteDataSource {
     public init() {}
     
+    public func getTask(taskId: String) async throws -> TaskDetailsDTO {
+        let endpoint = ChatEndPoint.getTask(taskId: taskId)
+        return try await NetworkManger.shared.request(endpoint: endpoint, responseType: TaskDetailsDTO.self)
+    }
+    
     public func updateTask(taskId: String, request: UpdateTaskRequestDTO) async throws {
         let endpoint = ChatEndPoint.updateTask(taskId: taskId, request: request)
         _ = try await NetworkManger.shared.request(endpoint: endpoint, responseType: EmptyResponseDTO.self)

@@ -14,6 +14,10 @@ public class ChatRepositoryImpl: ChatRepository {
         self.remoteDataSource = remoteDataSource
     }
     
+    public func getTask(taskId: String) async throws -> TaskDetailsDTO {
+        return try await remoteDataSource.getTask(taskId: taskId)
+    }
+    
     public func updateTask(taskId: String, completed: Bool, activeSpentTime: Int) async throws {
         let request = UpdateTaskRequestDTO(completed: completed, active_spent_time: activeSpentTime)
         try await remoteDataSource.updateTask(taskId: taskId, request: request)

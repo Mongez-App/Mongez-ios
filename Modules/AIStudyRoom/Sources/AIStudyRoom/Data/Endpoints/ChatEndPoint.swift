@@ -12,6 +12,7 @@ public enum ChatEndPoint: EndPoint {
     case updateTask(taskId: String, request: UpdateTaskRequestDTO)
     case sendMessage(taskId: String, request: SendMessageRequestDTO)
     case getMessages(taskId: String, page: Int, size: Int)
+    case getTask(taskId: String)
     
     public var baseURL: String {
         return "https://api-gateway-production-5110.up.railway.app/api/v1"
@@ -20,6 +21,8 @@ public enum ChatEndPoint: EndPoint {
     public var path: String {
         switch self {
         case .updateTask(let taskId, _):
+            return "/tasks/\(taskId)"
+        case .getTask(let taskId):
             return "/tasks/\(taskId)"
         case .sendMessage(let taskId, _):
             return "/tasks/\(taskId)/chat"
@@ -30,7 +33,7 @@ public enum ChatEndPoint: EndPoint {
     
     public var method: HTTPMethod {
         switch self {
-        case .getMessages: return .get
+        case .getMessages, .getTask: return .get
         case .updateTask: return .patch
         default: return .post
         }
@@ -50,7 +53,7 @@ public enum ChatEndPoint: EndPoint {
             return try? JSONEncoder().encode(request)
         case .sendMessage(_, let request):
             return try? JSONEncoder().encode(request)
-        case .getMessages:
+        case .getMessages, .getTask:
             return nil
         }
     }
