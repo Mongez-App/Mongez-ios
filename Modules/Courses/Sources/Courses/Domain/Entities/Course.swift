@@ -20,6 +20,7 @@ public struct Course: Identifiable, Equatable {
     public var isHidden: Bool
     public var imageData: Data?
     public var materialCount: Int
+    public var hasMaterials: Bool
 
     public init(
         id: String = UUID().uuidString,
@@ -35,7 +36,8 @@ public struct Course: Identifiable, Equatable {
         completionPercentage: Double = 0.0,
         isHidden: Bool = false,
         imageData: Data? = nil,
-        materialCount: Int = 0
+        materialCount: Int = 0,
+        hasMaterials: Bool = false
     ) {
         self.id = id
         self.name = name
@@ -51,5 +53,6 @@ public struct Course: Identifiable, Equatable {
         self.isHidden = isHidden
         self.imageData = imageData
         self.materialCount = materialCount
+        self.hasMaterials = hasMaterials
     }
 }
