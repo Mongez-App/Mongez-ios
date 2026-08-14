@@ -18,6 +18,7 @@ import Foundation
 @MainActor
 class ProfileViewModel: ObservableObject {
     @Published var profile: UserProfile?
+    @Published var isLoading: Bool = false
     @Published var isCalendarSyncEnabled: Bool = true
     @Published var appearanceMode: String = UserDefaults.standard.string(forKey: "user_appearance") ?? "System"
     @Published var selectedLanguage: String = UserDefaults.standard.string(forKey: "selected_language") ?? "EN" {
@@ -32,29 +33,43 @@ class ProfileViewModel: ObservableObject {
     @Published var dailyStudyHours: Int = 4
     @Published var availableDays: Set<String> = ["Mon", "Wed", "Fri"]
     @Published var localSelectedImageData: Data? = nil
+    @Published var isPreferencesLoading: Bool = false
 
     private let getProfileUseCase: GetProfileUseCaseProtocol
+    private let getPreferencesUseCase: GetPreferencesUseCaseProtocol
     private let updateProfileUseCase: UpdateProfileUseCaseProtocol
     private let updatePreferencesUseCase: UpdatePreferencesUseCaseProtocol
+    private let updateCalendarSyncUseCase: UpdateCalendarSyncUseCaseProtocol
 
     init(
         getProfileUseCase: GetProfileUseCaseProtocol,
+        getPreferencesUseCase: GetPreferencesUseCaseProtocol,
         updateProfileUseCase: UpdateProfileUseCaseProtocol,
-        updatePreferencesUseCase: UpdatePreferencesUseCaseProtocol
+        updatePreferencesUseCase: UpdatePreferencesUseCaseProtocol,
+        updateCalendarSyncUseCase: UpdateCalendarSyncUseCaseProtocol
     ) {
         self.getProfileUseCase = getProfileUseCase
+        self.getPreferencesUseCase = getPreferencesUseCase
         self.updateProfileUseCase = updateProfileUseCase
         self.updatePreferencesUseCase = updatePreferencesUseCase
+        self.updateCalendarSyncUseCase = updateCalendarSyncUseCase
     }
 
     func loadProfile() {
+        isLoading = true
         Task {
+            defer { isLoading = false }
             do {
-                let fetchedProfile = try await getProfileUseCase.execute()
-                self.profile = fetchedProfile
+                async let fetchedProfileTask = getProfileUseCase.execute()
+                async let fetchedPreferencesTask = getPreferencesUseCase.execute()
+                
+                let (fetchedProfile, fetchedPreferences) = try await (fetchedProfileTask, fetchedPreferencesTask)
+                
+                let mergedProfile = fetchedProfile.merged(with: fetchedPreferences)
+                self.profile = mergedProfile
                 
                 // Sync UI fields
-                if let appearance = fetchedProfile.appearance {
+                if let appearance = mergedProfile.appearance {
                     // Only override local setting if it's not "System"
                     let localAppearance = UserDefaults.standard.string(forKey: "user_appearance") ?? "System"
                     if localAppearance != "System" {
@@ -65,13 +80,13 @@ class ProfileViewModel: ObservableObject {
                 if let language = fetchedProfile.language {
                     self.selectedLanguage = (language.lowercased() == "arabic" || language.lowercased() == "ar") ? "AR" : "EN"
                 }
-                if let calendarConnected = fetchedProfile.calendarSyncConnected {
+                if let calendarConnected = mergedProfile.calendarSyncConnected {
                     self.isCalendarSyncEnabled = calendarConnected
                 }
-                if let dailyHours = fetchedProfile.stats?.dailyStudyHours {
+                if let dailyHours = mergedProfile.stats?.dailyStudyHours {
                     self.dailyStudyHours = dailyHours
                 }
-                if let days = fetchedProfile.stats?.availableDays {
+                if let days = mergedProfile.stats?.availableDays {
                     self.availableDays = Set(days)
                 }
             } catch {
@@ -118,15 +133,32 @@ class ProfileViewModel: ObservableObject {
         if isCalendarSyncEnabled && newValue == false {
             showDisableCalendarSyncAlert = true
         } else {
-            isCalendarSyncEnabled = newValue
-            updateProfileOnServer()
+            updateCalendarSyncState(to: newValue)
         }
     }
 
     func confirmDisableCalendarSync() {
-        isCalendarSyncEnabled = false
         showDisableCalendarSyncAlert = false
-        updateProfileOnServer()
+        updateCalendarSyncState(to: false)
+    }
+    
+    private func updateCalendarSyncState(to newValue: Bool) {
+        let previousValue = isCalendarSyncEnabled
+        isCalendarSyncEnabled = newValue
+        isLoading = true
+        
+        Task {
+            defer { isLoading = false }
+            do {
+                let updated = try await updateCalendarSyncUseCase.execute(calendarConnected: newValue, calendarSynced: newValue)
+                if let currentProfile = self.profile {
+                    self.profile = currentProfile.merged(with: updated)
+                }
+            } catch {
+                print("Error updating calendar sync: \(error)")
+                self.isCalendarSyncEnabled = previousValue // Rollback
+            }
+        }
     }
 
     func cancelDisableCalendarSync() {
@@ -135,18 +167,38 @@ class ProfileViewModel: ObservableObject {
 
     func openEditPreferences() {
         isEditPreferencesPresented = true
+        isPreferencesLoading = true
+        Task {
+            defer { isPreferencesLoading = false }
+            do {
+                let fetchedPreferences = try await getPreferencesUseCase.execute()
+                if let currentProfile = self.profile {
+                    self.profile = currentProfile.merged(with: fetchedPreferences)
+                }
+                if let dailyHours = fetchedPreferences.dailyStudyHours {
+                    self.dailyStudyHours = dailyHours
+                }
+                if let days = fetchedPreferences.availableDays {
+                    self.availableDays = Set(days)
+                }
+            } catch {
+                print("Error fetching preferences: \(error)")
+            }
+        }
     }
 
     func saveEditPreferences(hours: Int, days: Set<String>) {
         isEditPreferencesPresented = false
+        isLoading = true
         Task {
+            defer { isLoading = false }
             guard let currentProfile = self.profile else { return }
             do {
-                let updated = try await updatePreferencesUseCase.execute(
+                let updatedPreferences = try await updatePreferencesUseCase.execute(
                     dailyStudyHours: hours,
                     availableDays: Array(days)
                 )
-                self.profile = currentProfile.merged(with: updated)
+                self.profile = currentProfile.merged(with: updatedPreferences)
                 self.dailyStudyHours = hours
                 self.availableDays = days
             } catch {

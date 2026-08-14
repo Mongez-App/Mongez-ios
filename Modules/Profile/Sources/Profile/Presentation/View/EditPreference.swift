@@ -14,9 +14,9 @@ struct EditPreferencesSheet: View {
 
     let onSave: (Int, Set<String>) -> Void
     let onCancel: () -> Void
-
-    @State private var hours: Int
-    @State private var selectedDays: Set<String>
+    @Binding var isLoading: Bool
+    @Binding var hours: Int
+    @Binding var selectedDays: Set<String>
 
     private let hoursRange = Array(1...12)
     private let weekdays: [(key: String, label: String)] = [
@@ -25,37 +25,49 @@ struct EditPreferencesSheet: View {
     ]
 
     init(
-        initialHours: Int,
-        initialDays: Set<String>,
+        hours: Binding<Int>,
+        selectedDays: Binding<Set<String>>,
+        isLoading: Binding<Bool>,
         onSave: @escaping (Int, Set<String>) -> Void,
         onCancel: @escaping () -> Void
     ) {
         self.onSave = onSave
         self.onCancel = onCancel
-        _hours = State(initialValue: initialHours)
-        _selectedDays = State(initialValue: initialDays)
+        self._hours = hours
+        self._selectedDays = selectedDays
+        self._isLoading = isLoading
     }
 
     var body: some View {
-        VStack(spacing: AppTheme.Spacing.large) {
-            Capsule()
-                .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.15))
-                .frame(width: 48, height: 5)
-                .padding(.top, AppTheme.Spacing.small)
+        ZStack {
+            VStack(spacing: AppTheme.Spacing.large) {
+                Capsule()
+                    .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.15))
+                    .frame(width: 48, height: 5)
+                    .padding(.top, AppTheme.Spacing.small)
 
-            Text("Edit Preferences")
-                .font(AppTheme.textStyle(size: 22, weight: .bold))
-                .foregroundColor(AppTheme.Colors.black100)
+                Text("Edit Preferences")
+                    .font(AppTheme.textStyle(size: 22, weight: .bold))
+                    .foregroundColor(AppTheme.Colors.black100)
 
-            hoursSection
-            daysSection
+                hoursSection
+                daysSection
 
-            Spacer(minLength: 0)
+                Spacer(minLength: 0)
 
-            actionButtons
+                actionButtons
+            }
+            .padding(.horizontal, AppTheme.Spacing.large)
+            .padding(.bottom, AppTheme.Spacing.large)
+            .opacity(isLoading ? 0.3 : 1.0)
+            .disabled(isLoading)
+
+            if isLoading {
+                ProgressView()
+                    .scaleEffect(1.5)
+                    .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.Colors.purple200))
+            }
         }
-        .padding(.horizontal, AppTheme.Spacing.large)
-        .padding(.bottom, AppTheme.Spacing.large)
         .background(AppTheme.Colors.white100)
         .clipShape(RoundedRectangle(cornerRadius: 36, style: .continuous))
         .presentationDetents([.height(500), .large])

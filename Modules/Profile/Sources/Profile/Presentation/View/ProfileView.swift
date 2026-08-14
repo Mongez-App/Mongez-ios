@@ -5,13 +5,6 @@
 //  Created by Shady Eldakrory on 21/07/2026.
 //
 
-//
-//  File.swift
-//
-//
-//  Created by Shady Eldakrory on 21/07/2026.
-//
-
 import SwiftUI
 import Common
 
@@ -22,12 +15,22 @@ public struct ProfileView: View {
                 remoteDataSource: ProfileRemoteDataSource()
             )
         ),
+        getPreferencesUseCase: GetPreferencesUseCase(
+            repository: ProfileRepository(
+                remoteDataSource: ProfileRemoteDataSource()
+            )
+        ),
         updateProfileUseCase: UpdateProfileUseCase(
             repository: ProfileRepository(
                 remoteDataSource: ProfileRemoteDataSource()
             )
         ),
         updatePreferencesUseCase: UpdatePreferencesUseCase(
+            repository: ProfileRepository(
+                remoteDataSource: ProfileRemoteDataSource()
+            )
+        ),
+        updateCalendarSyncUseCase: UpdateCalendarSyncUseCase(
             repository: ProfileRepository(
                 remoteDataSource: ProfileRemoteDataSource()
             )
@@ -275,11 +278,23 @@ public struct ProfileView: View {
                     }
                 )
             }
+            if viewModel.isLoading {
+                ZStack {
+                    Color.black.opacity(0.3).ignoresSafeArea()
+                    ProgressView()
+                        .scaleEffect(1.5, anchor: .center)
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .padding()
+                        .background(Color.gray.opacity(0.8))
+                        .cornerRadius(10)
+                }
+            }
         }
         .sheet(isPresented: $viewModel.isEditPreferencesPresented) {
             EditPreferencesSheet(
-                initialHours: viewModel.dailyStudyHours,
-                initialDays: viewModel.availableDays,
+                hours: $viewModel.dailyStudyHours,
+                selectedDays: $viewModel.availableDays,
+                isLoading: $viewModel.isPreferencesLoading,
                 onSave: { hours, days in
                     viewModel.saveEditPreferences(hours: hours, days: days)
                 },
