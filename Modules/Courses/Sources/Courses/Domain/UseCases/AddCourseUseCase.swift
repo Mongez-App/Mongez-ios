@@ -9,7 +9,8 @@ public class AddCourseUseCase {
         self.cloudinaryService = cloudinaryService
     }
 
-    public func execute(
+    // Online Course tab (old format with course_type + material_url)
+    public func executeOnlineCourse(
         name: String,
         courseCode: String,
         description: String?,
@@ -17,11 +18,7 @@ public class AddCourseUseCase {
         startDate: Date,
         endDate: Date?,
         examDate: Date,
-        courseType: CourseType,
-        materialUrl: String?,
-        materials: [MaterialFileInfo],
-        dailyStudyMinutes: Int,
-        preferredDays: String
+        materialUrl: String?
     ) async throws -> Course {
 
         var imageUrl: String? = nil
@@ -36,26 +33,56 @@ public class AddCourseUseCase {
             startDate: startDate,
             endDate: endDate,
             examDate: examDate,
-            courseType: courseType,
+            courseType: .urlCourse,
             materialUrl: materialUrl
         )
 
-        if courseType == .materialCourse {
-            try await withThrowingTaskGroup(of: Void.self) { group in
-                for material in materials {
-                    group.addTask {
-                        let _ = try await self.repository.addMaterial(
-                            courseId: course.id,
-                            fileData: material.fileData,
-                            fileName: material.fileName,
-                            contentType: material.contentType,
-                            dailyStudyMinutes: dailyStudyMinutes,
-                            preferredDays: preferredDays
-                        )
-                    }
-                }
-                try await group.waitForAll()
-            }
+        return course
+    }
+
+    // Upload Material tab (new format with has_materials + two-step material upload)
+    public func executeMaterialCourse(
+        name: String,
+        courseCode: String,
+        description: String?,
+        imageData: Data?,
+        startDate: Date,
+        examDate: Date,
+        materials: [MaterialFileInfo]
+    ) async throws -> Course {
+
+        var imageUrl: String? = nil
+        if let imageData = imageData {
+            imageUrl = try await cloudinaryService.uploadImage(imageData: imageData)
+        }
+
+        let course = try await repository.createMaterialCourse(
+            name: name,
+            courseCode: courseCode,
+            imageUrl: imageUrl,
+            startDate: startDate,
+            examDate: examDate
+        )
+
+        // Two-step material upload for each material
+        for material in materials {
+            // Step 1: Create material metadata
+            let createdMaterial = try await repository.createMaterial(
+                courseId: course.id,
+                fileName: material.fileName,
+                contentType: material.contentType,
+                fileSizeBytes: material.fileSizeBytes,
+                pageCount: material.pageCount,
+                deviceFileUri: material.deviceFileUri
+            )
+
+            // Step 2: Upload the actual PDF file
+            let _ = try await repository.uploadMaterialPDF(
+                materialId: createdMaterial.id,
+                fileData: material.fileData,
+                fileName: material.fileName,
+                contentType: material.contentType
+            )
         }
 
         return course
@@ -68,12 +95,14 @@ public struct MaterialFileInfo {
     public let fileSizeBytes: Int
     public let pageCount: Int?
     public let fileData: Data
+    public let deviceFileUri: String
 
-    public init(fileName: String, contentType: String, fileSizeBytes: Int, pageCount: Int? = nil, fileData: Data) {
+    public init(fileName: String, contentType: String, fileSizeBytes: Int, pageCount: Int? = nil, fileData: Data, deviceFileUri: String) {
         self.fileName = fileName
         self.contentType = contentType
         self.fileSizeBytes = fileSizeBytes
         self.pageCount = pageCount
         self.fileData = fileData
+        self.deviceFileUri = deviceFileUri
     }
 }

@@ -13,6 +13,7 @@ final class CoursesRepositoryImpl: CoursesRepositoryProtocol {
         return dtos.map { $0.toDomain() }
     }
 
+    // Online Course tab (old format)
     func createCourse(name: String, courseCode: String, imageUrl: String?, startDate: Date, endDate: Date?, examDate: Date, courseType: CourseType, materialUrl: String?) async throws -> Course {
         let dateFormatter = ISO8601DateFormatter()
         dateFormatter.formatOptions = [.withInternetDateTime]
@@ -31,6 +32,24 @@ final class CoursesRepositoryImpl: CoursesRepositoryProtocol {
         return courseDTO.toDomain()
     }
 
+    // Upload Material tab (new format)
+    func createMaterialCourse(name: String, courseCode: String, imageUrl: String?, startDate: Date, examDate: Date) async throws -> Course {
+        let dateFormatter = ISO8601DateFormatter()
+        dateFormatter.formatOptions = [.withInternetDateTime]
+
+        let requestDTO = CreateMaterialCourseRequestDTO(
+            name: name,
+            courseCode: courseCode.isEmpty ? nil : courseCode,
+            imageUrl: imageUrl,
+            startDate: dateFormatter.string(from: startDate),
+            examDate: dateFormatter.string(from: examDate),
+            hasMaterials: true
+        )
+
+        let courseDTO = try await remoteDataSource.createMaterialCourse(requestDTO: requestDTO)
+        return courseDTO.toDomain()
+    }
+
     func updateCourse(id: String, name: String?, imageUrl: String?, isHidden: Bool?) async throws -> Course {
         let requestDTO = UpdateCourseRequestDTO(
             name: name,
@@ -45,14 +64,26 @@ final class CoursesRepositoryImpl: CoursesRepositoryProtocol {
         try await remoteDataSource.deleteCourse(id: id)
     }
 
-    func addMaterial(courseId: String, fileData: Data, fileName: String, contentType: String, dailyStudyMinutes: Int, preferredDays: String) async throws -> Material {
-        let materialDTO = try await remoteDataSource.addMaterial(
-            courseId: courseId,
-            fileData: fileData,
+    // Step 1: Create material metadata
+    func createMaterial(courseId: String, fileName: String, contentType: String, fileSizeBytes: Int, pageCount: Int?, deviceFileUri: String) async throws -> Material {
+        let requestDTO = CreateMaterialRequestDTO(
             fileName: fileName,
             contentType: contentType,
-            dailyStudyMinutes: dailyStudyMinutes,
-            preferredDays: preferredDays
+            fileSizeBytes: fileSizeBytes,
+            pageCount: pageCount,
+            deviceFileUri: deviceFileUri
+        )
+        let materialDTO = try await remoteDataSource.createMaterial(courseId: courseId, requestDTO: requestDTO)
+        return materialDTO.toDomain()
+    }
+
+    // Step 2: Upload the actual PDF file
+    func uploadMaterialPDF(materialId: String, fileData: Data, fileName: String, contentType: String) async throws -> Material {
+        let materialDTO = try await remoteDataSource.uploadMaterialPDF(
+            materialId: materialId,
+            fileData: fileData,
+            fileName: fileName,
+            contentType: contentType
         )
         return materialDTO.toDomain()
     }
