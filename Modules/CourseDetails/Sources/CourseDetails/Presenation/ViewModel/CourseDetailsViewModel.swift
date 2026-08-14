@@ -18,6 +18,7 @@ public class CourseDetailsViewModel: ObservableObject {
     @Published public var courseType: String
     @Published public var showFileImporter: Bool = false
     @Published public var isUploading: Bool = false
+    @Published public var isLoading: Bool = false
     
     public var onTaskSelected: ((String, String) -> Void)?
     public var completedTasksCount: Int { tasks.filter { $0.isCompleted }.count }
@@ -58,19 +59,23 @@ public class CourseDetailsViewModel: ObservableObject {
     }
     
     public func loadData() async {
+        isLoading = true
         do {
             materials = try await getMaterialsUseCase.execute(courseId: courseId)
             tasks = try await getTasksUseCase.execute(courseId: courseId)
+            isLoading = false
         } catch is CancellationError {
+            isLoading = false
             return
         } catch {
+            isLoading = false
             print("Error loading course details: \(error)")
         }
     }
     
     public func selectTask(_ task: CourseTask) {
         if !task.isCompleted {
-            onTaskSelected?(courseId, task.title)
+            onTaskSelected?(task.id, task.title)
         }
     }
     
@@ -126,6 +131,7 @@ public class CourseDetailsViewModel: ObservableObject {
         do {
             try await deleteCourseMaterialUseCase.execute(courseId: courseId, materialId: materialId)
             self.materials.removeAll { $0.id == materialId }
+            tasks = try await getTasksUseCase.execute(courseId: courseId)
         } catch {
             print("Error deleting material: \(error)")
         }

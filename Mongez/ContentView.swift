@@ -78,18 +78,12 @@ struct ContentView: View {
                                 )
                             )
                         ),
-                        studyRoomFactory: { courseId, taskTitle in
-                            let chatRepository = MockChatRepository()
-                            let studyViewModel = StudyRoomViewModel(
-                                courseId: courseId,
-                                getChatHistoryUseCase: GetChatHistoryUseCase(repository: chatRepository),
-                                sendMessageUseCase: SendMessageUseCase(repository: chatRepository)
-                            )
+                        studyRoomFactory: { taskId, taskTitle in
+                            let studyViewModel = ServiceLocator.resolve(StudyRoomViewModel.self, arguments: taskId, taskTitle)!
                             
                             return AnyView(
                                 StudyRoomView(
-                                    viewModel: studyViewModel,
-                                    taskTitle: taskTitle
+                                    viewModel: studyViewModel
                                 )
                             )
                         },
@@ -101,8 +95,8 @@ struct ContentView: View {
                                 CourseDetailsCoordinatorView(
                                     coordinator: detailsCoordinator,
                                     viewModel: detailsViewModel,
-                                    onStudyRoomSelected: { roomId, taskTitle in
-                                        coordinator.push(.studyRoom(courseId: roomId, taskTitle: taskTitle))
+                                    onStudyRoomSelected: { taskId, taskTitle in
+                                        coordinator.push(.studyRoom(taskId: taskId, taskTitle: taskTitle))
                                     }
                                 )
                             )
@@ -141,8 +135,8 @@ struct ContentView: View {
                                 CourseDetailsCoordinatorView(
                                     coordinator: detailsCoordinator,
                                     viewModel: detailsViewModel,
-                                    onStudyRoomSelected: { roomId, taskTitle in
-                                        coordinator.push(.details(courseId: roomId, courseName: courseName, courseType: courseType))
+                                    onStudyRoomSelected: { taskId, taskTitle in
+                                        coordinator.push(.details(courseId: courseId, courseName: courseName, courseType: courseType))
                                     }
                                 )
                             )

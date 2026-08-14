@@ -11,6 +11,7 @@ import Authntication
 import Profile
 import Common
 import CourseDetails
+import AIStudyRoom
 import Swinject
 
 class AppDelegate: NSObject, UIApplicationDelegate {
@@ -24,6 +25,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         let container = DIContainer.shared.getContainer()
         CourseDetailsAssembly().assemble(container: container)
+        ChatAssembly().assemble(container: container)
         AppAssembly().assemble(container: container)
 
         return true
