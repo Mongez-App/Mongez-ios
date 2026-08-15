@@ -26,8 +26,8 @@ public struct CourseDetailsCoordinatorView: View {
     public var body: some View {
         CourseDetailsView(viewModel: viewModel)
             .onAppear {
-                viewModel.onTaskSelected = { courseId, taskTitle in
-                    onStudyRoomSelected(courseId, taskTitle)
+                viewModel.onTaskSelected = { taskId, taskTitle in
+                    onStudyRoomSelected(taskId, taskTitle)
                 }
             }
     }

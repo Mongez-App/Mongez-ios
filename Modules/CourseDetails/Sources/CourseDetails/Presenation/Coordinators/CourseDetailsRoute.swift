@@ -7,5 +7,5 @@
 
 import Foundation
 public enum CourseDetailsRoute: Hashable {
-    case studyRoom(courseId: String, taskTitle: String)
+    case studyRoom(taskId: String, taskTitle: String)
 }

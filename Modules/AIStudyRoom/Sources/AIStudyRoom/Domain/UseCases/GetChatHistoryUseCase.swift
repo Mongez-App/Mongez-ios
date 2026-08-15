@@ -6,13 +6,16 @@
 //
 
 import Foundation
+
 public struct GetChatHistoryUseCase {
-    let repository: ChatRepository
+    private let repository: ChatRepository
     
     public init(repository: ChatRepository) {
         self.repository = repository
     }
-    func execute(courseId: String) async throws -> [ChatMessage] {
-        return try await repository.getHistory(courseId: courseId)
+    
+    public func execute(taskId: String, page: Int = 0, size: Int = 20) async throws -> [ChatMessage] {
+        let responseDTO = try await repository.getChatMessages(taskId: taskId, page: page, size: size)
+        return responseDTO.messages.map { $0.toDomain() }
     }
 }

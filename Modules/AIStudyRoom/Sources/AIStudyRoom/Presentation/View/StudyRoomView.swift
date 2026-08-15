@@ -12,13 +12,11 @@ import Common
 public struct StudyRoomView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject var viewModel: StudyRoomViewModel
-    let taskTitle: String
     @State private var isPaused = false
-    @State private var showAlert = false
+    @State private var alertType: EndSessionAlertType? = nil
     
-    public init(viewModel: StudyRoomViewModel, taskTitle: String) {
+    public init(viewModel: StudyRoomViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
-        self.taskTitle = taskTitle
     }
     
     public var body: some View {
@@ -26,11 +24,17 @@ public struct StudyRoomView: View {
             VStack(spacing: 0) {
                 VStack {
                     StudyRoomHeaderView(
-                        taskTitle: taskTitle,
+                        taskTitle: viewModel.taskTitle,
                         isPaused: $isPaused,
                         onTogglePause: { isPaused ? viewModel.pauseTimer() : viewModel.startTimer() },
-                        onDoneAction: { showAlert = true },
-                        onBackAction: { dismiss() }
+                        onDoneAction: {
+                            viewModel.pauseTimer()
+                            alertType = .complete
+                        },
+                        onBackAction: {
+                            viewModel.pauseTimer()
+                            alertType = .incomplete
+                        }
                     )
                     
                     StudyRoomTimerView(
@@ -87,17 +91,24 @@ public struct StudyRoomView: View {
             }
             .onDisappear {
                 viewModel.pauseTimer()
+                Task {
+                    await viewModel.endSession(isCompleted: false)
+                }
             }
             
-            if showAlert {
+            if let type = alertType {
                 EndSessionAlertView(
+                    type: type,
                     onEndSession: {
-                        showAlert = false
-                        viewModel.pauseTimer()
-                        dismiss()
+                        Task {
+                            await viewModel.endSession(isCompleted: type == .complete)
+                            alertType = nil
+                            dismiss()
+                        }
                     },
                     onKeepStudying: {
-                        showAlert = false
+                        alertType = nil
+                        viewModel.startTimer()
                     }
                 )
                 .zIndex(2)

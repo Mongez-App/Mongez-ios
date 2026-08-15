@@ -44,8 +44,8 @@ public struct DashboardCoordinatorView: View {
                 case .dashboard:
                     DashboardView(viewModel: viewModel)
                         .onAppear {
-                            viewModel.onTaskSelected = { [weak coordinator] courseId, taskTitle in
-                                coordinator?.push(.studyRoom(courseId: courseId, taskTitle: taskTitle))
+                            viewModel.onTaskSelected = { [weak coordinator] taskId, taskTitle in
+                                coordinator?.push(.studyRoom(taskId: taskId, taskTitle: taskTitle))
                             }
                             viewModel.onViewAllTodayTasks = { [weak coordinator] in
                                 coordinator?.push(.todayTasks)
@@ -70,8 +70,8 @@ public struct DashboardCoordinatorView: View {
             }
             .navigationDestination(for: DashboardRoute.self) { route in
                 switch route {
-                case .studyRoom(let courseId, let taskTitle):
-                    studyRoomFactory(courseId, taskTitle)
+                case .studyRoom(let taskId, let taskTitle):
+                    studyRoomFactory(taskId, taskTitle)
                 case .courseDetails(let courseId, let courseName, let courseType):
                     courseDetailsFactory(courseId, courseName, courseType)
                 case .todayTasks:

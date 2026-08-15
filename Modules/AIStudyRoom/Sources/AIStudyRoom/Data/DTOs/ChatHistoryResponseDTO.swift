@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct ChatHistoryResponseDTO: Decodable {
-    let course_id: String
-    let messages: [ChatMessageDTO]
-    let has_more: Bool
+public struct ChatHistoryResponseDTO: Decodable {
+    public let pagination: PaginationDTO
+    public let messages: [ChatMessageDTO]
 }
