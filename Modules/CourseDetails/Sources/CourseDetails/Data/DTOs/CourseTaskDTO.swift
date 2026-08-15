@@ -62,3 +62,13 @@ public extension CourseTaskDTO {
         )
     }
 }
+
+public struct CourseTasksResponseDTO: Codable {
+    public let meta: CourseTasksMetaDTO
+    public let data: [CourseTaskDTO]
+}
+
+public struct CourseTasksMetaDTO: Codable {
+    public let preferred_study_time_minutes: Int
+    public let total_tasks: Int
+}

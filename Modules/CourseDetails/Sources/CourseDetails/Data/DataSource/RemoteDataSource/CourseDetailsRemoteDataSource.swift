@@ -14,5 +14,5 @@ public protocol CourseDetailsRemoteDataSource {
     func updateCourse(courseId: String, request: UpdateCourseRequestDTO) async throws -> CourseDTO
     func deleteCourse(courseId: String) async throws -> EmptyResponseDTO
     func deleteMaterial(courseId: String, materialId: String) async throws -> EmptyResponseDTO
-    func getTasks(courseId: String) async throws -> [CourseTaskDTO]
+    func getTasks(courseId: String) async throws -> CourseTasksResponseDTO
 }
