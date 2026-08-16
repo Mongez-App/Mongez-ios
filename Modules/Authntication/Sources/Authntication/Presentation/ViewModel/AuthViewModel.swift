@@ -130,10 +130,6 @@ public final class AuthViewModel: ObservableObject {
         }
     }
     
-    public func continueAsGuest() async {
-        showError(message: "Guest login is not available yet")
-    }
-
     private func mapError(_ error: Error) -> String {
         if let apiError = error as? APIError {
             return apiError.message
