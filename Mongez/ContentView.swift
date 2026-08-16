@@ -16,6 +16,7 @@ import Courses
 import CourseDetails
 import Profile
 import Roadmap
+import Organizations
 
 struct ContentView: View {
     @StateObject private var appCoordinator = AppCoordinator()
@@ -112,6 +113,12 @@ struct ContentView: View {
                         roadmapFactory: {
                             AnyView(
                                 RoadmapView(viewModel: RoadmapViewmodel())
+                            )
+                        },
+                        organizationsFactory: {
+                            let organizationsViewModel = ServiceLocator.resolve(OrganizationsViewModel.self)!
+                            return AnyView(
+                                OrganizationsView(viewModel: organizationsViewModel)
                             )
                         },
                         profileFactory: {

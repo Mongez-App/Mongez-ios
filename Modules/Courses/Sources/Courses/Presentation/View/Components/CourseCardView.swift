@@ -108,21 +108,12 @@ struct CourseCardView: View {
     private var initialsView: some View {
         ZStack {
             RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
-                .fill(
-                    LinearGradient(
-                        colors: [
-                            AppTheme.Colors.black100,
-                            AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.4)
-                        ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
+                .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.2))
                 .frame(width: 135, height: 135)
 
             Text(course.name.initials)
                 .font(AppTheme.textStyle(size: 28, weight: .bold))
-                .foregroundColor(AppTheme.Colors.green100)
+                .foregroundColor(AppTheme.Colors.purple200)
         }
     }
 }
