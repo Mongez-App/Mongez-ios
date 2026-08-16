@@ -9,4 +9,7 @@ import Foundation
 
 public protocol OrganizationRepositoryProtocol {
     func fetchUserTeams() async throws -> [Team]
+    func discoverTeams() async throws -> OrgTeamsResponse
+    func joinTeam(inviteCode: String) async throws -> JoinTeamResponse
+    func searchTeams(query: String) async throws -> SearchResponse
 }

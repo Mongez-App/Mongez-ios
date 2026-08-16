@@ -23,4 +23,19 @@ public class OrganizationRepository : OrganizationRepositoryProtocol {
         
         return teams
     }
+    
+    public func discoverTeams() async throws -> OrgTeamsResponse {
+        let dto = try await remoteDataSource.discoverTeams()
+        return OrgTeamsResponseDTO.mapToEntity(dto: dto)
+    }
+    
+    public func joinTeam(inviteCode: String) async throws -> JoinTeamResponse {
+        let dto = try await remoteDataSource.joinTeam(inviteCode: inviteCode)
+        return JoinTeamDTO.mapToEntity(dto: dto)
+    }
+    
+    public func searchTeams(query: String) async throws -> SearchResponse {
+        let dto = try await remoteDataSource.searchTeams(query: query)
+        return SearchResponseDTO.mapToEntity(dto: dto)
+    }
 }
