@@ -1,4 +1,5 @@
 import Foundation
+import Common
 
 public class AddCourseUseCase {
     private let repository: CoursesRepositoryProtocol
@@ -64,24 +65,17 @@ public class AddCourseUseCase {
             examDate: examDate
         )
 
-        // Two-step material upload for each material
+        // Upload each material to Cloudinary and create in backend
         for material in materials {
-            // Step 1: Create material metadata
-            let createdMaterial = try await repository.createMaterial(
+            let cloudinaryUrl = try await cloudinaryService.uploadPDF(fileData: material.fileData, fileName: material.fileName)
+            
+            let _ = try await repository.createMaterial(
                 courseId: course.id,
                 fileName: material.fileName,
                 contentType: material.contentType,
                 fileSizeBytes: material.fileSizeBytes,
                 pageCount: material.pageCount,
-                deviceFileUri: material.deviceFileUri
-            )
-
-            // Step 2: Upload the actual PDF file
-            let _ = try await repository.uploadMaterialPDF(
-                materialId: createdMaterial.id,
-                fileData: material.fileData,
-                fileName: material.fileName,
-                contentType: material.contentType
+                deviceFileUri: cloudinaryUrl
             )
         }
 
