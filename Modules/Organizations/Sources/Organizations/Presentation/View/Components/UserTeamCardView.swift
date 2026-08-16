@@ -167,14 +167,16 @@ public struct UserTeamCardView: View {
     }
 }
 
-#Preview {
-    let sampleTeam = Team(
-        teamId: "team123",
-        name: "Design Team",
-        organizationName: "Mongez",
-        imageUrl: "",
-        completionPercentage: 0.55, 
-        events: []
-    )
-    return UserTeamCardView(team: sampleTeam).padding(16)
+struct UserTeamCardView_Previews: PreviewProvider {
+    static var previews: some View {
+        let sampleTeam = Team(
+            teamId: "team123",
+            name: "Design Team",
+            organizationName: "Mongez",
+            imageUrl: "",
+            completionPercentage: 0.55, 
+            events: []
+        )
+        return UserTeamCardView(team: sampleTeam).padding(16)
+    }
 }

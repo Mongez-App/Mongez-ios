@@ -205,36 +205,38 @@ extension OrgTeam: Identifiable {
     public var id: String { teamId }
 }
 
-#Preview {
-    struct MockGetUserTeamsUseCase: GetUserTeamsUseCaseProtocol {
-        func execute() async throws -> [Team] { return [] }
-    }
-    struct MockDiscoverTeamsUseCase: DiscoverTeamsUseCaseProtocol {
-        func execute() async throws -> OrgTeamsResponse {
-            let pending = [
-                OrgTeam(teamId: "1", name: "Team Name", imageUrl: "", organizationName: "Organization Name", appliedAt: "2024-05-25T10:00:00Z", status: "PENDING")
-            ]
-            let trending = [
-                OrgTeam(teamId: "2", name: "Team Name", imageUrl: "", organizationName: "Organization Name", appliedAt: "", status: "NOT_A_MEMBER")
-            ]
-            return OrgTeamsResponse(pendingRequests: pending, trendingTeams: trending)
+struct DiscoverView_Previews: PreviewProvider {
+    static var previews: some View {
+        struct MockGetUserTeamsUseCase: GetUserTeamsUseCaseProtocol {
+            func execute() async throws -> [Team] { return [] }
         }
-    }
-    struct MockJoinTeamUseCase: JoinTeamUseCaseProtocol {
-        func execute(inviteCode: String) async throws -> JoinTeamResponse {
-            return JoinTeamResponse(message: "Your request has been sent for Organization Name")
+        struct MockDiscoverTeamsUseCase: DiscoverTeamsUseCaseProtocol {
+            func execute() async throws -> OrgTeamsResponse {
+                let pending = [
+                    OrgTeam(teamId: "1", name: "Team Name", imageUrl: "", organizationName: "Organization Name", appliedAt: "2024-05-25T10:00:00Z", status: "PENDING")
+                ]
+                let trending = [
+                    OrgTeam(teamId: "2", name: "Team Name", imageUrl: "", organizationName: "Organization Name", appliedAt: "", status: "NOT_A_MEMBER")
+                ]
+                return OrgTeamsResponse(pendingRequests: pending, trendingTeams: trending)
+            }
         }
+        struct MockJoinTeamUseCase: JoinTeamUseCaseProtocol {
+            func execute(inviteCode: String) async throws -> JoinTeamResponse {
+                return JoinTeamResponse(message: "Your request has been sent for Organization Name")
+            }
+        }
+        struct MockSearchTeamsUseCase: SearchTeamsUseCaseProtocol {
+            func execute(query: String) async throws -> SearchResponse { return SearchResponse(data: []) }
+        }
+        
+        let viewModel = OrganizationsViewModel(
+            getUserTeamsUseCase: MockGetUserTeamsUseCase(),
+            discoverTeamsUseCase: MockDiscoverTeamsUseCase(),
+            joinTeamUseCase: MockJoinTeamUseCase(),
+            searchTeamsUseCase: MockSearchTeamsUseCase()
+        )
+        
+        return DiscoverView(viewModel: viewModel)
     }
-    struct MockSearchTeamsUseCase: SearchTeamsUseCaseProtocol {
-        func execute(query: String) async throws -> SearchResponse { return SearchResponse(data: []) }
-    }
-    
-    let viewModel = OrganizationsViewModel(
-        getUserTeamsUseCase: MockGetUserTeamsUseCase(),
-        discoverTeamsUseCase: MockDiscoverTeamsUseCase(),
-        joinTeamUseCase: MockJoinTeamUseCase(),
-        searchTeamsUseCase: MockSearchTeamsUseCase()
-    )
-    
-    return DiscoverView(viewModel: viewModel)
 }
