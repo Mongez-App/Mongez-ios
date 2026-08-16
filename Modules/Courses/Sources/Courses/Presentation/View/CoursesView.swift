@@ -203,12 +203,9 @@ struct MockCoursesRepository: CoursesRepositoryProtocol {
 
     func deleteCourse(id: String) async throws {}
 
+    // MARK: - Fixed Method Signature
     func createMaterial(courseId: String, fileName: String, contentType: String, fileSizeBytes: Int, pageCount: Int?, deviceFileUri: String) async throws -> Material {
         return Material(fileName: fileName, contentType: contentType, fileSizeBytes: fileSizeBytes, courseId: courseId, deviceFileUri: deviceFileUri)
-    }
-
-    func uploadMaterialPDF(materialId: String, fileData: Data, fileName: String, contentType: String) async throws -> Material {
-        return Material(fileName: fileName, contentType: contentType, fileSizeBytes: fileData.count)
     }
 
     func listMaterials(courseId: String) async throws -> [Material] {
@@ -218,16 +215,16 @@ struct MockCoursesRepository: CoursesRepositoryProtocol {
     func deleteMaterial(courseId: String, materialId: String) async throws {}
 }
 
-struct MockCloudinaryService: CloudinaryServiceProtocol {
-    func uploadImage(imageData: Data) async throws -> String {
-        return "https://mock-image-url.com/image.jpg"
-    }
-}
+//struct MockCloudinaryService: CloudinaryServiceProtocol {
+//    func uploadImage(imageData: Data) async throws -> String {
+//        return "https://mock-image-url.com/image.jpg"
+//    }
+//}
 
 extension CoursesViewModel {
     static var preview: CoursesViewModel {
         let repo = MockCoursesRepository()
-        let cloudinary = MockCloudinaryService()
+        let cloudinary = CloudinaryService()
         return CoursesViewModel(
             fetchCoursesUseCase: FetchCoursesUseCase(repository: repo),
             addCourseUseCase: AddCourseUseCase(repository: repo, cloudinaryService: cloudinary),

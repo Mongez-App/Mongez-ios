@@ -14,7 +14,7 @@ public struct CourseMaterialDTO: Codable {
     public let file_size_mb: Double
     public let status: String
     public let uploaded_at: String
-    public let material_path: String?
+    public let device_file_uri: String?
 }
 
 public extension CourseMaterialDTO {
@@ -26,7 +26,7 @@ public extension CourseMaterialDTO {
             fileSizeMB: file_size_mb,
             status: status,
             uploadedAt: uploaded_at,
-            materialPath: material_path
+            materialPath: device_file_uri
         )
     }
 }

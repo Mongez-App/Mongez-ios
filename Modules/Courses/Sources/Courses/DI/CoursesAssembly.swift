@@ -37,7 +37,8 @@ public final class CoursesAssembly: Assembly {
 
         container.register(AddMaterialUseCase.self) { resolver in
             let repository = resolver.resolve(CoursesRepositoryProtocol.self)!
-            return AddMaterialUseCase(repository: repository)
+            let cloudinaryService = resolver.resolve(CloudinaryServiceProtocol.self)!
+            return AddMaterialUseCase(repository: repository, cloudinaryService: cloudinaryService)
         }
 
         container.register(ListMaterialsUseCase.self) { resolver in

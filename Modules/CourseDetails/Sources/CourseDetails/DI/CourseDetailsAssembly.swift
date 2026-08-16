@@ -11,6 +11,10 @@ public class CourseDetailsAssembly: DIAssembly {
             CourseDetailsRemoteDataSourceImpl()
         }
         
+        container.register(CloudinaryServiceProtocol.self) { _ in
+            CloudinaryService()
+        }.inObjectScope(.container)
+        
         container.register(CourseDetailsRepository.self) { resolver in
             let remoteDataSource = resolver.resolve(CourseDetailsRemoteDataSource.self)!
             return CourseDetailsRepositoryImpl(remoteDataSource: remoteDataSource)
@@ -28,12 +32,14 @@ public class CourseDetailsAssembly: DIAssembly {
         
         container.register(UploadCourseMaterialUseCase.self) { resolver in
             let repository = resolver.resolve(CourseDetailsRepository.self)!
-            return UploadCourseMaterialUseCase(repository: repository)
+            let cloudinaryService = resolver.resolve(CloudinaryServiceProtocol.self)!
+            return UploadCourseMaterialUseCase(repository: repository, cloudinaryService: cloudinaryService)
         }
         
         container.register(UpdateCourseUseCase.self) { resolver in
             let repository = resolver.resolve(CourseDetailsRepository.self)!
-            return UpdateCourseUseCase(repository: repository)
+            let cloudinaryService = resolver.resolve(CloudinaryServiceProtocol.self)!
+            return UpdateCourseUseCase(repository: repository, cloudinaryService: cloudinaryService)
         }
         
         container.register(DeleteCourseUseCase.self) { resolver in
@@ -43,7 +49,8 @@ public class CourseDetailsAssembly: DIAssembly {
         
         container.register(DeleteCourseMaterialUseCase.self) { resolver in
             let repository = resolver.resolve(CourseDetailsRepository.self)!
-            return DeleteCourseMaterialUseCase(repository: repository)
+            let cloudinaryService = resolver.resolve(CloudinaryServiceProtocol.self)!
+            return DeleteCourseMaterialUseCase(repository: repository, cloudinaryService: cloudinaryService)
         }
     }
 }

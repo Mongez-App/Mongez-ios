@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CloudinaryCloudName</key>
+	<string>vllwannu</string>
+	<key>CloudinaryAPISecret</key>
+	<string>xQC09Jusc2RDXLJZnPsAy_tzNHM</string>
+	<key>CloudinaryAPIKey</key>
+	<string>474858797229748</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

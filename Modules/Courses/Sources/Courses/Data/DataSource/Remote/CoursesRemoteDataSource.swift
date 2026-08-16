@@ -8,7 +8,6 @@ protocol CoursesRemoteDataSourceProtocol {
     func updateCourse(id: String, requestDTO: UpdateCourseRequestDTO) async throws -> CourseDTO
     func deleteCourse(id: String) async throws
     func createMaterial(courseId: String, requestDTO: CreateMaterialRequestDTO) async throws -> MaterialDTO
-    func uploadMaterialPDF(materialId: String, fileData: Data, fileName: String, contentType: String) async throws -> MaterialDTO
     func listMaterials(courseId: String) async throws -> [MaterialDTO]
     func deleteMaterial(courseId: String, materialId: String) async throws
 }
@@ -135,38 +134,6 @@ final class CoursesRemoteDataSource: CoursesRemoteDataSourceProtocol {
         throw NSError(domain: "CreateMaterial", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid response: \(str)"])
     }
 
-    // Step 2: Upload the actual PDF file
-    func uploadMaterialPDF(materialId: String, fileData: Data, fileName: String, contentType: String) async throws -> MaterialDTO {
-        let boundary = UUID().uuidString
-        let body = createMultipartBody(fileData: fileData, fileName: fileName, contentType: contentType, boundary: boundary)
-
-        let endpoint = CoursesEndPoint.uploadMaterialPDF(
-            materialId: materialId,
-            body: body,
-            boundary: boundary
-        )
-
-        let (data, _) = try await NetworkManger.shared.requestRaw(endpoint: endpoint)
-
-        do {
-            let response = try JSONDecoder().decode(UploadMaterialResponseDTO.self, from: data)
-            if let material = response.material, material.id != nil {
-                return material
-            }
-        } catch {}
-
-        do {
-            let material = try JSONDecoder().decode(MaterialDTO.self, from: data)
-            if material.id != nil {
-                return material
-            }
-        } catch {
-            print("Failed to decode MaterialDTO from uploadMaterialPDF: \(error)")
-        }
-
-        let str = String(data: data, encoding: .utf8) ?? "Unreadable data"
-        throw NSError(domain: "UploadMaterialPDF", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid response: \(str)"])
-    }
 
     func listMaterials(courseId: String) async throws -> [MaterialDTO] {
         do {
@@ -187,20 +154,6 @@ final class CoursesRemoteDataSource: CoursesRemoteDataSourceProtocol {
         let _ = try await NetworkManger.shared.requestRaw(
             endpoint: CoursesEndPoint.deleteMaterial(courseId: courseId, materialId: materialId)
         )
-    }
-
-    private func createMultipartBody(fileData: Data, fileName: String, contentType: String, boundary: String) -> Data {
-        var body = Data()
-        let lineBreak = "\r\n"
-
-        body.append("--\(boundary)\(lineBreak)".data(using: .utf8)!)
-        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(fileName)\"\(lineBreak)".data(using: .utf8)!)
-        body.append("Content-Type: \(contentType)\(lineBreak)\(lineBreak)".data(using: .utf8)!)
-        body.append(fileData)
-        body.append("\(lineBreak)".data(using: .utf8)!)
-        body.append("--\(boundary)--\(lineBreak)".data(using: .utf8)!)
-
-        return body
     }
 }
 
