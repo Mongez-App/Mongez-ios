@@ -10,7 +10,7 @@ import Common
 
 public struct ValidationAlert: View {
     @Binding var isPresented: Bool
-    let title: String
+    let title: LocalizedStringKey
     let description: String
     
     public var body: some View {

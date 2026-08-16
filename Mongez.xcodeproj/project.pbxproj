@@ -25,6 +25,7 @@
 		5ABEF5C83007A98600B1ACEF /* MongezApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5C73007A98600B1ACEF /* MongezApp.swift */; };
 		5ABEF5CA3007A98600B1ACEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5C93007A98600B1ACEF /* ContentView.swift */; };
 		5ABEF5CC3007A98800B1ACEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5ABEF5CB3007A98800B1ACEF /* Assets.xcassets */; };
+		0AC641FE31484FF49897ACDD /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2F96FCB6F9884337ADD6932F /* Localizable.xcstrings */; };
 		5ABEF5CF3007A98800B1ACEF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5ABEF5CE3007A98800B1ACEF /* Preview Assets.xcassets */; };
 		5ABEF5D13007A98800B1ACEF /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5D03007A98800B1ACEF /* Persistence.swift */; };
 		5ABEF5D43007A98800B1ACEF /* Mongez.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5ABEF5D23007A98800B1ACEF /* Mongez.xcdatamodeld */; };
@@ -61,6 +62,7 @@
 		5ABEF5C73007A98600B1ACEF /* MongezApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MongezApp.swift; sourceTree = "<group>"; };
 		5ABEF5C93007A98600B1ACEF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5ABEF5CB3007A98800B1ACEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2F96FCB6F9884337ADD6932F /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		5ABEF5CE3007A98800B1ACEF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		5ABEF5D03007A98800B1ACEF /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		5ABEF5D33007A98800B1ACEF /* Mongez.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mongez.xcdatamodel; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				5ABEF5C73007A98600B1ACEF /* MongezApp.swift */,
 				5ABEF5C93007A98600B1ACEF /* ContentView.swift */,
 				5ABEF5CB3007A98800B1ACEF /* Assets.xcassets */,
+				2F96FCB6F9884337ADD6932F /* Localizable.xcstrings */,
 				5ABEF5D03007A98800B1ACEF /* Persistence.swift */,
 				5ABEF5D23007A98800B1ACEF /* Mongez.xcdatamodeld */,
 				5ABEF5CD3007A98800B1ACEF /* Preview Content */,
@@ -284,6 +287,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				ar,
 				Base,
 			);
 			mainGroup = 5ABEF5BB3007A98600B1ACEF;
@@ -324,6 +328,7 @@
 			files = (
 				5ABEF5CF3007A98800B1ACEF /* Preview Assets.xcassets in Resources */,
 				5ABEF5CC3007A98800B1ACEF /* Assets.xcassets in Resources */,
+				0AC641FE31484FF49897ACDD /* Localizable.xcstrings in Resources */,
 				038C2DD7300E35810046780D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

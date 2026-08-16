@@ -22,7 +22,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Common",package: "Common")]
         ),
-        
+
         .testTarget(
             name: "OnBoardingTests",
             dependencies: ["OnBoarding"]),

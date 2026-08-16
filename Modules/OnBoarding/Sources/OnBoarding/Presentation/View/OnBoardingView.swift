@@ -108,12 +108,12 @@ struct OnboardingPageView: View {
             Spacer()
             
             VStack(spacing: AppTheme.Spacing.small) {
-                Text(step.title)
+                Text(LocalizedStringKey(step.title))
                     .font(AppTheme.textStyle(size: 24, weight: .bold))
                     .foregroundColor(AppTheme.Colors.black100)
                     .multilineTextAlignment(.center)
-                
-                Text(step.descreption)
+
+                Text(LocalizedStringKey(step.descreption))
                     .font(AppTheme.textStyle(size: 18, weight: .regular))
                     .foregroundColor(AppTheme.Colors.gray200)
                     .multilineTextAlignment(.center)

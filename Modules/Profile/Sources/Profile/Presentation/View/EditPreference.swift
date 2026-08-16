@@ -19,7 +19,7 @@ struct EditPreferencesSheet: View {
     @Binding var selectedDays: Set<String>
 
     private let hoursRange = Array(1...12)
-    private let weekdays: [(key: String, label: String)] = [
+    private let weekdays: [(key: String, label: LocalizedStringKey)] = [
         ("Sun", "S"), ("Mon", "M"), ("Tue", "T"),
         ("Wed", "W"), ("Thu", "T"), ("Fri", "F"), ("Sat", "S")
     ]
@@ -128,7 +128,7 @@ struct EditPreferencesSheet: View {
         }
     }
 
-    private func dayChip(key: String, label: String) -> some View {
+    private func dayChip(key: String, label: LocalizedStringKey) -> some View {
         let isSelected = selectedDays.contains(key)
         return Button {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.6, blendDuration: 0.5)) {
