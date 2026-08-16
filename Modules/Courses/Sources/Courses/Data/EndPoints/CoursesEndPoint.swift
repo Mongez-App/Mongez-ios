@@ -8,6 +8,7 @@ enum CoursesEndPoint: EndPoint {
     case updateCourse(id: String, body: Data)
     case deleteCourse(id: String)
     case createMaterial(courseId: String, body: Data)
+    case uploadMaterialPDF(materialId: String, body: Data, boundary: String)
 
     case listMaterials(courseId: String)
     case deleteMaterial(courseId: String, materialId: String)
@@ -30,6 +31,8 @@ enum CoursesEndPoint: EndPoint {
             return "courses/\(id)"
         case .createMaterial(let courseId, _):
             return "courses/\(courseId)/materials"
+        case .uploadMaterialPDF(let materialId, _, _):
+            return "upload/\(materialId)"
 
         case .listMaterials(let courseId):
             return "courses/\(courseId)/materials"
@@ -42,7 +45,7 @@ enum CoursesEndPoint: EndPoint {
         switch self {
         case .listCourses, .getCourse, .listMaterials:
             return .get
-        case .createCourse, .createMaterial:
+        case .createCourse, .createMaterial, .uploadMaterialPDF:
             return .post
         case .updateCourse:
             return .patch
@@ -63,7 +66,12 @@ enum CoursesEndPoint: EndPoint {
             headers["X-User-Id"] = userId
         }
 
-        headers["Content-Type"] = "application/json"
+        switch self {
+        case .uploadMaterialPDF(_, _, let boundary):
+            headers["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
+        default:
+            headers["Content-Type"] = "application/json"
+        }
 
         return headers
     }
@@ -71,7 +79,7 @@ enum CoursesEndPoint: EndPoint {
     var body: Data? {
         switch self {
         case .createCourse(let body), .updateCourse(_, let body),
-             .createMaterial(_, let body):
+             .createMaterial(_, let body), .uploadMaterialPDF(_, let body, _):
             return body
         default:
             return nil
