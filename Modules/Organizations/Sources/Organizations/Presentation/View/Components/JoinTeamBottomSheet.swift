@@ -142,20 +142,22 @@ public struct JoinTeamBottomSheet: View {
     }
 }
 
-#Preview {
-    VStack(spacing: 40) {
-        let team1 = OrgTeam(teamId: "1", name: "Team Name", imageUrl: "", organizationName: "Organization Name", appliedAt: "", status: "NOT_A_MEMBER")
-        JoinTeamBottomSheet(team: team1, inviteCode: .constant(""), onSubmit: {})
-            .frame(height: 350)
-            .background(Color.white)
-            .cornerRadius(24)
-        
-        let team2 = OrgTeam(teamId: "2", name: "Team Name", imageUrl: "", organizationName: "Organization Name", appliedAt: "", status: "ALREADY_A_MEMBER")
-        JoinTeamBottomSheet(team: team2, inviteCode: .constant(""), onSubmit: {})
-            .frame(height: 250)
-            .background(Color.white)
-            .cornerRadius(24)
+struct JoinTeamBottomSheet_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack(spacing: 40) {
+            let team1 = OrgTeam(teamId: "1", name: "Team Name", imageUrl: "", organizationName: "Organization Name", appliedAt: "", status: "NOT_A_MEMBER")
+            JoinTeamBottomSheet(team: team1, inviteCode: .constant(""), onSubmit: {})
+                .frame(height: 350)
+                .background(Color.white)
+                .cornerRadius(24)
+            
+            let team2 = OrgTeam(teamId: "2", name: "Team Name", imageUrl: "", organizationName: "Organization Name", appliedAt: "", status: "ALREADY_A_MEMBER")
+            JoinTeamBottomSheet(team: team2, inviteCode: .constant(""), onSubmit: {})
+                .frame(height: 250)
+                .background(Color.white)
+                .cornerRadius(24)
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
     }
-    .padding()
-    .background(Color.gray.opacity(0.1))
 }

@@ -111,27 +111,29 @@ public struct OrgTeamCardView: View {
     }
 }
 
-#Preview {
-    VStack(spacing: 16) {
-        let samplePendingTeam = OrgTeam(
-            teamId: "1",
-            name: "Team Name",
-            imageUrl: "",
-            organizationName: "Organization Name",
-            appliedAt: "2024-05-25T10:00:00Z",
-            status: "PENDING"
-        )
-        OrgTeamCardView(team: samplePendingTeam, isPending: true)
-        
-        let sampleTrendingTeam = OrgTeam(
-            teamId: "2",
-            name: "Team Name",
-            imageUrl: "",
-            organizationName: "Organization Name",
-            appliedAt: "",
-            status: "NOT_A_MEMBER"
-        )
-        OrgTeamCardView(team: sampleTrendingTeam, isPending: false)
+struct OrgTeamCardView_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack(spacing: 16) {
+            let samplePendingTeam = OrgTeam(
+                teamId: "1",
+                name: "Team Name",
+                imageUrl: "",
+                organizationName: "Organization Name",
+                appliedAt: "2024-05-25T10:00:00Z",
+                status: "PENDING"
+            )
+            OrgTeamCardView(team: samplePendingTeam, isPending: true)
+            
+            let sampleTrendingTeam = OrgTeam(
+                teamId: "2",
+                name: "Team Name",
+                imageUrl: "",
+                organizationName: "Organization Name",
+                appliedAt: "",
+                status: "NOT_A_MEMBER"
+            )
+            OrgTeamCardView(team: sampleTrendingTeam, isPending: false)
+        }
+        .padding()
     }
-    .padding()
 }

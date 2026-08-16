@@ -12,9 +12,9 @@ enum TeamCoursesEndPoint: EndPoint {
     var path: String {
         switch self {
         case .getTeamCourses(let teamId, _):
-            return "organization/getCourses?teamId=\(teamId)"
+            return "teams/\(teamId)/courses"
         case .getTeamEvents(let teamId, _):
-            return "organization/getEvents?teamId=\(teamId)"
+            return "team/\(teamId)/events"
         }
     }
     
