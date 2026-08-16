@@ -23,12 +23,16 @@ struct MessageBubbleView: View {
                     .background(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.6))
                     .cornerRadius(AppTheme.radius.meduim)
             } else {
-                Text(message.content)
-                    .font(AppTheme.textStyle(size: 16))
-                    .foregroundColor(AppTheme.Colors.black100)
-                    .padding(AppTheme.Spacing.xSmall)
-                    .background(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.gray100, opacity: 0.6))
-                    .cornerRadius(AppTheme.radius.meduim)
+                if message.content == "..." {
+                    TypingIndicatorView()
+                } else {
+                    Text(message.content)
+                        .font(AppTheme.textStyle(size: 16))
+                        .foregroundColor(AppTheme.Colors.black100)
+                        .padding(AppTheme.Spacing.xSmall)
+                        .background(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.gray100, opacity: 0.6))
+                        .cornerRadius(AppTheme.radius.meduim)
+                }
                 Spacer()
             }
         }

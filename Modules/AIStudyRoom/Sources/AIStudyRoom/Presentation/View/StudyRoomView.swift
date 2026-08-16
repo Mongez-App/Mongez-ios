@@ -70,7 +70,7 @@ public struct StudyRoomView: View {
                         }
                     }
                     
-                    if viewModel.isLoading {
+                    if viewModel.isLoading && viewModel.messages.isEmpty {
                         ProgressView()
                             .scaleEffect(1.5)
                             .tint(AppTheme.Colors.purple200)

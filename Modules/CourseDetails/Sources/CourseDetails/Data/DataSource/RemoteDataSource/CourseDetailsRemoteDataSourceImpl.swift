@@ -79,8 +79,8 @@ public class CourseDetailsRemoteDataSourceImpl: CourseDetailsRemoteDataSource {
         return try await NetworkManger.shared.request(endpoint: endpoint, responseType: EmptyResponseDTO.self)
     }
     
-    public func getTasks(courseId: String) async throws -> [CourseTaskDTO] {
+    public func getTasks(courseId: String) async throws -> CourseTasksResponseDTO {
         let endpoint = CourseTaskEndPoint.getTasks(courseId: courseId)
-        return try await NetworkManger.shared.request(endpoint: endpoint, responseType: [CourseTaskDTO].self)
+        return try await NetworkManger.shared.request(endpoint: endpoint, responseType: CourseTasksResponseDTO.self)
     }
 }
