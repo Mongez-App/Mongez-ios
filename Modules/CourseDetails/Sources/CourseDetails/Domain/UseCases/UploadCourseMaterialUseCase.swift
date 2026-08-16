@@ -32,6 +32,15 @@ public class UploadCourseMaterialUseCase {
             deviceUri: materialPath
         )
         
+        let materialId = initResponse.material_id
+        
+        // 3. Upload the actual PDF file to the backend to trigger AI
+        let _ = try await repository.uploadFile(
+            materialId: materialId,
+            fileData: fileData,
+            fileName: fileName
+        )
+        
         return initResponse
     }
 }

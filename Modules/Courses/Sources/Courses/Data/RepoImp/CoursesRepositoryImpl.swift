@@ -77,6 +77,17 @@ final class CoursesRepositoryImpl: CoursesRepositoryProtocol {
         return materialDTO.toDomain()
     }
 
+    // Step 2: Upload actual material PDF
+    func uploadMaterialPDF(materialId: String, fileData: Data, fileName: String, contentType: String) async throws -> Material {
+        let materialDTO = try await remoteDataSource.uploadMaterialPDF(
+            materialId: materialId,
+            fileData: fileData,
+            fileName: fileName,
+            contentType: contentType
+        )
+        return materialDTO.toDomain()
+    }
+
 
 
     func listMaterials(courseId: String) async throws -> [Material] {

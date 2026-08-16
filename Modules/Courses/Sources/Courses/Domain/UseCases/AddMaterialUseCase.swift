@@ -32,6 +32,14 @@ public class AddMaterialUseCase {
             deviceFileUri: cloudinaryUrl
         )
 
-        return createdMaterial
+        // Step 3: Upload the actual PDF file to the backend
+        let uploadedMaterial = try await repository.uploadMaterialPDF(
+            materialId: createdMaterial.id,
+            fileData: fileData,
+            fileName: fileName,
+            contentType: contentType
+        )
+
+        return uploadedMaterial
     }
 }

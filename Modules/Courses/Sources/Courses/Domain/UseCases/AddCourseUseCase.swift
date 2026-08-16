@@ -69,13 +69,20 @@ public class AddCourseUseCase {
         for material in materials {
             let cloudinaryUrl = try await cloudinaryService.uploadPDF(fileData: material.fileData, fileName: material.fileName)
             
-            let _ = try await repository.createMaterial(
+            let createdMaterial = try await repository.createMaterial(
                 courseId: course.id,
                 fileName: material.fileName,
                 contentType: material.contentType,
                 fileSizeBytes: material.fileSizeBytes,
                 pageCount: material.pageCount,
                 deviceFileUri: cloudinaryUrl
+            )
+            
+            let _ = try await repository.uploadMaterialPDF(
+                materialId: createdMaterial.id,
+                fileData: material.fileData,
+                fileName: material.fileName,
+                contentType: material.contentType
             )
         }
 

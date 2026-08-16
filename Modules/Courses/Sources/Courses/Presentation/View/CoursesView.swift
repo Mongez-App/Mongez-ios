@@ -208,6 +208,10 @@ struct MockCoursesRepository: CoursesRepositoryProtocol {
         return Material(fileName: fileName, contentType: contentType, fileSizeBytes: fileSizeBytes, courseId: courseId, deviceFileUri: deviceFileUri)
     }
 
+    func uploadMaterialPDF(materialId: String, fileData: Data, fileName: String, contentType: String) async throws -> Material {
+        return Material(fileName: fileName, contentType: contentType, fileSizeBytes: fileData.count)
+    }
+
     func listMaterials(courseId: String) async throws -> [Material] {
         return []
     }
