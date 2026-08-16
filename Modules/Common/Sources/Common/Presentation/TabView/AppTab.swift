@@ -11,6 +11,7 @@ public enum AppTab: Int, CaseIterable {
     case dashboard
     case courses
     case roadmap
+    case organizations
     case profile
     
     public var iconName: String {
@@ -21,6 +22,8 @@ public enum AppTab: Int, CaseIterable {
             return "courses"
         case .roadmap:
             return "roadmap"
+        case .organizations:
+            return "teams"
         case .profile:
             return "profile"
         }

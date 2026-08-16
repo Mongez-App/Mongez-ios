@@ -13,6 +13,7 @@ import Common
 import CourseDetails
 import AIStudyRoom
 import Swinject
+import Organizations
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
@@ -26,6 +27,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         let container = DIContainer.shared.getContainer()
         CourseDetailsAssembly().assemble(container: container)
         ChatAssembly().assemble(container: container)
+        OrganizationsAssembly().assemble(container: container)
         AppAssembly().assemble(container: container)
 
         return true
