@@ -45,7 +45,7 @@ public struct OrganizationsView: View {
                 UserTeamsView(viewModel: viewModel)
                     .tag(OrganizationTab.myTeams)
                 
-                DiscoverView()
+                DiscoverView(viewModel: viewModel)
                     .tag(OrganizationTab.discover)
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))

@@ -63,7 +63,7 @@ public struct OrgTeamDTO: Decodable {
             teamId: dto.teamId,
             name: dto.name,
             imageUrl: dto.imageUrl ?? "",
-            organizationName: dto.organizationName ?? "",
+            organizationName: dto.organizationName ?? "Organization Name",
             appliedAt: dto.appliedAt ?? "",
             status: dto.status
         )

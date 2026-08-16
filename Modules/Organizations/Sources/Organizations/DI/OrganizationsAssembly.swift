@@ -33,7 +33,12 @@ public class OrganizationsAssembly: DIAssembly {
         }
         
         container.register(OrganizationsViewModel.self) { resolver in
-            OrganizationsViewModel(getUserTeamsUseCase: resolver.resolve(GetUserTeamsUseCaseProtocol.self)!)
+            OrganizationsViewModel(
+                getUserTeamsUseCase: resolver.resolve(GetUserTeamsUseCaseProtocol.self)!,
+                discoverTeamsUseCase: resolver.resolve(DiscoverTeamsUseCaseProtocol.self)!,
+                joinTeamUseCase: resolver.resolve(JoinTeamUseCaseProtocol.self)!,
+                searchTeamsUseCase: resolver.resolve(SearchTeamsUseCaseProtocol.self)!
+            )
         }
     }
 }
