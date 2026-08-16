@@ -65,6 +65,36 @@ public final class CoursesAssembly: Assembly {
                 deleteCourseUseCase: deleteCourseUseCase
             )
         }.inObjectScope(.container)
+        container.register(TeamCoursesRemoteDataSourceProtocol.self) { _ in
+            TeamCoursesRemoteDataSource()
+        }.inObjectScope(.container)
+
+        container.register(TeamCoursesRepositoryProtocol.self) { resolver in
+            let remoteDataSource = resolver.resolve(TeamCoursesRemoteDataSourceProtocol.self)!
+            return TeamCoursesRepositoryImpl(remoteDataSource: remoteDataSource)
+        }.inObjectScope(.container)
+
+        container.register(FetchTeamCoursesUseCase.self) { resolver in
+            let repository = resolver.resolve(TeamCoursesRepositoryProtocol.self)!
+            return FetchTeamCoursesUseCase(repository: repository)
+        }
+
+        container.register(FetchTeamEventsUseCase.self) { resolver in
+            let repository = resolver.resolve(TeamCoursesRepositoryProtocol.self)!
+            return FetchTeamEventsUseCase(repository: repository)
+        }
+
+        container.register(TeamCoursesViewModel.self) { (resolver, teamId: String, teamName: String, organizationId: String) in
+            let fetchCoursesUseCase = resolver.resolve(FetchTeamCoursesUseCase.self)!
+            let fetchEventsUseCase = resolver.resolve(FetchTeamEventsUseCase.self)!
+            return TeamCoursesViewModel(
+                teamId: teamId,
+                teamName: teamName,
+                organizationId: organizationId,
+                fetchTeamCoursesUseCase: fetchCoursesUseCase,
+                fetchTeamEventsUseCase: fetchEventsUseCase
+            )
+        }
     }
 }
 

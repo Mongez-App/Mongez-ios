@@ -57,8 +57,7 @@ class ProfileViewModel: ObservableObject {
 
     func loadProfile() {
         isLoading = true
-        Task {
-            defer { isLoading = false }
+        Task { @MainActor in
             do {
                 async let fetchedProfileTask = getProfileUseCase.execute()
                 async let fetchedPreferencesTask = getPreferencesUseCase.execute()
@@ -89,8 +88,10 @@ class ProfileViewModel: ObservableObject {
                 if let days = mergedProfile.stats?.availableDays {
                     self.availableDays = Set(days)
                 }
+                self.isLoading = false
             } catch {
                 print("Error loading profile: \(error.localizedDescription)")
+                self.isLoading = false
             }
         }
     }
@@ -147,16 +148,17 @@ class ProfileViewModel: ObservableObject {
         isCalendarSyncEnabled = newValue
         isLoading = true
         
-        Task {
-            defer { isLoading = false }
+        Task { @MainActor in
             do {
                 let updated = try await updateCalendarSyncUseCase.execute(calendarConnected: newValue, calendarSynced: newValue)
                 if let currentProfile = self.profile {
                     self.profile = currentProfile.merged(with: updated)
                 }
+                self.isLoading = false
             } catch {
                 print("Error updating calendar sync: \(error)")
                 self.isCalendarSyncEnabled = previousValue // Rollback
+                self.isLoading = false
             }
         }
     }
@@ -168,8 +170,7 @@ class ProfileViewModel: ObservableObject {
     func openEditPreferences() {
         isEditPreferencesPresented = true
         isPreferencesLoading = true
-        Task {
-            defer { isPreferencesLoading = false }
+        Task { @MainActor in
             do {
                 let fetchedPreferences = try await getPreferencesUseCase.execute()
                 if let currentProfile = self.profile {
@@ -181,8 +182,10 @@ class ProfileViewModel: ObservableObject {
                 if let days = fetchedPreferences.availableDays {
                     self.availableDays = Set(days)
                 }
+                self.isPreferencesLoading = false
             } catch {
                 print("Error fetching preferences: \(error)")
+                self.isPreferencesLoading = false
             }
         }
     }
@@ -190,9 +193,11 @@ class ProfileViewModel: ObservableObject {
     func saveEditPreferences(hours: Int, days: Set<String>) {
         isEditPreferencesPresented = false
         isLoading = true
-        Task {
-            defer { isLoading = false }
-            guard let currentProfile = self.profile else { return }
+        Task { @MainActor in
+            guard let currentProfile = self.profile else {
+                self.isLoading = false
+                return
+            }
             do {
                 let updatedPreferences = try await updatePreferencesUseCase.execute(
                     dailyStudyHours: hours,
@@ -201,8 +206,10 @@ class ProfileViewModel: ObservableObject {
                 self.profile = currentProfile.merged(with: updatedPreferences)
                 self.dailyStudyHours = hours
                 self.availableDays = days
+                self.isLoading = false
             } catch {
                 print("Error updating preferences: \(error)")
+                self.isLoading = false
             }
         }
     }
