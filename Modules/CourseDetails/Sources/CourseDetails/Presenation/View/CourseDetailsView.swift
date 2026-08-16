@@ -32,9 +32,9 @@ public struct CourseDetailsView: View {
                 }
             )
             .sheet(isPresented: $showEditSheet) {
-                EditCourseSheetView(initialCourseName: viewModel.courseName) { name in
+                EditCourseSheetView(initialCourseName: viewModel.courseName) { name, imageData in
                     Task {
-                        await viewModel.updateCourse(name: name)
+                        await viewModel.updateCourse(name: name, imageData: imageData)
                     }
                 }
                     .presentationDetents([.fraction(0.85)])
