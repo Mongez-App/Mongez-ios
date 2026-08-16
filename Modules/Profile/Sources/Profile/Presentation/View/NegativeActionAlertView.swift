@@ -11,11 +11,11 @@ import Common
 public struct NegativeActionAlertView: View {
     @Binding var isPresented: Bool
     
-    let title: String
-    let description: String
-    
-    var primaryButtonTitle: String = "Cancel"
-    let secondaryButtonTitle: String
+    let title: LocalizedStringKey
+    let description: LocalizedStringKey
+
+    var primaryButtonTitle: LocalizedStringKey = "Cancel"
+    let secondaryButtonTitle: LocalizedStringKey
     
     let secondaryAction: () -> Void
     

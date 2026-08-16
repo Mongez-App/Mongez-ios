@@ -35,7 +35,7 @@ public struct CourseTasksTabView: View {
         }
     }
     
-    private var emptyStateText: String {
+    private var emptyStateText: LocalizedStringKey {
         switch selectedFilter {
         case "All": return "No tasks found in this course."
         case "Pending": return "No pending tasks found."

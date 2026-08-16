@@ -99,7 +99,7 @@ public struct AuthView: View {
         .padding(.bottom, AppTheme.Spacing.small)
     }
 
-    private func fieldBlock(field: Field, title: String, icon: String, text: Binding<String>, placeholder: String, keyboard: UIKeyboardType = .default) -> some View {
+    private func fieldBlock(field: Field, title: LocalizedStringKey, icon: String, text: Binding<String>, placeholder: LocalizedStringKey, keyboard: UIKeyboardType = .default) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(AppTheme.textStyle(size: 13, weight: .semibold))
@@ -123,7 +123,7 @@ public struct AuthView: View {
         }
     }
 
-    private func secureFieldBlock(field: Field, title: String, text: Binding<String>, isVisible: Binding<Bool>) -> some View {
+    private func secureFieldBlock(field: Field, title: LocalizedStringKey, text: Binding<String>, isVisible: Binding<Bool>) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(AppTheme.textStyle(size: 13, weight: .semibold))

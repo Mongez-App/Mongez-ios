@@ -10,7 +10,7 @@ import Common
 
 /// Labeled dropdown field — reused for both "Event Type" and "Course" in the Add Event form.
 struct RoadmapDropdownField: View {
-    let title: String
+    let title: LocalizedStringKey
     let options: [String]
     @Binding var selection: String
 

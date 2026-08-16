@@ -23,7 +23,7 @@ public struct OrganizationsView: View {
                             viewModel.selectedTab = tab
                         }
                     }) {
-                        Text(tab.rawValue)
+                        Text(tabTitle(for: tab))
                             .font(AppTheme.textStyle(size: 14, weight: .medium))
                             .foregroundColor(viewModel.selectedTab == tab ? AppTheme.Colors.black100 : AppTheme.Colors.gray300)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -53,6 +53,18 @@ public struct OrganizationsView: View {
         }
         .padding(.top, AppTheme.Spacing.large)
         .background(AppTheme.Colors.white100.ignoresSafeArea())
+    }
+
+    // `OrganizationTab.rawValue` is a plain String, so `Text(tab.rawValue)` would not
+    // auto-localize (Text(String) never resolves against the String Catalog). Map each
+    // fixed tab case to a LocalizedStringKey literal here instead.
+    private func tabTitle(for tab: OrganizationTab) -> LocalizedStringKey {
+        switch tab {
+        case .myTeams:
+            return "My Teams"
+        case .discover:
+            return "Discover"
+        }
     }
 }
 

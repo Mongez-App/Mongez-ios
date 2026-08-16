@@ -13,6 +13,7 @@
 //
 
 import Combine
+import Common
 import Foundation
 
 @MainActor
@@ -77,7 +78,9 @@ class ProfileViewModel: ObservableObject {
                     }
                 }
                 if let language = fetchedProfile.language {
-                    self.selectedLanguage = (language.lowercased() == "arabic" || language.lowercased() == "ar") ? "AR" : "EN"
+                    let resolvedLanguage = AppLanguage(backendValue: language)
+                    self.selectedLanguage = resolvedLanguage.rawValue
+                    LocalizationManager.shared.setLanguage(resolvedLanguage)
                 }
                 if let calendarConnected = mergedProfile.calendarSyncConnected {
                     self.isCalendarSyncEnabled = calendarConnected
@@ -118,7 +121,7 @@ class ProfileViewModel: ObservableObject {
 
     func updateLanguage(_ lang: String) {
         self.selectedLanguage = lang
-        UserDefaults.standard.set(lang.uppercased(), forKey: "selected_language")
+        LocalizationManager.shared.setLanguage(AppLanguage(rawValue: lang.uppercased()) ?? .english)
         updateProfileOnServer()
     }
 

@@ -74,7 +74,7 @@ public struct TeamCoursesView: View {
         )
     }
     
-    private func tabButton(title: String, tab: TeamCoursesViewModel.Tab) -> some View {
+    private func tabButton(title: LocalizedStringKey, tab: TeamCoursesViewModel.Tab) -> some View {
         Button(action: { viewModel.selectedTab = tab }) {
             Text(title)
                 .font(AppTheme.textStyle(size: 14, weight: .semibold))

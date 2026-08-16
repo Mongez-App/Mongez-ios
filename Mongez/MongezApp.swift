@@ -43,13 +43,17 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct MongezApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
- 
+    @StateObject private var localization = LocalizationManager.shared
+
     let persistenceController = PersistenceController.shared
- 
+
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.locale, localization.language.locale)
+                .environment(\.layoutDirection, localization.language.layoutDirection)
+                .id(localization.language)
                 .onOpenURL { url in
                     GIDSignIn.sharedInstance.handle(url)
                 }

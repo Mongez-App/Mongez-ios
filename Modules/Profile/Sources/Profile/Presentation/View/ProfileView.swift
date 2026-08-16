@@ -321,7 +321,7 @@ public struct ProfileView: View {
 }
 
 struct StatCard: View {
-    let title: String
+    let title: LocalizedStringKey
     let value: String
     
     var body: some View {
@@ -348,7 +348,7 @@ struct SettingRow<TrailingContent: View>: View {
     let iconName: String
     let iconColor: Color
     let bgOpacity: Double
-    let title: String
+    let title: LocalizedStringKey
     var titleColor: Color = AppTheme.Colors.black100
     var font: Font
     var showDivider: Bool = true
