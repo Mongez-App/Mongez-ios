@@ -102,7 +102,7 @@ public struct DiscoverView: View {
                                     .frame(width: 72, height: 72)
                                     .foregroundColor(AppTheme.Colors.purple200)
                             }
-                            .padding(.bottom, 8)
+                            .padding(.bottom, 24)
                             
                             Text("No Teams Found")
                                 .font(AppTheme.textStyle(size: 18, weight: .bold))
