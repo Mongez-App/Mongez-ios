@@ -14,26 +14,45 @@ struct TeamCourseDTO: Decodable {
     enum CodingKeys: String, CodingKey {
         case id
         case _id
+        case courseId = "course_id"
         case name
         case progress
+        case completionPercentage = "completion_percentage"
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         if let id = try container.decodeIfPresent(String.self, forKey: .id) {
             self.id = id
+        } else if let courseId = try container.decodeIfPresent(String.self, forKey: .courseId) {
+            self.id = courseId
         } else {
             self.id = try container.decodeIfPresent(String.self, forKey: ._id)
         }
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
-        self.progress = try container.decodeIfPresent(Double.self, forKey: .progress)
+        
+        if let completion = try container.decodeIfPresent(Double.self, forKey: .completionPercentage) {
+            self.progress = completion
+        } else {
+            self.progress = try container.decodeIfPresent(Double.self, forKey: .progress)
+        }
     }
     
     func toDomain() -> TeamCourse {
+        let rawName = name ?? "Untitled Course"
+        var actualName = rawName
+        var orgId: String? = nil
+        
+        if let underscoreIndex = rawName.firstIndex(of: "_") {
+            orgId = String(rawName[..<underscoreIndex])
+            actualName = String(rawName[rawName.index(after: underscoreIndex)...])
+        }
+        
         return TeamCourse(
             id: id ?? UUID().uuidString,
-            name: name ?? "Untitled Course",
-            progress: progress ?? 0.0
+            name: actualName,
+            progress: progress ?? 0.0,
+            organizationId: orgId
         )
     }
 }

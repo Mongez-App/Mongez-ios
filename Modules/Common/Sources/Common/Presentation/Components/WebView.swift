@@ -3,12 +3,14 @@ import PDFKit
 
 public struct WebView: View {
     public let url: URL
+    public let headers: [String: String]?
     @State private var pdfDocument: PDFDocument?
     @State private var isLoading = true
     @State private var errorMessage: String?
     
-    public init(url: URL) {
+    public init(url: URL, headers: [String: String]? = nil) {
         self.url = url
+        self.headers = headers
     }
     
     public var body: some View {
@@ -44,7 +46,14 @@ public struct WebView: View {
     private func loadPDF() {
         Task {
             do {
-                let (data, response) = try await URLSession.shared.data(from: url)
+                var request = URLRequest(url: url)
+                if let headers = headers {
+                    for (key, value) in headers {
+                        request.setValue(value, forHTTPHeaderField: key)
+                    }
+                }
+                
+                let (data, response) = try await URLSession.shared.data(for: request)
                 
                 guard let httpResponse = response as? HTTPURLResponse else {
                     await MainActor.run {

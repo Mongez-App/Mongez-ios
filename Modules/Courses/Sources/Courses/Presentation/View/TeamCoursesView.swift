@@ -133,6 +133,9 @@ public struct TeamCoursesView: View {
                     LazyVStack(spacing: AppTheme.Spacing.medium) {
                         ForEach(viewModel.filteredCourses) { course in
                             TeamCourseCardView(course: course)
+                                .onTapGesture {
+                                    viewModel.onCourseSelected?(course.id, course.name, course.organizationId)
+                                }
                         }
                     }
                     .padding(.horizontal, AppTheme.Spacing.large)

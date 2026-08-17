@@ -26,6 +26,7 @@ struct CourseDTO: Codable {
     let isHidden: Bool?
     let materialCount: Int?
     let hasMaterials: Bool?
+    let organizationId: String?
     let createdAt: String?
     let updatedAt: String?
 
@@ -46,6 +47,7 @@ struct CourseDTO: Codable {
         case isHidden = "is_hidden"
         case materialCount = "material_count"
         case hasMaterials = "has_materials"
+        case organizationId = "organization_id"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
@@ -75,6 +77,7 @@ struct CourseDTO: Codable {
         isHidden = try container.decodeIfPresent(Bool.self, forKey: .isHidden)
         materialCount = try container.decodeIfPresent(Int.self, forKey: .materialCount)
         hasMaterials = try container.decodeIfPresent(Bool.self, forKey: .hasMaterials)
+        organizationId = try container.decodeIfPresent(String.self, forKey: .organizationId)
         createdAt = try container.decodeIfPresent(String.self, forKey: .createdAt)
         updatedAt = try container.decodeIfPresent(String.self, forKey: .updatedAt)
     }
@@ -96,6 +99,7 @@ struct CourseDTO: Codable {
         try container.encodeIfPresent(isHidden, forKey: .isHidden)
         try container.encodeIfPresent(materialCount, forKey: .materialCount)
         try container.encodeIfPresent(hasMaterials, forKey: .hasMaterials)
+        try container.encodeIfPresent(organizationId, forKey: .organizationId)
         try container.encodeIfPresent(createdAt, forKey: .createdAt)
         try container.encodeIfPresent(updatedAt, forKey: .updatedAt)
     }
@@ -126,7 +130,8 @@ struct CourseDTO: Codable {
             completionPercentage: completionPercentage ?? 0.0,
             isHidden: isHidden ?? false,
             materialCount: materialCount ?? 0,
-            hasMaterials: hasMaterials ?? false
+            hasMaterials: hasMaterials ?? false,
+            organizationId: organizationId
         )
     }
 }

@@ -3,6 +3,7 @@ import Foundation
 public enum CourseType: String, Codable, Equatable {
     case materialCourse = "MATERIAL_COURSE"
     case urlCourse = "URL_COURSE"
+    case teamCourse = "TEAM_COURSE"
 }
 
 public struct Course: Identifiable, Equatable {
@@ -21,6 +22,7 @@ public struct Course: Identifiable, Equatable {
     public var imageData: Data?
     public var materialCount: Int
     public var hasMaterials: Bool
+    public var organizationId: String?
 
     public init(
         id: String = UUID().uuidString,
@@ -37,7 +39,8 @@ public struct Course: Identifiable, Equatable {
         isHidden: Bool = false,
         imageData: Data? = nil,
         materialCount: Int = 0,
-        hasMaterials: Bool = false
+        hasMaterials: Bool = false,
+        organizationId: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -54,5 +57,6 @@ public struct Course: Identifiable, Equatable {
         self.imageData = imageData
         self.materialCount = materialCount
         self.hasMaterials = hasMaterials
+        self.organizationId = organizationId
     }
 }

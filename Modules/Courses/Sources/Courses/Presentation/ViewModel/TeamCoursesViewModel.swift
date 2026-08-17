@@ -18,6 +18,8 @@ public class TeamCoursesViewModel: ObservableObject {
     @Published public var isLoadingEvents: Bool = false
     @Published public var errorMessage: String?
     
+    public var onCourseSelected: ((String, String, String?) -> Void)?
+    
     public enum Tab {
         case courses
         case events

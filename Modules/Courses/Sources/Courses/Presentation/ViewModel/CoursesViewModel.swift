@@ -52,7 +52,7 @@ public class CoursesViewModel: ObservableObject {
 
     private var cancellables = Set<AnyCancellable>()
 
-    public var onCourseSelected: ((String, String, String) -> Void)?
+    public var onCourseSelected: ((String, String, String, String?) -> Void)?
 
     /// Injected from the app shell (Payment module can't be imported here — features only depend on Common).
     /// When set, gates `addCourse()` behind the free-tier course limit.
@@ -91,7 +91,7 @@ public class CoursesViewModel: ObservableObject {
     }
 
     public func selectCourse(course: Course) {
-        onCourseSelected?(course.id, course.name, course.courseType.rawValue)
+        onCourseSelected?(course.id, course.name, course.courseType.rawValue, course.organizationId)
     }
 
     @MainActor

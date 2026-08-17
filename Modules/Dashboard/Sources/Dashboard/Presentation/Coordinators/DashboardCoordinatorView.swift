@@ -19,6 +19,7 @@ public struct DashboardCoordinatorView: View {
     private let organizationsFactory: () -> AnyView
     private let profileFactory: () -> AnyView
     private let teamCoursesFactory: (String, String, String) -> AnyView
+    private let teamCourseDetailsFactory: (String, String, String, String) -> AnyView
 
     public init(
         coordinator: DashboardCoordinator,
@@ -29,7 +30,8 @@ public struct DashboardCoordinatorView: View {
         roadmapFactory: @escaping () -> AnyView,
         organizationsFactory: @escaping () -> AnyView,
         profileFactory: @escaping () -> AnyView,
-        teamCoursesFactory: @escaping (String, String, String) -> AnyView
+        teamCoursesFactory: @escaping (String, String, String) -> AnyView,
+        teamCourseDetailsFactory: @escaping (String, String, String, String) -> AnyView
     ) {
         self.coordinator = coordinator
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -40,6 +42,7 @@ public struct DashboardCoordinatorView: View {
         self.organizationsFactory = organizationsFactory
         self.profileFactory = profileFactory
         self.teamCoursesFactory = teamCoursesFactory
+        self.teamCourseDetailsFactory = teamCourseDetailsFactory
     }
     
     public var body: some View {
@@ -87,6 +90,8 @@ public struct DashboardCoordinatorView: View {
                     TodayTasksView(viewModel: viewModel)
                 case .teamCourses(let teamId, let teamName, let orgId):
                     teamCoursesFactory(teamId, teamName, orgId)
+                case .teamCourseDetails(let courseId, let organizationId, let courseName, let courseType):
+                    teamCourseDetailsFactory(courseId, organizationId, courseName, courseType)
                 }
             }
         }

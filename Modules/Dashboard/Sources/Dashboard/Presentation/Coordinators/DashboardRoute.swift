@@ -11,4 +11,5 @@ public enum DashboardRoute: Hashable {
     case courseDetails(courseId: String, courseName: String, courseType: String)
     case todayTasks
     case teamCourses(teamId: String, teamName: String, orgId: String)
+    case teamCourseDetails(courseId: String, organizationId: String, courseName: String, courseType: String)
 }
