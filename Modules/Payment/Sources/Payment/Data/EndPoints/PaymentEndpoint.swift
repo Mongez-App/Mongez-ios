@@ -1,7 +1,7 @@
 import Foundation
 import Common
 public enum PaymentConfig {
-    // Real values live in PaymentSecrets.swift, which is gitignored — see PaymentSecrets.example.swift.
+    // Real values live in PaymentSecrets.swift, which is gitignored — see PaymentSecrets.swift.example.
     public static let secretKey = PaymentSecrets.secretKey
     public static let publicKey = PaymentSecrets.publicKey
     public static let apiKey = PaymentSecrets.apiKey

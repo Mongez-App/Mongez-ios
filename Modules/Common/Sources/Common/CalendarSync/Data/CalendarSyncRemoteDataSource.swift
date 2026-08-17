@@ -12,7 +12,7 @@ final class CalendarSyncRemoteDataSource: CalendarSyncRemoteDataSourceProtocol {
             endpoint: CalendarSyncEndpoint.syncEvents(events: events.map { $0.mapToDto() }),
             responseType: CalendarSyncResponseDto.self
         )
-        return response.syncedCount
+        return response.createdCount
     }
 
     func getStatus() async throws -> CalendarSyncStatus {

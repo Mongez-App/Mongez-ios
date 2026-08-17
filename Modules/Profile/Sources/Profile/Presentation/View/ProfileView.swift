@@ -313,6 +313,7 @@ public struct ProfileView: View {
                 }
                 .padding(.horizontal, AppTheme.Spacing.medium)
             }
+            .padding(.bottom, 100)
         }
         .background(AppTheme.Colors.white100)
         .onAppear {

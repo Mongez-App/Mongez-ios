@@ -1,19 +1,14 @@
 import Foundation
 
+// This DTO talks to a different backend service (api-gateway-production-3fd0) than the rest of
+// CalendarSync (getStatus/updateFlags hit api-gateway-production-5110, which uses snake_case like
+// the rest of the app) — this one expects camelCase keys, so no custom CodingKeys here.
 struct CalendarEventDto: Codable {
     let externalId: String
     let title: String
     let startDate: Date
     let endDate: Date
     let calendarName: String?
-
-    enum CodingKeys: String, CodingKey {
-        case externalId = "external_id"
-        case title
-        case startDate = "start_date"
-        case endDate = "end_date"
-        case calendarName = "calendar_name"
-    }
 }
 
 extension CalendarEventEntity {
@@ -28,10 +23,8 @@ extension CalendarEventEntity {
     }
 }
 
+// Same camelCase service as CalendarEventDto above — see that comment.
+// Actual response shape: {"success":true,"message":"...","createdCount":0,"data":[]}
 struct CalendarSyncResponseDto: Decodable {
-    let syncedCount: Int
-
-    enum CodingKeys: String, CodingKey {
-        case syncedCount = "synced_count"
-    }
+    let createdCount: Int
 }

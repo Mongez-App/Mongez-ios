@@ -8,7 +8,7 @@ enum CalendarSyncEndpoint: EndPoint {
     var baseURL: String {
         switch self {
         case .syncEvents:
-            return "https://api-gateway-production-3fd0.up.railway.app/api/v1"
+            return "https://api-gateway-production-5110.up.railway.app/api/v1"
         case .getStatus, .updateFlags:
             return "https://api-gateway-production-5110.up.railway.app/api/v1"
         }
@@ -16,7 +16,7 @@ enum CalendarSyncEndpoint: EndPoint {
 
     var path: String {
         switch self {
-        case .syncEvents: return "/calendar-events"
+        case .syncEvents: return "/calendar/events"
         case .getStatus, .updateFlags: return "/auth/calendar-sync"
         }
     }
