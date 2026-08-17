@@ -54,6 +54,12 @@ public class CoursesViewModel: ObservableObject {
 
     public var onCourseSelected: ((String, String, String) -> Void)?
 
+    /// Injected from the app shell (Payment module can't be imported here — features only depend on Common).
+    /// When set, gates `addCourse()` behind the free-tier course limit.
+    public var isSubscribed: (() async -> Bool)?
+    @Published public var showUpgradePrompt: Bool = false
+    private static let freeCourseLimit = 2
+
     public var canAddCourse: Bool {
         switch addCourseTab {
         case .onlineCourse:
@@ -131,6 +137,23 @@ public class CoursesViewModel: ObservableObject {
     public func cancelDelete() {
         courseToDelete = nil
         showDeleteConfirmation = false
+    }
+
+    /// Gates opening the Add Course sheet behind the free-tier limit. Must run *before* the sheet is
+    /// presented — checking inside addCourse() (after the sheet is already up) can't cleanly show the
+    /// upgrade prompt, since SwiftUI won't present a second sheet over an already-presented one.
+    @MainActor
+    public func requestAddCourse() async {
+        if let isSubscribed, courses.count >= Self.freeCourseLimit {
+            let subscribed = await isSubscribed()
+            if !subscribed {
+                showUpgradePrompt = true
+                return
+            }
+        }
+
+        resetAddCourseForm()
+        showAddCourseSheet = true
     }
 
     @MainActor
