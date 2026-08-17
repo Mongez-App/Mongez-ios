@@ -11,21 +11,22 @@ public struct EmptyTeamEventsView: View {
 
             ZStack {
                 Circle()
-                    .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.orange100, opacity: 0.08))
+                    .fill(AppTheme.Colors.white100)
                     .frame(width: 160, height: 160)
+                    .appShadow(opacity: 0.05, radius: 10, y: 4)
 
                 Circle()
-                    .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.orange100, opacity: 0.15))
+                    .fill(Color(hex: "#EFEFFF"))
                     .frame(width: 110, height: 110)
 
                 Image(systemName: "calendar")
-                    .font(.system(size: 48, weight: .light))
-                    .foregroundColor(AppTheme.Colors.orange100)
+                    .font(.system(size: 40, weight: .light))
+                    .foregroundColor(Color(hex: "#4D46C8"))
             }
 
             VStack(spacing: AppTheme.Spacing.xxSmall) {
-                Text("No Events Yet")
-                    .font(AppTheme.textStyle(size: 22, weight: .bold))
+                Text("No events scheduled")
+                    .font(AppTheme.textStyle(size: 18, weight: .bold))
                     .foregroundColor(AppTheme.Colors.black100)
 
                 Text("This team has no upcoming events.")
@@ -38,7 +39,8 @@ public struct EmptyTeamEventsView: View {
             Spacer()
             Spacer()
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(hex: "#F9F9FF"))
         .padding(.horizontal, AppTheme.Spacing.large)
     }
 }

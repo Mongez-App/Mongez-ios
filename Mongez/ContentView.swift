@@ -120,6 +120,11 @@ struct ContentView: View {
                             let organizationsViewModel = ServiceLocator.resolve(OrganizationsViewModel.self)!
                             return AnyView(
                                 OrganizationsView(viewModel: organizationsViewModel)
+                                    .onAppear {
+                                        organizationsViewModel.onTeamSelected = { [weak coordinator] teamId, teamName, orgId in
+                                            coordinator?.push(.teamCourses(teamId: teamId, teamName: teamName, orgId: orgId))
+                                        }
+                                    }
                             )
                         },
                         profileFactory: {
@@ -127,6 +132,12 @@ struct ContentView: View {
                                 ProfileView(subscriptionScreenFactory: {
                                     AnyView(PaymentView(viewModel: ServiceLocator.resolve(PaymentViewModel.self)!))
                                 })
+                            )
+                        },
+                        teamCoursesFactory: { teamId, teamName, orgId in
+                            let teamCoursesViewModel = appCoordinator.container.resolve(TeamCoursesViewModel.self, arguments: teamId, teamName, orgId)!
+                            return AnyView(
+                                TeamCoursesView(viewModel: teamCoursesViewModel)
                             )
                         }
                     )

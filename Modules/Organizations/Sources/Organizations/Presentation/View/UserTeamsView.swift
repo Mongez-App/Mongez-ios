@@ -76,7 +76,12 @@ public struct UserTeamsView: View {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: AppTheme.Spacing.small) {
                         ForEach(viewModel.teams, id: \.teamId) { team in
-                            UserTeamCardView(team: team)
+                            Button(action: {
+                                viewModel.selectTeam(team: team)
+                            }) {
+                                UserTeamCardView(team: team)
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
                     }
                     .padding(.horizontal, AppTheme.Spacing.large)

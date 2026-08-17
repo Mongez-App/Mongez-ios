@@ -18,10 +18,10 @@ public struct EventDTO: Decodable {
 public struct TeamDTO: Decodable {
     let teamId: String
     let name: String
-    let organizationName: String
+    let organizationName: String?
     let imageUrl: String?
-    let completionPercentage: Double
-    let events: [EventDTO]
+    let completionPercentage: Double?
+    let events: [EventDTO]?
     
     enum CodingKeys: String, CodingKey {
         case teamId = "team_id"
@@ -34,16 +34,16 @@ public struct TeamDTO: Decodable {
     
 
     public static func mapToEntity(dto: TeamDTO) -> Team {
-        let eventEntities = dto.events.map { eventDTO in
+        let eventEntities = dto.events?.map { eventDTO in
             Event(eventType: eventDTO.eventType)
-        }
+        } ?? []
         
         return Team(
             teamId: dto.teamId,
             name: dto.name,
-            organizationName: dto.organizationName,
+            organizationName: dto.organizationName ?? "",
             imageUrl: dto.imageUrl ?? "",
-            completionPercentage: dto.completionPercentage,
+            completionPercentage: dto.completionPercentage ?? 0.0,
             events: eventEntities
         )
     }

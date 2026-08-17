@@ -20,6 +20,8 @@ public final class OrganizationsViewModel: ObservableObject {
     @Published public var isLoading: Bool = false
     @Published public var errorMessage: String? = nil
     
+    public var onTeamSelected: ((String, String, String) -> Void)?
+    
     // Discover State
     @Published public var searchQuery: String = ""
     @Published public var pendingRequests: [OrgTeam] = []
@@ -61,6 +63,10 @@ public final class OrganizationsViewModel: ObservableObject {
             }
             isLoading = false
         }
+    }
+    
+    public func selectTeam(team: Team) {
+        onTeamSelected?(team.teamId, team.name, team.organizationName)
     }
     
     public func fetchDiscoverTeams() {

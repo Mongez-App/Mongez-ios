@@ -18,6 +18,7 @@ public struct DashboardCoordinatorView: View {
     private let roadmapFactory: () -> AnyView
     private let organizationsFactory: () -> AnyView
     private let profileFactory: () -> AnyView
+    private let teamCoursesFactory: (String, String, String) -> AnyView
 
     public init(
         coordinator: DashboardCoordinator,
@@ -27,7 +28,8 @@ public struct DashboardCoordinatorView: View {
         coursesFactory: @escaping () -> AnyView,
         roadmapFactory: @escaping () -> AnyView,
         organizationsFactory: @escaping () -> AnyView,
-        profileFactory: @escaping () -> AnyView
+        profileFactory: @escaping () -> AnyView,
+        teamCoursesFactory: @escaping (String, String, String) -> AnyView
     ) {
         self.coordinator = coordinator
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -37,6 +39,7 @@ public struct DashboardCoordinatorView: View {
         self.roadmapFactory = roadmapFactory
         self.organizationsFactory = organizationsFactory
         self.profileFactory = profileFactory
+        self.teamCoursesFactory = teamCoursesFactory
     }
     
     public var body: some View {
@@ -82,6 +85,8 @@ public struct DashboardCoordinatorView: View {
                     courseDetailsFactory(courseId, courseName, courseType)
                 case .todayTasks:
                     TodayTasksView(viewModel: viewModel)
+                case .teamCourses(let teamId, let teamName, let orgId):
+                    teamCoursesFactory(teamId, teamName, orgId)
                 }
             }
         }
