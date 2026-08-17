@@ -4,8 +4,16 @@ import Common
 public struct CoursesView: View {
     @ObservedObject public var viewModel: CoursesViewModel
 
-    public init(viewModel: CoursesViewModel) {
+    /// Builds the subscription screen shown when the free-tier course limit is hit.
+    /// Injected from the app shell so this module needn't depend on Payment.
+    private let upgradeScreenFactory: () -> AnyView
+
+    public init(
+        viewModel: CoursesViewModel,
+        upgradeScreenFactory: @escaping () -> AnyView = { AnyView(EmptyView()) }
+    ) {
         self.viewModel = viewModel
+        self.upgradeScreenFactory = upgradeScreenFactory
     }
 
     public var body: some View {
@@ -48,7 +56,7 @@ public struct CoursesView: View {
                     EmptyCoursesView(
                         isSearching: !viewModel.searchText.isEmpty,
                         onAddCourse: {
-                            viewModel.showAddCourseSheet = true
+                            Task { await viewModel.requestAddCourse() }
                         }
                     )
                 } else {
@@ -60,6 +68,9 @@ public struct CoursesView: View {
             AddCourseSheet(viewModel: viewModel)
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
+        }
+        .sheet(isPresented: $viewModel.showUpgradePrompt) {
+            upgradeScreenFactory()
         }
         .overlay {
             if viewModel.showDeleteConfirmation {
@@ -97,8 +108,7 @@ public struct CoursesView: View {
             Spacer()
 
             Button(action: {
-                viewModel.resetAddCourseForm()
-                viewModel.showAddCourseSheet = true
+                Task { await viewModel.requestAddCourse() }
             }) {
                 Image(systemName: "plus")
                     .font(.system(size: 18, weight: .semibold))

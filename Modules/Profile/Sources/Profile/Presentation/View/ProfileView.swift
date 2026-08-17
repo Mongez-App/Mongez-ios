@@ -37,8 +37,13 @@ public struct ProfileView: View {
         )
     )
     
-    public init() {}
-    
+    @State private var showSubscription = false
+    private let subscriptionScreenFactory: () -> AnyView
+
+    public init(subscriptionScreenFactory: @escaping () -> AnyView = { AnyView(EmptyView()) }) {
+        self.subscriptionScreenFactory = subscriptionScreenFactory
+    }
+
     public var body: some View {
         ScrollView {
             VStack(spacing: AppTheme.Spacing.large) {
@@ -228,6 +233,38 @@ public struct ProfileView: View {
                         viewModel.openEditPreferences()
                     }
                     
+                    VStack(spacing: 0) {
+                        HStack(spacing: AppTheme.Spacing.small) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: AppTheme.Spacing.xxSmall)
+                                    .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.12))
+                                    .frame(width: 32, height: 32)
+
+                                Image(systemName: "crown.fill")
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundColor(AppTheme.Colors.purple200)
+                            }
+
+                            Text("Manage Plan")
+                                .font(AppTheme.textStyle(size: 16, weight: .regular))
+                                .foregroundColor(AppTheme.Colors.black100)
+
+                            Spacer()
+
+                            Image(systemName: "chevron.right")
+                                .font(AppTheme.textStyle(size: 14, weight: .semibold))
+                                .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.35))
+                        }
+                        .padding(.vertical, AppTheme.Spacing.small)
+
+                        Divider()
+                            .padding(.leading, 48)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        showSubscription = true
+                    }
+
                     SettingRow(
                         iconName: "logout",
                         iconColor: AppTheme.Colors.red100,
@@ -289,6 +326,9 @@ public struct ProfileView: View {
                         .cornerRadius(10)
                 }
             }
+        }
+        .sheet(isPresented: $showSubscription) {
+            subscriptionScreenFactory()
         }
         .sheet(isPresented: $viewModel.isEditPreferencesPresented) {
             EditPreferencesSheet(

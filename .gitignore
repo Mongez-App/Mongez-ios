@@ -133,3 +133,8 @@ build_log.txt
 # Signing Files
 # =========================================================
 *.mobileprovision
+
+# =========================================================
+# Local secrets
+# =========================================================
+Modules/Payment/Sources/Payment/Data/EndPoints/PaymentSecrets.swift
