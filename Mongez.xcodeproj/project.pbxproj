@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,7 @@
 		03BC5244300F908100548CAD /* Profile in Frameworks */ = {isa = PBXBuildFile; productRef = 03BC5243300F908100548CAD /* Profile */; };
 		03C4C2A2300A8FFD00031E11 /* OnBoarding in Frameworks */ = {isa = PBXBuildFile; productRef = 03C4C2A1300A8FFD00031E11 /* OnBoarding */; };
 		0AC641FE31484FF49897ACDD /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2F96FCB6F9884337ADD6932F /* Localizable.xcstrings */; };
+		314B64F53033A723009D1695 /* TeamCourseDetails in Frameworks */ = {isa = PBXBuildFile; productRef = 314B64F43033A723009D1695 /* TeamCourseDetails */; };
 		3153CDC7300E8B3800635A33 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3153CDC6300E8B3800635A33 /* AppCoordinator.swift */; };
 		3195CCEB300EAD82004F0C28 /* CourseDetails in Frameworks */ = {isa = PBXBuildFile; productRef = 3195CCEA300EAD82004F0C28 /* CourseDetails */; };
 		31A2F377300BF7A70014E39A /* Dashboard in Frameworks */ = {isa = PBXBuildFile; productRef = 31A2F376300BF7A70014E39A /* Dashboard */; };
@@ -92,6 +93,7 @@
 				5A429D823011B20B0013DAB5 /* SDWebImage in Frameworks */,
 				5AB1211B300DA1A600953837 /* Courses in Frameworks */,
 				5A429D843011B20B0013DAB5 /* SDWebImageMapKit in Frameworks */,
+				314B64F53033A723009D1695 /* TeamCourseDetails in Frameworks */,
 				31F0B54B300C0D0000293455 /* AIStudyRoom in Frameworks */,
 				5049958C192D9E49C8579EA9 /* Roadmap in Frameworks */,
 				A1B2C3D4E5F6A7B8C9D0E1F2 /* Organizations in Frameworks */,
@@ -220,6 +222,7 @@
 				5A429D833011B20B0013DAB5 /* SDWebImageMapKit */,
 				5A87E71030132E8F003F9F5E /* Cloudinary */,
 				A6AF4EAB925BD7838F7984D7 /* Payment */,
+				314B64F43033A723009D1695 /* TeamCourseDetails */,
 			);
 			productName = Mongez;
 			productReference = 5ABEF5C43007A98600B1ACEF /* Mongez.app */;
@@ -811,6 +814,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9D4DEAC084C44BF295D2F663 /* XCLocalSwiftPackageReference "Modules/Preferences" */;
 			productName = Preferences;
+		};
+		314B64F43033A723009D1695 /* TeamCourseDetails */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TeamCourseDetails;
 		};
 		3195CCEA300EAD82004F0C28 /* CourseDetails */ = {
 			isa = XCSwiftPackageProductDependency;

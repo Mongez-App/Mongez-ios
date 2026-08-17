@@ -11,6 +11,7 @@ import Authntication
 import Profile
 import Common
 import CourseDetails
+import TeamCourseDetails
 import AIStudyRoom
 import Swinject
 import Organizations
@@ -27,6 +28,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         let container = DIContainer.shared.getContainer()
         CourseDetailsAssembly().assemble(container: container)
+        TeamCourseDetailsAssembly().assemble(container: container)
         ChatAssembly().assemble(container: container)
         OrganizationsAssembly().assemble(container: container)
         PaymentAssembly().assemble(container: container)
@@ -82,6 +84,17 @@ public class AppAssembly: DIAssembly {
                 updateCourseUseCase: resolver.resolve(UpdateCourseUseCase.self)!,
                 deleteCourseUseCase: resolver.resolve(DeleteCourseUseCase.self)!,
                 deleteCourseMaterialUseCase: resolver.resolve(DeleteCourseMaterialUseCase.self)!
+            )
+        }
+        
+        container.register(TeamCourseDetailsViewModel.self) { (resolver, courseId: String, organizationId: String, courseName: String, courseType: String) in
+            return TeamCourseDetailsViewModel(
+                courseId: courseId,
+                organizationId: organizationId,
+                courseName: courseName,
+                courseType: courseType,
+                getMaterialsUseCase: resolver.resolve(GetTeamCourseMaterialsUseCase.self)!,
+                getTasksUseCase: resolver.resolve(GetTeamCourseTasksUseCase.self)!
             )
         }
         

@@ -14,6 +14,7 @@ import AIStudyRoom
 import Preferences
 import Courses
 import CourseDetails
+import TeamCourseDetails
 import Profile
 import Roadmap
 import Organizations
@@ -138,6 +139,20 @@ struct ContentView: View {
                             let teamCoursesViewModel = appCoordinator.container.resolve(TeamCoursesViewModel.self, arguments: teamId, teamName, orgId)!
                             return AnyView(
                                 TeamCoursesView(viewModel: teamCoursesViewModel)
+                                    .onAppear {
+                                        teamCoursesViewModel.onCourseSelected = { [weak coordinator] courseId, courseName, extractedOrgId in
+                                            let finalOrgId = extractedOrgId ?? orgId
+                                            coordinator?.push(.teamCourseDetails(courseId: courseId, organizationId: finalOrgId, courseName: courseName, courseType: "TEAM_COURSE"))
+                                        }
+                                    }
+                            )
+                        },
+                        teamCourseDetailsFactory: { courseId, organizationId, courseName, courseType in
+                            let detailsViewModel = DIContainer.shared.getContainer().resolve(TeamCourseDetailsViewModel.self, arguments: courseId, organizationId, courseName, courseType)!
+                            return AnyView(
+                                TeamCourseDetailsView(
+                                    viewModel: detailsViewModel
+                                )
                             )
                         }
                     )
@@ -160,6 +175,14 @@ struct ContentView: View {
                                     onStudyRoomSelected: { taskId, taskTitle in
                                         coordinator.push(.details(courseId: courseId, courseName: courseName, courseType: courseType))
                                     }
+                                )
+                            )
+                        },
+                        teamCourseDetailsFactory: { courseId, organizationId, courseName, courseType in
+                            let detailsViewModel = DIContainer.shared.getContainer().resolve(TeamCourseDetailsViewModel.self, arguments: courseId, organizationId, courseName, courseType)!
+                            return AnyView(
+                                TeamCourseDetailsView(
+                                    viewModel: detailsViewModel
                                 )
                             )
                         },
@@ -199,8 +222,12 @@ struct DashboardCoursesContainer: View {
             }
         )
         .onAppear {
-            viewModel.onCourseSelected = { [weak coordinator] courseId, courseName, courseType in
-                coordinator?.push(.courseDetails(courseId: courseId, courseName: courseName, courseType: courseType))
+            viewModel.onCourseSelected = { [weak coordinator] courseId, courseName, courseType, organizationId in
+                if courseType == "TEAM_COURSE" {
+                    coordinator?.push(.teamCourseDetails(courseId: courseId, organizationId: organizationId ?? "", courseName: courseName, courseType: courseType))
+                } else {
+                    coordinator?.push(.courseDetails(courseId: courseId, courseName: courseName, courseType: courseType))
+                }
             }
             viewModel.isSubscribed = {
                 ServiceLocator.resolve(GetSubscriptionStatusUseCase.self)?.execute() ?? false
