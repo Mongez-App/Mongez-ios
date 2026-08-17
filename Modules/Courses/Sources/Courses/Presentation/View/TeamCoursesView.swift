@@ -11,7 +11,7 @@ public struct TeamCoursesView: View {
 
     public var body: some View {
         ZStack {
-            AppTheme.Colors.white100.ignoresSafeArea()
+            Color(hex: "#F9F9FF").ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 0) {
                 headerSection
