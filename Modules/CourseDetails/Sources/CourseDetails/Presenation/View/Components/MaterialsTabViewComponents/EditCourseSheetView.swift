@@ -101,6 +101,17 @@ public struct EditCourseSheetView: View {
                         }
                     }
                 }
+                
+                if selectedImageData != nil {
+                    HStack(spacing: 8) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                        Text("Image uploaded successfully")
+                            .font(AppTheme.textStyle(size: 14, weight: .medium))
+                            .foregroundColor(.green)
+                    }
+                    .padding(.top, 4)
+                }
             }
             Spacer()
             
