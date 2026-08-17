@@ -27,9 +27,9 @@ enum TeamCoursesEndPoint: EndPoint {
             "Content-Type": "application/json"
         ]
         
-        switch self {
-        case .getTeamCourses(_, let orgId), .getTeamEvents(_, let orgId):
-            headers["x-user-id"] = orgId
+        if let userId = UserDefaults.standard.string(forKey: "current_user_id") {
+            headers["x-user-id"] = userId
+            headers["X-User-Id"] = userId
         }
         
         if let token = UserDefaults.standard.string(forKey: "main_token") {
