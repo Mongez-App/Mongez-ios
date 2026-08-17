@@ -32,6 +32,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         PaymentAssembly().assemble(container: container)
         AppAssembly().assemble(container: container)
 
+        CalendarSyncManager.shared.registerBackgroundTask()
+
         return true
     }
 

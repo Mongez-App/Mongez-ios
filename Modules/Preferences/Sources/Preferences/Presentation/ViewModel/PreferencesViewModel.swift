@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import Common
 
 @MainActor
 public final class PreferencesViewModel: ObservableObject {
@@ -67,6 +68,17 @@ public final class PreferencesViewModel: ObservableObject {
     }
 
     public func syncCalendar() async {
+        errorMessage = nil
+        isSaving = true
+
+        do {
+            _ = try await useCase.executeSyncCalendar()
+            CalendarSyncManager.shared.startContinuousSync(onSyncCompleted: nil)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+
+        isSaving = false
         await finish()
     }
 

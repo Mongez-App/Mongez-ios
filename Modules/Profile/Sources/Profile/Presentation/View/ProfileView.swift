@@ -29,11 +29,6 @@ public struct ProfileView: View {
             repository: ProfileRepository(
                 remoteDataSource: ProfileRemoteDataSource()
             )
-        ),
-        updateCalendarSyncUseCase: UpdateCalendarSyncUseCase(
-            repository: ProfileRepository(
-                remoteDataSource: ProfileRemoteDataSource()
-            )
         )
     )
     
@@ -104,21 +99,56 @@ public struct ProfileView: View {
                 }
                 
                 VStack(spacing: 0) {
-                    SettingRow(
-                        iconName: "calendar-green",
-                        iconColor: AppTheme.Colors.green100,
-                        bgOpacity: 0.10,
-                        title: "Calendar Sync",
-                        font: AppTheme.textStyle(size: 16, weight: .regular)
-                    ) {
-                        Toggle("", isOn: Binding(
-                            get: { viewModel.isCalendarSyncEnabled },
-                            set: { viewModel.requestCalendarSyncChange(to: $0) }
-                        ))
-                        .labelsHidden()
-                        .tint(AppTheme.Colors.green100)
+                    VStack(spacing: 0) {
+                        SettingRow(
+                            iconName: "calendar-green",
+                            iconColor: AppTheme.Colors.green100,
+                            bgOpacity: 0.10,
+                            title: "Calendar Sync",
+                            font: AppTheme.textStyle(size: 16, weight: .regular),
+                            showDivider: !viewModel.isCalendarSyncEnabled
+                        ) {
+                            Toggle("", isOn: Binding(
+                                get: { viewModel.isCalendarSyncEnabled },
+                                set: { viewModel.requestCalendarSyncChange(to: $0) }
+                            ))
+                            .labelsHidden()
+                            .tint(AppTheme.Colors.green100)
+                        }
+
+                        if viewModel.isCalendarSyncEnabled {
+                            VStack(alignment: .leading, spacing: AppTheme.Spacing.xxxSmall) {
+                                HStack(spacing: AppTheme.Spacing.xxxSmall) {
+                                    Circle()
+                                        .fill(viewModel.isCalendarSynced ? AppTheme.Colors.green100 : AppTheme.Colors.orange100)
+                                        .frame(width: 6, height: 6)
+                                    Text(viewModel.isCalendarSynced ? "Synced" : "Not Synced")
+                                        .font(AppTheme.textStyle(size: 12, weight: .medium))
+                                        .foregroundColor(viewModel.isCalendarSynced ? AppTheme.Colors.green100 : AppTheme.Colors.orange100)
+                                }
+
+                                Text("Last time synced: \(viewModel.lastCalendarSyncReadableDate)")
+                                    .font(AppTheme.textStyle(size: 12, weight: .regular))
+                                    .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
+
+                                Button {
+                                    viewModel.manualSyncNow()
+                                } label: {
+                                    Text(viewModel.isManualSyncInProgress ? "Syncing…" : "Manual sync now")
+                                        .font(AppTheme.textStyle(size: 12, weight: .medium))
+                                        .foregroundColor(AppTheme.Colors.purple200)
+                                }
+                                .disabled(viewModel.isManualSyncInProgress)
+                            }
+                            .padding(.leading, 48)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.bottom, AppTheme.Spacing.small)
+
+                            Divider()
+                                .padding(.leading, 48)
+                        }
                     }
-                    
+
                     SettingRow(
                         iconName: "moon",
                         iconColor: AppTheme.Colors.black100,
@@ -283,6 +313,7 @@ public struct ProfileView: View {
                 }
                 .padding(.horizontal, AppTheme.Spacing.medium)
             }
+            .padding(.bottom, 100)
         }
         .background(AppTheme.Colors.white100)
         .onAppear {

@@ -22,5 +22,17 @@
 		</dict>
 		<dict/>
 	</array>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Mongez reads your calendar events so the AI study planner can avoid conflicts when building your schedule.</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Mongez reads your calendar events so the AI study planner can avoid conflicts when building your schedule.</string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>app.mongez.calendarSync.refresh</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
 </dict>
 </plist>
