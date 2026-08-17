@@ -14,7 +14,7 @@ enum TeamCoursesEndPoint: EndPoint {
         case .getTeamCourses(let teamId, _):
             return "teams/\(teamId)/courses"
         case .getTeamEvents(let teamId, _):
-            return "team/\(teamId)/events"
+            return "teams/team/\(teamId)/events"
         }
     }
     
