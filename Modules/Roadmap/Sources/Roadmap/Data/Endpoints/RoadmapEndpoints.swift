@@ -63,7 +63,7 @@ public enum RoadmapEndpoints: EndPoint {
         case .event(_, _, let event):
             let bodyParams: [String: String] = [
                 "title": event.title,
-                "event_type": event.eventType,
+                "event_type": event.eventType.uppercased(),
                 "event_date": event.eventDate
             ]
             return try? JSONSerialization.data(withJSONObject: bodyParams)
