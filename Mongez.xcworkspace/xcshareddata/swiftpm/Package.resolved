@@ -10,15 +10,6 @@
       }
     },
     {
-      "identity" : "alamofire",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Alamofire/Alamofire.git",
-      "state" : {
-        "revision" : "78424be314842833c04bc3bef5b72e85fff99204",
-        "version" : "5.6.4"
-      }
-    },
-    {
       "identity" : "app-check",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/app-check.git",
@@ -34,15 +25,6 @@
       "state" : {
         "revision" : "2781038865a80e2c425a1da12cc1327bcd56501f",
         "version" : "1.7.6"
-      }
-    },
-    {
-      "identity" : "cloudinary_ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/cloudinary/cloudinary_ios.git",
-      "state" : {
-        "revision" : "b4daed17183f45a1ef3045983ee8255dc1979122",
-        "version" : "5.0.0"
       }
     },
     {
@@ -151,15 +133,6 @@
       "state" : {
         "revision" : "f4a19a3c313dc2616c70bb49d29a799fb16be837",
         "version" : "2.4.1"
-      }
-    },
-    {
-      "identity" : "sdwebimage",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sdwebimage/sdwebimage",
-      "state" : {
-        "revision" : "2c8ed9a2f3ad537dbe9e58e2ec18be361da112aa",
-        "version" : "5.9.5"
       }
     },
     {

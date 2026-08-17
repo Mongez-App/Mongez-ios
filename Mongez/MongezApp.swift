@@ -14,6 +14,7 @@ import CourseDetails
 import AIStudyRoom
 import Swinject
 import Organizations
+import Payment
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
@@ -28,7 +29,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         CourseDetailsAssembly().assemble(container: container)
         ChatAssembly().assemble(container: container)
         OrganizationsAssembly().assemble(container: container)
+        PaymentAssembly().assemble(container: container)
         AppAssembly().assemble(container: container)
+
+        CalendarSyncManager.shared.registerBackgroundTask()
 
         return true
     }
