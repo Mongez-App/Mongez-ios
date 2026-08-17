@@ -94,7 +94,8 @@ public final class AuthViewModel: ObservableObject {
             
             // Use saved preferences; default to system values on first launch
             let appearance = UserDefaults.standard.string(forKey: "user_appearance") ?? "Light Mode"
-            let language  = UserDefaults.standard.string(forKey: "selected_language")?.lowercased() ?? "en"
+            let rawLang = UserDefaults.standard.string(forKey: "selected_language")?.uppercased() ?? "EN"
+            let language = (rawLang == "AR" || rawLang == "ARABIC") ? "ar" : "en"
             
             let result = try await useCase.executeHandshake(idToken: idToken, name: displayName, appearance: appearance, language: language)
             self.user = result.user
@@ -117,7 +118,8 @@ public final class AuthViewModel: ObservableObject {
             
             // Use saved preferences; default to system values on first launch
             let appearance = UserDefaults.standard.string(forKey: "user_appearance") ?? "Light Mode"
-            let language  = UserDefaults.standard.string(forKey: "selected_language")?.lowercased() ?? "en"
+            let rawLang = UserDefaults.standard.string(forKey: "selected_language")?.uppercased() ?? "EN"
+            let language = (rawLang == "AR" || rawLang == "ARABIC") ? "ar" : "en"
             
             let result = try await useCase.executeHandshake(idToken: firebaseIDToken, name: displayName, appearance: appearance, language: language)
             self.user = result.user
@@ -128,10 +130,6 @@ public final class AuthViewModel: ObservableObject {
         }
     }
     
-    public func continueAsGuest() async {
-        showError(message: "Guest login is not available yet")
-    }
-
     private func mapError(_ error: Error) -> String {
         if let apiError = error as? APIError {
             return apiError.message

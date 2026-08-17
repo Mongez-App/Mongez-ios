@@ -49,13 +49,7 @@ public struct AuthView: View {
                         secureFieldBlock(field: .password, title: "Password", text: $viewModel.password, isVisible: $viewModel.isPasswordVisible)
 
                         if viewModel.mode == .login {
-                            HStack {
-                                Spacer()
-                                Button("Forgot Password?") {
-                                }
-                                .font(AppTheme.textStyle(size: 13, weight: .medium))
-                                .foregroundColor(AppTheme.Colors.purple200)
-                            }
+                            Spacer()
                         } else {
                             secureFieldBlock(field: .confirmPassword, title: "Confirm Password", text: $viewModel.confirmPassword, isVisible: $viewModel.isConfirmPasswordVisible)
                         }
@@ -67,7 +61,6 @@ public struct AuthView: View {
                             .padding(.vertical, AppTheme.Spacing.xSmall)
 
                         VStack(spacing: AppTheme.Spacing.xSmall) {
-                            guestButton
                             googleButton
                         }
                     }
@@ -106,7 +99,7 @@ public struct AuthView: View {
         .padding(.bottom, AppTheme.Spacing.small)
     }
 
-    private func fieldBlock(field: Field, title: String, icon: String, text: Binding<String>, placeholder: String, keyboard: UIKeyboardType = .default) -> some View {
+    private func fieldBlock(field: Field, title: LocalizedStringKey, icon: String, text: Binding<String>, placeholder: LocalizedStringKey, keyboard: UIKeyboardType = .default) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(AppTheme.textStyle(size: 13, weight: .semibold))
@@ -130,7 +123,7 @@ public struct AuthView: View {
         }
     }
 
-    private func secureFieldBlock(field: Field, title: String, text: Binding<String>, isVisible: Binding<Bool>) -> some View {
+    private func secureFieldBlock(field: Field, title: LocalizedStringKey, text: Binding<String>, isVisible: Binding<Bool>) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(AppTheme.textStyle(size: 13, weight: .semibold))
@@ -202,25 +195,6 @@ public struct AuthView: View {
                 .font(AppTheme.textStyle(size: 12))
                 .foregroundColor(secondaryTextColor)
             Rectangle().frame(height: 1).foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.2))
-        }
-    }
-
-    private var guestButton: some View {
-        Button {
-            Task { await viewModel.continueAsGuest() }
-        } label: {
-            HStack {
-                Image("guest")
-                Text("Continue as guest")
-                    .font(AppTheme.textStyle(size: 15, weight: .medium))
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 48)
-            .background(
-                RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
-                    .stroke(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.4))
-            )
-            .foregroundColor(AppTheme.Colors.black100)
         }
     }
 

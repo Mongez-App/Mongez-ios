@@ -7,6 +7,8 @@ struct MaterialDTO: Decodable {
     let fileSizeBytes: Int?
     let pageCount: Int?
     let courseId: String?
+    let deviceFileUri: String?
+    let status: String?
     let createdAt: String?
     let updatedAt: String?
 
@@ -21,6 +23,8 @@ struct MaterialDTO: Decodable {
         case fileSizeMB = "file_size_mb"
         case pageCount = "page_count"
         case courseId = "course_id"
+        case deviceFileUri = "device_file_uri"
+        case status
         case createdAt = "created_at"
         case uploadedAt = "uploaded_at"
         case updatedAt = "updated_at"
@@ -50,6 +54,8 @@ struct MaterialDTO: Decodable {
 
         self.pageCount = try container.decodeIfPresent(Int.self, forKey: .pageCount)
         self.courseId = try container.decodeIfPresent(String.self, forKey: .courseId)
+        self.deviceFileUri = try container.decodeIfPresent(String.self, forKey: .deviceFileUri)
+        self.status = try container.decodeIfPresent(String.self, forKey: .status)
         
         let decodedCreatedAt = try container.decodeIfPresent(String.self, forKey: .createdAt)
         let fallbackCreatedAt = try container.decodeIfPresent(String.self, forKey: .uploadedAt)
@@ -72,7 +78,9 @@ struct MaterialDTO: Decodable {
             fileSizeBytes: fileSizeBytes ?? 0,
             pageCount: pageCount,
             courseId: courseId ?? "",
-            createdAt: createdAt.flatMap { dateFormatter.date(from: $0) ?? fallbackFormatter.date(from: $0) }
+            createdAt: createdAt.flatMap { dateFormatter.date(from: $0) ?? fallbackFormatter.date(from: $0) },
+            deviceFileUri: deviceFileUri,
+            status: status
         )
     }
 }
@@ -88,5 +96,28 @@ struct AddMaterialResponseDTO: Decodable {
 }
 
 struct DeleteMaterialResponseDTO: Decodable {
+    let message: String?
+}
+
+// Step 1: Create material metadata (JSON body)
+struct CreateMaterialRequestDTO: Codable {
+    let fileName: String
+    let contentType: String
+    let fileSizeBytes: Int
+    let pageCount: Int?
+    let deviceFileUri: String
+
+    enum CodingKeys: String, CodingKey {
+        case fileName = "file_name"
+        case contentType = "content_type"
+        case fileSizeBytes = "file_size_bytes"
+        case pageCount = "page_count"
+        case deviceFileUri = "device_file_uri"
+    }
+}
+
+// Step 2: Upload material PDF response
+struct UploadMaterialResponseDTO: Decodable {
+    let material: MaterialDTO?
     let message: String?
 }

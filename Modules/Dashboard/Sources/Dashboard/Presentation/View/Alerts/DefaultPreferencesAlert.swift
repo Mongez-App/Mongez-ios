@@ -140,7 +140,7 @@ public struct DefaultPreferencesAlert: View {
 }
 
 struct DayPillView: View {
-    let day: String
+    let day: LocalizedStringKey
     
     var body: some View {
         Text(day)

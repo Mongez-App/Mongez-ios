@@ -10,10 +10,10 @@ import Common
 
 struct ProgressCard: View {
     let color: Color
-    let title: String
+    let title: LocalizedStringKey
     let numerator: Int
     let denominator: Int
-    let unit: String
+    let unit: LocalizedStringKey
     
     private var progressRatio: CGFloat {
         guard denominator > 0 else { return 0 }

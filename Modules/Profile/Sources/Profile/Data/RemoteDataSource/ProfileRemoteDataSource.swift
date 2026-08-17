@@ -9,8 +9,10 @@ import Foundation
 
 protocol ProfileRemoteDataSourceProtocol {
     func getProfile() async throws -> UserProfile
+    func getPreferences() async throws -> UserPreferences
     func updateProfile(name: String, avatarUrl: String, appearance: String, language: String, calendarSyncConnected: Bool) async throws -> UserProfile
-    func updatePreferences(dailyStudyHours: Int, availableDays: [String]) async throws -> UserProfile
+    func updatePreferences(dailyStudyHours: Int, availableDays: [String]) async throws -> UserPreferences
+    func updateCalendarSync(calendarConnected: Bool, calendarSynced: Bool) async throws -> UserProfile
 }
 
 import Common
@@ -18,6 +20,10 @@ import Common
 class ProfileRemoteDataSource: ProfileRemoteDataSourceProtocol {
     func getProfile() async throws -> UserProfile {
         return try await NetworkManger.shared.request(endpoint: ProfileEndpoint.getProfile, responseType: UserProfile.self)
+    }
+
+    func getPreferences() async throws -> UserPreferences {
+        return try await NetworkManger.shared.request(endpoint: ProfileEndpoint.getPreferences, responseType: UserPreferences.self)
     }
     
     func updateProfile(name: String, avatarUrl: String, appearance: String, language: String, calendarSyncConnected: Bool) async throws -> UserProfile {
@@ -27,9 +33,16 @@ class ProfileRemoteDataSource: ProfileRemoteDataSourceProtocol {
         )
     }
     
-    func updatePreferences(dailyStudyHours: Int, availableDays: [String]) async throws -> UserProfile {
+    func updatePreferences(dailyStudyHours: Int, availableDays: [String]) async throws -> UserPreferences {
         return try await NetworkManger.shared.request(
             endpoint: ProfileEndpoint.updatePreferences(dailyStudyHours: dailyStudyHours, availableDays: availableDays),
+            responseType: UserPreferences.self
+        )
+    }
+
+    func updateCalendarSync(calendarConnected: Bool, calendarSynced: Bool) async throws -> UserProfile {
+        return try await NetworkManger.shared.request(
+            endpoint: ProfileEndpoint.updateCalendarSync(calendarConnected: calendarConnected, calendarSynced: calendarSynced),
             responseType: UserProfile.self
         )
     }

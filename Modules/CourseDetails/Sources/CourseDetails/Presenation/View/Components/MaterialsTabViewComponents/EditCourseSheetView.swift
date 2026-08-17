@@ -13,10 +13,11 @@ import PhotosUI
 public struct EditCourseSheetView: View {
     @State private var courseName: String = ""
     @State private var selectedImageItem: PhotosPickerItem? = nil
+    @State private var selectedImageData: Data? = nil
     @Environment(\.dismiss) private var dismiss
-    public var onSubmit: ((String) -> Void)?
+    public var onSubmit: ((String, Data?) -> Void)?
     
-    public init(initialCourseName: String = "", onSubmit: ((String) -> Void)? = nil) {
+    public init(initialCourseName: String = "", onSubmit: ((String, Data?) -> Void)? = nil) {
         self._courseName = State(initialValue: initialCourseName)
         self.onSubmit = onSubmit
     }
@@ -66,7 +67,7 @@ public struct EditCourseSheetView: View {
                     VStack(spacing: AppTheme.Spacing.small) {
                         Image(systemName: "photo")
                             .font(.system(size: 24))
-                            .foregroundColor(AppTheme.Colors.yellow100)
+                            .foregroundColor(.green)
                             .padding()
                             .background(
                                 Circle()
@@ -89,19 +90,22 @@ public struct EditCourseSheetView: View {
                     .background(
                         RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
                             .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [6, 4]))
-                            .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple100, opacity: 0.3))
-                    )
-                    .background(
-                        RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
-                            .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple100, opacity: 0.02))
+                            .foregroundColor(AppTheme.Colors.gray200)
                     )
                 }
+                .buttonStyle(.plain)
+                .onChange(of: selectedImageItem) { newValue in
+                    Task {
+                        if let data = try? await newValue?.loadTransferable(type: Data.self) {
+                            selectedImageData = data
+                        }
+                    }
+                }
             }
-            
             Spacer()
             
             Button(action: {
-                onSubmit?(courseName)
+                onSubmit?(courseName, selectedImageData)
                 dismiss()
             }) {
                 Text("Save Changes")

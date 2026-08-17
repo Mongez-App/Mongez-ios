@@ -29,6 +29,13 @@ public class DIContainer {
         container.register(serviceType) { factory($0) }
     }
     
+    public func register<Service, Arg1>(
+        _ serviceType: Service.Type,
+        factory: @escaping (Resolver, Arg1) -> Service
+    ) {
+        container.register(serviceType) { factory($0, $1) }
+    }
+    
     public func register<Service, Arg1, Arg2>(
         _ serviceType: Service.Type,
         factory: @escaping (Resolver, Arg1, Arg2) -> Service
@@ -48,6 +55,13 @@ public class DIContainer {
         return container.resolve(serviceType)
     }
     
+    public func resolve<Service, Arg1>(
+        _ serviceType: Service.Type,
+        argument arg1: Arg1
+    ) -> Service? {
+        return container.resolve(serviceType, argument: arg1)
+    }
+    
     public func resolve<Service, Arg1, Arg2>(
         _ serviceType: Service.Type,
         arguments arg1: Arg1,
@@ -58,6 +72,22 @@ public class DIContainer {
     
     public func resolve<Service>(_ serviceType: Service.Type, name: String?) -> Service? {
         return container.resolve(serviceType, name: name)
+    }
+    
+    public func resolve<Service, Arg1, Arg2, Arg3>(
+        _ serviceType: Service.Type,
+        arguments arg1: Arg1,
+        _ arg2: Arg2,
+        _ arg3: Arg3
+    ) -> Service? {
+        return container.resolve(serviceType, arguments: arg1, arg2, arg3)
+    }
+    
+    public func register<Service, Arg1, Arg2, Arg3>(
+        _ serviceType: Service.Type,
+        factory: @escaping (Resolver, Arg1, Arg2, Arg3) -> Service
+    ) {
+        container.register(serviceType) { factory($0, $1, $2, $3) }
     }
     
     public func getContainer() -> Container {

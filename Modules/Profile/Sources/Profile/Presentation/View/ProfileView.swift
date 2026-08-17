@@ -5,19 +5,17 @@
 //  Created by Shady Eldakrory on 21/07/2026.
 //
 
-//
-//  File.swift
-//
-//
-//  Created by Shady Eldakrory on 21/07/2026.
-//
-
 import SwiftUI
 import Common
 
 public struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel(
         getProfileUseCase: GetProfileUseCase(
+            repository: ProfileRepository(
+                remoteDataSource: ProfileRemoteDataSource()
+            )
+        ),
+        getPreferencesUseCase: GetPreferencesUseCase(
             repository: ProfileRepository(
                 remoteDataSource: ProfileRemoteDataSource()
             )
@@ -34,8 +32,13 @@ public struct ProfileView: View {
         )
     )
     
-    public init() {}
-    
+    @State private var showSubscription = false
+    private let subscriptionScreenFactory: () -> AnyView
+
+    public init(subscriptionScreenFactory: @escaping () -> AnyView = { AnyView(EmptyView()) }) {
+        self.subscriptionScreenFactory = subscriptionScreenFactory
+    }
+
     public var body: some View {
         ScrollView {
             VStack(spacing: AppTheme.Spacing.large) {
@@ -96,21 +99,56 @@ public struct ProfileView: View {
                 }
                 
                 VStack(spacing: 0) {
-                    SettingRow(
-                        iconName: "calendar-green",
-                        iconColor: AppTheme.Colors.green100,
-                        bgOpacity: 0.10,
-                        title: "Calendar Sync",
-                        font: AppTheme.textStyle(size: 16, weight: .regular)
-                    ) {
-                        Toggle("", isOn: Binding(
-                            get: { viewModel.isCalendarSyncEnabled },
-                            set: { viewModel.requestCalendarSyncChange(to: $0) }
-                        ))
-                        .labelsHidden()
-                        .tint(AppTheme.Colors.green100)
+                    VStack(spacing: 0) {
+                        SettingRow(
+                            iconName: "calendar-green",
+                            iconColor: AppTheme.Colors.green100,
+                            bgOpacity: 0.10,
+                            title: "Calendar Sync",
+                            font: AppTheme.textStyle(size: 16, weight: .regular),
+                            showDivider: !viewModel.isCalendarSyncEnabled
+                        ) {
+                            Toggle("", isOn: Binding(
+                                get: { viewModel.isCalendarSyncEnabled },
+                                set: { viewModel.requestCalendarSyncChange(to: $0) }
+                            ))
+                            .labelsHidden()
+                            .tint(AppTheme.Colors.green100)
+                        }
+
+                        if viewModel.isCalendarSyncEnabled {
+                            VStack(alignment: .leading, spacing: AppTheme.Spacing.xxxSmall) {
+                                HStack(spacing: AppTheme.Spacing.xxxSmall) {
+                                    Circle()
+                                        .fill(viewModel.isCalendarSynced ? AppTheme.Colors.green100 : AppTheme.Colors.orange100)
+                                        .frame(width: 6, height: 6)
+                                    Text(viewModel.isCalendarSynced ? "Synced" : "Not Synced")
+                                        .font(AppTheme.textStyle(size: 12, weight: .medium))
+                                        .foregroundColor(viewModel.isCalendarSynced ? AppTheme.Colors.green100 : AppTheme.Colors.orange100)
+                                }
+
+                                Text("Last time synced: \(viewModel.lastCalendarSyncReadableDate)")
+                                    .font(AppTheme.textStyle(size: 12, weight: .regular))
+                                    .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.6))
+
+                                Button {
+                                    viewModel.manualSyncNow()
+                                } label: {
+                                    Text(viewModel.isManualSyncInProgress ? "Syncing…" : "Manual sync now")
+                                        .font(AppTheme.textStyle(size: 12, weight: .medium))
+                                        .foregroundColor(AppTheme.Colors.purple200)
+                                }
+                                .disabled(viewModel.isManualSyncInProgress)
+                            }
+                            .padding(.leading, 48)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.bottom, AppTheme.Spacing.small)
+
+                            Divider()
+                                .padding(.leading, 48)
+                        }
                     }
-                    
+
                     SettingRow(
                         iconName: "moon",
                         iconColor: AppTheme.Colors.black100,
@@ -225,6 +263,38 @@ public struct ProfileView: View {
                         viewModel.openEditPreferences()
                     }
                     
+                    VStack(spacing: 0) {
+                        HStack(spacing: AppTheme.Spacing.small) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: AppTheme.Spacing.xxSmall)
+                                    .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.12))
+                                    .frame(width: 32, height: 32)
+
+                                Image(systemName: "crown.fill")
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundColor(AppTheme.Colors.purple200)
+                            }
+
+                            Text("Manage Plan")
+                                .font(AppTheme.textStyle(size: 16, weight: .regular))
+                                .foregroundColor(AppTheme.Colors.black100)
+
+                            Spacer()
+
+                            Image(systemName: "chevron.right")
+                                .font(AppTheme.textStyle(size: 14, weight: .semibold))
+                                .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.35))
+                        }
+                        .padding(.vertical, AppTheme.Spacing.small)
+
+                        Divider()
+                            .padding(.leading, 48)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        showSubscription = true
+                    }
+
                     SettingRow(
                         iconName: "logout",
                         iconColor: AppTheme.Colors.red100,
@@ -243,6 +313,7 @@ public struct ProfileView: View {
                 }
                 .padding(.horizontal, AppTheme.Spacing.medium)
             }
+            .padding(.bottom, 100)
         }
         .background(AppTheme.Colors.white100)
         .onAppear {
@@ -275,11 +346,26 @@ public struct ProfileView: View {
                     }
                 )
             }
+            if viewModel.isLoading {
+                ZStack {
+                    Color.black.opacity(0.3).ignoresSafeArea()
+                    ProgressView()
+                        .scaleEffect(1.5, anchor: .center)
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .padding()
+                        .background(Color.gray.opacity(0.8))
+                        .cornerRadius(10)
+                }
+            }
+        }
+        .sheet(isPresented: $showSubscription) {
+            subscriptionScreenFactory()
         }
         .sheet(isPresented: $viewModel.isEditPreferencesPresented) {
             EditPreferencesSheet(
-                initialHours: viewModel.dailyStudyHours,
-                initialDays: viewModel.availableDays,
+                hours: $viewModel.dailyStudyHours,
+                selectedDays: $viewModel.availableDays,
+                isLoading: $viewModel.isPreferencesLoading,
                 onSave: { hours, days in
                     viewModel.saveEditPreferences(hours: hours, days: days)
                 },
@@ -306,7 +392,7 @@ public struct ProfileView: View {
 }
 
 struct StatCard: View {
-    let title: String
+    let title: LocalizedStringKey
     let value: String
     
     var body: some View {
@@ -333,7 +419,7 @@ struct SettingRow<TrailingContent: View>: View {
     let iconName: String
     let iconColor: Color
     let bgOpacity: Double
-    let title: String
+    let title: LocalizedStringKey
     var titleColor: Color = AppTheme.Colors.black100
     var font: Font
     var showDivider: Bool = true

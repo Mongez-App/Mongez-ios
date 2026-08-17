@@ -8,13 +8,13 @@
 import Foundation
 
 public struct SendMessageUseCase {
-    let repository: ChatRepository
+    private let repository: ChatRepository
     
     public init(repository: ChatRepository) {
         self.repository = repository
     }
     
-    func execute(courseId: String, text: String) -> AsyncThrowingStream<String, Error> {
-        return repository.sendMessageStream(courseId: courseId, text: text)
+    public func execute(taskId: String, text: String) async throws {
+        try await repository.sendMessage(taskId: taskId, message: text)
     }
 }

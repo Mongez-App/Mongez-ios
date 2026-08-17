@@ -39,7 +39,8 @@ public enum AuthEndpoint: EndPoint {
             token = idToken
         }
         
-        let lang = UserDefaults.standard.string(forKey: "selected_language")?.lowercased() ?? "en"
+        let rawLang = UserDefaults.standard.string(forKey: "selected_language")?.uppercased() ?? "EN"
+        let lang = (rawLang == "AR" || rawLang == "ARABIC") ? "ar" : "en"
         
         return [
             "Content-Type": "application/json",

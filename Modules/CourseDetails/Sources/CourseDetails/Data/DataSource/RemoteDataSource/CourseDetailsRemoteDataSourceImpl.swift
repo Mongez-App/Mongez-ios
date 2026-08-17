@@ -16,15 +16,14 @@ public class CourseDetailsRemoteDataSourceImpl: CourseDetailsRemoteDataSource {
         let endpoint = CourseMaterialEndPoint.getMaterials(courseId: courseId)
         return try await NetworkManger.shared.request(endpoint: endpoint, responseType: [CourseMaterialDTO].self)
     }
-    
-    public func uploadMaterial(
-        courseId: String,
-        fileData: Data,
-        fileName: String,
-        dailyStudyMinutes: Int?,
-        preferredDays: String?
-    ) async throws -> CourseMaterialDTO {
+    public func initializeUpload(courseId: String, request: InitUploadRequestDTO) async throws -> UploadMaterialResponseDTO {
+        let payload = try JSONEncoder().encode(request)
+        let endpoint = CourseMaterialEndPoint.initializeUpload(courseId: courseId, payload: payload)
         
+        return try await NetworkManger.shared.request(endpoint: endpoint, responseType: UploadMaterialResponseDTO.self)
+    }
+    
+    public func uploadFile(materialId: String, fileData: Data, fileName: String) async throws -> FinalizeUploadResponseDTO {
         let boundary = "Boundary-\(UUID().uuidString)"
         let multipartBody = createMultipartBody(
             fileData: fileData,
@@ -34,16 +33,15 @@ public class CourseDetailsRemoteDataSourceImpl: CourseDetailsRemoteDataSource {
             mimeType: "application/pdf"
         )
         
-        let endpoint = CourseMaterialEndPoint.uploadMaterial(
-            courseId: courseId,
+        let endpoint = CourseMaterialEndPoint.uploadFile(
+            materialId: materialId,
             payload: multipartBody,
-            boundary: boundary,
-            dailyStudyMinutes: dailyStudyMinutes,
-            preferredDays: preferredDays
+            boundary: boundary
         )
         
-        return try await NetworkManger.shared.request(endpoint: endpoint, responseType: CourseMaterialDTO.self)
+        return try await NetworkManger.shared.request(endpoint: endpoint, responseType: FinalizeUploadResponseDTO.self)
     }
+    
     
     private func createMultipartBody(
         fileData: Data,
@@ -81,8 +79,8 @@ public class CourseDetailsRemoteDataSourceImpl: CourseDetailsRemoteDataSource {
         return try await NetworkManger.shared.request(endpoint: endpoint, responseType: EmptyResponseDTO.self)
     }
     
-    public func getTasks(courseId: String) async throws -> [CourseTaskDTO] {
+    public func getTasks(courseId: String) async throws -> CourseTasksResponseDTO {
         let endpoint = CourseTaskEndPoint.getTasks(courseId: courseId)
-        return try await NetworkManger.shared.request(endpoint: endpoint, responseType: [CourseTaskDTO].self)
+        return try await NetworkManger.shared.request(endpoint: endpoint, responseType: CourseTasksResponseDTO.self)
     }
 }

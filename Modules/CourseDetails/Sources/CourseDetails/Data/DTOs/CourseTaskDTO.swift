@@ -16,6 +16,19 @@ public struct CourseTaskDTO: Codable {
     public let date: String?
     public let course_id: String?
     public let sequence_order: Int?
+    public let active_spent_time: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case task_id = "id"
+        case title
+        case duration_minutes
+        case priority
+        case is_completed = "completed"
+        case date = "scheduled_date"
+        case course_id
+        case sequence_order
+        case active_spent_time
+    }
 }
 
 public extension CourseTaskDTO {
@@ -43,7 +56,19 @@ public extension CourseTaskDTO {
             durationMinutes: duration_minutes,
             priority: mappedPriority,
             isCompleted: is_completed,
-            group: mappedGroup
+            group: mappedGroup,
+            date: date,
+            activeSpentTime: active_spent_time ?? 0
         )
     }
+}
+
+public struct CourseTasksResponseDTO: Codable {
+    public let meta: CourseTasksMetaDTO
+    public let data: [CourseTaskDTO]
+}
+
+public struct CourseTasksMetaDTO: Codable {
+    public let preferred_study_time_minutes: Int
+    public let total_tasks: Int
 }

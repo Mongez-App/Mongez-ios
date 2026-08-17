@@ -14,6 +14,8 @@ public struct CourseDetailsView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject var viewModel: CourseDetailsViewModel
     @State private var showEditSheet: Bool = false
+    @State private var showDeleteCourseWarning: Bool = false
+    @State private var materialToDelete: String? = nil
     
     public init(viewModel: CourseDetailsViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -26,16 +28,13 @@ public struct CourseDetailsView: View {
                 onBack: { dismiss() },
                 onEdit: { showEditSheet = true },
                 onDelete: {
-                    Task {
-                        await viewModel.deleteCourse()
-                        dismiss()
-                    }
+                    showDeleteCourseWarning = true
                 }
             )
             .sheet(isPresented: $showEditSheet) {
-                EditCourseSheetView(initialCourseName: viewModel.courseName) { name in
+                EditCourseSheetView(initialCourseName: viewModel.courseName) { name, imageData in
                     Task {
-                        await viewModel.updateCourse(name: name)
+                        await viewModel.updateCourse(name: name, imageData: imageData)
                     }
                 }
                     .presentationDetents([.fraction(0.85)])
@@ -46,19 +45,20 @@ public struct CourseDetailsView: View {
             if viewModel.selectedTab == 0 {
                 CourseMaterialsTabView(
                     materials: viewModel.materials,
+                    courseType: viewModel.courseType,
+                    isLoading: viewModel.isLoading,
                     onUploadAction: {
                         viewModel.showFileImporter = true
                     },
                     onDeleteMaterial: { materialId in
-                        Task {
-                            await viewModel.deleteMaterial(materialId: materialId)
-                        }
+                        materialToDelete = materialId
                     }
                 )
             } else {
                 CourseTasksTabView(viewModel: viewModel)
             }
         }
+        .frame(maxHeight: .infinity, alignment: .top)
         .background(AppTheme.Colors.white100.ignoresSafeArea())
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
@@ -82,6 +82,14 @@ public struct CourseDetailsView: View {
             }
         }
         .overlay {
+            if viewModel.isLoading {
+                ZStack {
+                    Color.black.opacity(0.15).ignoresSafeArea()
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.Colors.purple200))
+                        .scaleEffect(1.5)
+                }
+            }
             if viewModel.isUploading {
                 ZStack {
                     Color.black.opacity(0.3).ignoresSafeArea()
@@ -90,6 +98,38 @@ public struct CourseDetailsView: View {
                         .background(Color.white)
                         .cornerRadius(10)
                 }
+            }
+            if showDeleteCourseWarning {
+                WarningAlertView(
+                    title: "Delete Course",
+                    subtitle: "Are you sure you want to delete this course?",
+                    onPrimaryAction: {
+                        showDeleteCourseWarning = false
+                        Task {
+                            await viewModel.deleteCourse()
+                            dismiss()
+                        }
+                    },
+                    onCancel: {
+                        showDeleteCourseWarning = false
+                    }
+                )
+            }
+            if let materialId = materialToDelete {
+                WarningAlertView(
+                    title: "Delete Material",
+                    subtitle: "Are you sure you want to delete this material?",
+                    onPrimaryAction: {
+                        let id = materialId
+                        materialToDelete = nil
+                        Task {
+                            await viewModel.deleteMaterial(materialId: id)
+                        }
+                    },
+                    onCancel: {
+                        materialToDelete = nil
+                    }
+                )
             }
         }
     }
