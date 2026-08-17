@@ -13,7 +13,6 @@ public struct InitUploadRequestDTO: Codable {
     public let file_size_bytes: Int
     public let page_count: Int
     public let device_file_uri: String
-    
     public init(file_name: String, content_type: String, file_size_bytes: Int, page_count: Int, device_file_uri: String) {
         self.file_name = file_name
         self.content_type = content_type

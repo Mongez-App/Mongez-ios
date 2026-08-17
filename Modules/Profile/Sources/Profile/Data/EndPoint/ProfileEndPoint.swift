@@ -10,8 +10,10 @@ import Common
 
 enum ProfileEndpoint: EndPoint {
     case getProfile
+    case getPreferences
     case updateProfile(name: String, avatarUrl: String, appearance: String, language: String, calendarSyncConnected: Bool)
     case updatePreferences(dailyStudyHours: Int, availableDays: [String])
+    case updateCalendarSync(calendarConnected: Bool, calendarSynced: Bool)
     
     var baseURL: String {
         return "https://api-gateway-production-5110.up.railway.app/api/v1"
@@ -21,21 +23,27 @@ enum ProfileEndpoint: EndPoint {
         switch self {
         case .getProfile:
             return "/users/me/profile"
+        case .getPreferences:
+            return "/users/me/preferences"
         case .updateProfile:
             return "/users/me/profile"
         case .updatePreferences:
             return "/users/me/preferences"
+        case .updateCalendarSync:
+            return "/auth/calendar-sync"
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .getProfile:
+        case .getProfile, .getPreferences:
             return .get
         case .updateProfile:
             return .patch
         case .updatePreferences:
             return .put
+        case .updateCalendarSync:
+            return .patch
         }
     }
     
@@ -52,7 +60,7 @@ enum ProfileEndpoint: EndPoint {
     
     var body: Data? {
         switch self {
-        case .getProfile:
+        case .getProfile, .getPreferences:
             return nil
         case .updateProfile(let name, let avatarUrl, let appearance, let language, let calendarSyncConnected):
             let structBody = UpdateProfileBody(
@@ -67,6 +75,12 @@ enum ProfileEndpoint: EndPoint {
             let structBody = UpdatePreferencesBody(
                 dailyStudyHours: dailyStudyHours,
                 availableDays: availableDays
+            )
+            return try? JSONEncoder().encode(structBody)
+        case .updateCalendarSync(let calendarConnected, let calendarSynced):
+            let structBody = UpdateCalendarSyncBody(
+                calendarConnected: calendarConnected,
+                calendarSynced: calendarSynced
             )
             return try? JSONEncoder().encode(structBody)
         }
@@ -96,5 +110,15 @@ struct UpdatePreferencesBody: Encodable {
     enum CodingKeys: String, CodingKey {
         case dailyStudyHours = "daily_study_hours"
         case availableDays = "available_days"
+    }
+}
+
+struct UpdateCalendarSyncBody: Encodable {
+    let calendarConnected: Bool
+    let calendarSynced: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case calendarConnected = "calendar_connected"
+        case calendarSynced = "calendar_synced"
     }
 }

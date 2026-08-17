@@ -71,9 +71,9 @@ public class DashboardViewModel : ObservableObject {
         }
     }
     
-    public func selectTask(courseId: String, taskTitle: String ,isCompleted : Bool) {
+    public func selectTask(taskId: String, taskTitle: String, isCompleted: Bool) {
         if !isCompleted {
-            onTaskSelected?(courseId, taskTitle)
+            onTaskSelected?(taskId, taskTitle)
         }
     }
 }

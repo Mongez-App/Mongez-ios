@@ -8,6 +8,8 @@ public struct Material: Identifiable, Equatable {
     public let pageCount: Int?
     public let courseId: String
     public let createdAt: Date?
+    public let deviceFileUri: String?
+    public let status: String?
 
     public init(
         id: String = UUID().uuidString,
@@ -16,7 +18,9 @@ public struct Material: Identifiable, Equatable {
         fileSizeBytes: Int,
         pageCount: Int? = nil,
         courseId: String = "",
-        createdAt: Date? = nil
+        createdAt: Date? = nil,
+        deviceFileUri: String? = nil,
+        status: String? = nil
     ) {
         self.id = id
         self.fileName = fileName
@@ -25,5 +29,7 @@ public struct Material: Identifiable, Equatable {
         self.pageCount = pageCount
         self.courseId = courseId
         self.createdAt = createdAt
+        self.deviceFileUri = deviceFileUri
+        self.status = status
     }
 }

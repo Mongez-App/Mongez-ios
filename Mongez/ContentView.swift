@@ -16,6 +16,8 @@ import Courses
 import CourseDetails
 import Profile
 import Roadmap
+import Organizations
+import Payment
 
 struct ContentView: View {
     @StateObject private var appCoordinator = AppCoordinator()
@@ -78,18 +80,12 @@ struct ContentView: View {
                                 )
                             )
                         ),
-                        studyRoomFactory: { courseId, taskTitle in
-                            let chatRepository = MockChatRepository()
-                            let studyViewModel = StudyRoomViewModel(
-                                courseId: courseId,
-                                getChatHistoryUseCase: GetChatHistoryUseCase(repository: chatRepository),
-                                sendMessageUseCase: SendMessageUseCase(repository: chatRepository)
-                            )
+                        studyRoomFactory: { taskId, taskTitle in
+                            let studyViewModel = ServiceLocator.resolve(StudyRoomViewModel.self, arguments: taskId, taskTitle)!
                             
                             return AnyView(
                                 StudyRoomView(
-                                    viewModel: studyViewModel,
-                                    taskTitle: taskTitle
+                                    viewModel: studyViewModel
                                 )
                             )
                         },
@@ -101,8 +97,8 @@ struct ContentView: View {
                                 CourseDetailsCoordinatorView(
                                     coordinator: detailsCoordinator,
                                     viewModel: detailsViewModel,
-                                    onStudyRoomSelected: { roomId, taskTitle in
-                                        coordinator.push(.studyRoom(courseId: roomId, taskTitle: taskTitle))
+                                    onStudyRoomSelected: { taskId, taskTitle in
+                                        coordinator.push(.studyRoom(taskId: taskId, taskTitle: taskTitle))
                                     }
                                 )
                             )
@@ -120,9 +116,17 @@ struct ContentView: View {
                                 RoadmapView(viewModel: RoadmapViewmodel())
                             )
                         },
+                        organizationsFactory: {
+                            let organizationsViewModel = ServiceLocator.resolve(OrganizationsViewModel.self)!
+                            return AnyView(
+                                OrganizationsView(viewModel: organizationsViewModel)
+                            )
+                        },
                         profileFactory: {
                             AnyView(
-                                ProfileView()
+                                ProfileView(subscriptionScreenFactory: {
+                                    AnyView(PaymentView(viewModel: ServiceLocator.resolve(PaymentViewModel.self)!))
+                                })
                             )
                         }
                     )
@@ -130,24 +134,33 @@ struct ContentView: View {
                 }
             case .courses:
                 if let coordinator = appCoordinator.coursesCoordinator {
+                    let coursesViewModel = appCoordinator.makeCoursesViewModel()
                     CoursesCoordinatorView(
                         coordinator: coordinator,
-                        viewModel: appCoordinator.makeCoursesViewModel(),
+                        viewModel: coursesViewModel,
                         courseDetailsFactory: { courseId, courseName, courseType in
                             let detailsCoordinator = CourseDetailsCoordinator()
                             let detailsViewModel = ServiceLocator.resolve(CourseDetailsViewModel.self, arguments: courseId, courseName, courseType)!
-                            
+
                             return AnyView(
                                 CourseDetailsCoordinatorView(
                                     coordinator: detailsCoordinator,
                                     viewModel: detailsViewModel,
-                                    onStudyRoomSelected: { roomId, taskTitle in
-                                        coordinator.push(.details(courseId: roomId, courseName: courseName, courseType: courseType))
+                                    onStudyRoomSelected: { taskId, taskTitle in
+                                        coordinator.push(.details(courseId: courseId, courseName: courseName, courseType: courseType))
                                     }
                                 )
                             )
+                        },
+                        upgradeScreenFactory: {
+                            AnyView(PaymentView(viewModel: ServiceLocator.resolve(PaymentViewModel.self)!))
                         }
                     )
+                    .onAppear {
+                        coursesViewModel.isSubscribed = {
+                            ServiceLocator.resolve(GetSubscriptionStatusUseCase.self)?.execute() ?? false
+                        }
+                    }
                     .transition(.opacity)
                 }
             }
@@ -164,14 +177,24 @@ struct ContentView: View {
 struct DashboardCoursesContainer: View {
     let coordinator: DashboardCoordinator
     let viewModel: CoursesViewModel
-    
+
     var body: some View {
-        CoursesView(viewModel: viewModel)
-            .onAppear {
-                viewModel.onCourseSelected = { [weak coordinator] courseId, courseName, courseType in
-                    coordinator?.push(.courseDetails(courseId: courseId, courseName: courseName, courseType: courseType))
-                }
+        // The upgrade sheet is presented from inside CoursesView, which observes the view model —
+        // attaching it here (a non-observing parent) desyncs SwiftUI's presentation state.
+        CoursesView(
+            viewModel: viewModel,
+            upgradeScreenFactory: {
+                AnyView(PaymentView(viewModel: ServiceLocator.resolve(PaymentViewModel.self)!))
             }
+        )
+        .onAppear {
+            viewModel.onCourseSelected = { [weak coordinator] courseId, courseName, courseType in
+                coordinator?.push(.courseDetails(courseId: courseId, courseName: courseName, courseType: courseType))
+            }
+            viewModel.isSubscribed = {
+                ServiceLocator.resolve(GetSubscriptionStatusUseCase.self)?.execute() ?? false
+            }
+        }
     }
 }
 

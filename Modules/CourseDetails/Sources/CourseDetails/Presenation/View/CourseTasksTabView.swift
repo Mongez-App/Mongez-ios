@@ -35,6 +35,18 @@ public struct CourseTasksTabView: View {
         }
     }
     
+    private var emptyStateText: LocalizedStringKey {
+        switch selectedFilter {
+        case "All": return "No tasks found in this course."
+        case "Pending": return "No pending tasks found."
+        case "Completed": return "No completed tasks."
+        case "High": return "No high priority tasks."
+        case "Medium": return "No medium priority tasks."
+        case "Low": return "No low priority tasks."
+        default: return "No tasks found."
+        }
+    }
+    
     public var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.medium) {
@@ -54,23 +66,25 @@ public struct CourseTasksTabView: View {
                 )
                 
                 if filteredTasks.isEmpty {
-                    VStack(spacing: AppTheme.Spacing.small) {
-                        Spacer()
-                        
-                        Image("online_material")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100, height: 100)
-                            .padding(.bottom, AppTheme.Spacing.small)
-                        
-                        Text("No tasks found in this course.")
-                            .font(AppTheme.textStyle(size: 16, weight: .medium))
-                            .foregroundColor(AppTheme.Colors.gray300)
-                            .multilineTextAlignment(.center)
-                        
-                        Spacer()
+                    if !viewModel.isLoading {
+                        VStack(spacing: AppTheme.Spacing.small) {
+                            Spacer()
+                            
+                            Image("empty-tasks")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 100, height: 100)
+                                .padding(.bottom, AppTheme.Spacing.small)
+                            
+                            Text(emptyStateText)
+                                .font(AppTheme.textStyle(size: 16, weight: .medium))
+                                .foregroundColor(AppTheme.Colors.gray300)
+                                .multilineTextAlignment(.center)
+                            
+                            Spacer()
+                        }
+                        .frame(maxWidth: .infinity, minHeight: 250, alignment: .center)
                     }
-                    .frame(maxWidth: .infinity, minHeight: 250, alignment: .center)
                 } else {
                     VStack(alignment: .leading, spacing: AppTheme.Spacing.medium) {
                         let todayTasks = filteredTasks.filter { $0.group == .today }

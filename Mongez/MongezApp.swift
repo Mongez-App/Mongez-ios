@@ -11,7 +11,10 @@ import Authntication
 import Profile
 import Common
 import CourseDetails
+import AIStudyRoom
 import Swinject
+import Organizations
+import Payment
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
@@ -24,6 +27,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         let container = DIContainer.shared.getContainer()
         CourseDetailsAssembly().assemble(container: container)
+        ChatAssembly().assemble(container: container)
+        OrganizationsAssembly().assemble(container: container)
+        PaymentAssembly().assemble(container: container)
         AppAssembly().assemble(container: container)
 
         CalendarSyncManager.shared.registerBackgroundTask()
@@ -41,13 +47,17 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct MongezApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
- 
+    @StateObject private var localization = LocalizationManager.shared
+
     let persistenceController = PersistenceController.shared
- 
+
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.locale, localization.language.locale)
+                .environment(\.layoutDirection, localization.language.layoutDirection)
+                .id(localization.language)
                 .onOpenURL { url in
                     GIDSignIn.sharedInstance.handle(url)
                 }

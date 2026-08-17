@@ -20,7 +20,7 @@ let package = Package(
             name: "AIStudyRoom",
             dependencies: [.product(name: "Common",package: "Common")]
         ),
-        
+
         .testTarget(
             name: "AIStudyRoomTests",
             dependencies: ["AIStudyRoom"]),

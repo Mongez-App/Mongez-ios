@@ -33,7 +33,7 @@ public struct CourseTabBarView: View {
         )
     }
     
-    private func tabItem(title: String, tabIndex: Int) -> some View {
+    private func tabItem(title: LocalizedStringKey, tabIndex: Int) -> some View {
         let isSelected = selectedTab == tabIndex
         
         return VStack(spacing: AppTheme.Spacing.xSmall) {

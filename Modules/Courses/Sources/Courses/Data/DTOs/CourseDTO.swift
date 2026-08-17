@@ -25,6 +25,7 @@ struct CourseDTO: Codable {
     let completionPercentage: Double?
     let isHidden: Bool?
     let materialCount: Int?
+    let hasMaterials: Bool?
     let createdAt: String?
     let updatedAt: String?
 
@@ -44,6 +45,7 @@ struct CourseDTO: Codable {
         case completionPercentage = "completion_percentage"
         case isHidden = "is_hidden"
         case materialCount = "material_count"
+        case hasMaterials = "has_materials"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
@@ -72,6 +74,7 @@ struct CourseDTO: Codable {
         completionPercentage = try container.decodeIfPresent(Double.self, forKey: .completionPercentage)
         isHidden = try container.decodeIfPresent(Bool.self, forKey: .isHidden)
         materialCount = try container.decodeIfPresent(Int.self, forKey: .materialCount)
+        hasMaterials = try container.decodeIfPresent(Bool.self, forKey: .hasMaterials)
         createdAt = try container.decodeIfPresent(String.self, forKey: .createdAt)
         updatedAt = try container.decodeIfPresent(String.self, forKey: .updatedAt)
     }
@@ -92,6 +95,7 @@ struct CourseDTO: Codable {
         try container.encodeIfPresent(completionPercentage, forKey: .completionPercentage)
         try container.encodeIfPresent(isHidden, forKey: .isHidden)
         try container.encodeIfPresent(materialCount, forKey: .materialCount)
+        try container.encodeIfPresent(hasMaterials, forKey: .hasMaterials)
         try container.encodeIfPresent(createdAt, forKey: .createdAt)
         try container.encodeIfPresent(updatedAt, forKey: .updatedAt)
     }
@@ -121,11 +125,13 @@ struct CourseDTO: Codable {
             materialUrl: materialUrl,
             completionPercentage: completionPercentage ?? 0.0,
             isHidden: isHidden ?? false,
-            materialCount: materialCount ?? 0
+            materialCount: materialCount ?? 0,
+            hasMaterials: hasMaterials ?? false
         )
     }
 }
 
+// Used by Online Course tab (old format with course_type + material_url)
 struct CreateCourseRequestDTO: Codable {
     let name: String
     let courseCode: String?
@@ -143,6 +149,25 @@ struct CreateCourseRequestDTO: Codable {
         case examDate = "exam_date"
         case courseType = "course_type"
         case materialUrl = "material_url"
+    }
+}
+
+// Used by Upload Material tab (new format with has_materials)
+struct CreateMaterialCourseRequestDTO: Codable {
+    let name: String
+    let courseCode: String?
+    let imageUrl: String?
+    let startDate: String
+    let examDate: String
+    let hasMaterials: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case courseCode = "course_code"
+        case imageUrl = "image_url"
+        case startDate = "start_date"
+        case examDate = "exam_date"
+        case hasMaterials = "has_materials"
     }
 }
 

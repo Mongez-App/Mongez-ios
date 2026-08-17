@@ -46,7 +46,7 @@ struct RoadmapEntryCardView: View {
 }
 
 struct RoadmapEmptyStateView: View {
-    let message: String
+    let message: LocalizedStringKey
 
     var body: some View {
         Text(message)

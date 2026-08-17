@@ -57,8 +57,8 @@ public class CourseDetailsRepositoryImpl: CourseDetailsRepository {
     }
     
     public func getTasks(courseId: String) async throws -> [CourseTask] {
-        let taskDTOs = try await remoteDataSource.getTasks(courseId: courseId)
-        return taskDTOs.map { $0.toDomain() }
+        let response = try await remoteDataSource.getTasks(courseId: courseId)
+        return response.data.map { $0.toDomain() }
     }
     
     public func updateCourse(courseId: String, name: String?, imageUrl: String?, isHidden: Bool?) async throws -> Course {

@@ -5,19 +5,17 @@
 //  Created by Shady Eldakrory on 21/07/2026.
 //
 
-//
-//  File.swift
-//
-//
-//  Created by Shady Eldakrory on 21/07/2026.
-//
-
 import SwiftUI
 import Common
 
 public struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel(
         getProfileUseCase: GetProfileUseCase(
+            repository: ProfileRepository(
+                remoteDataSource: ProfileRemoteDataSource()
+            )
+        ),
+        getPreferencesUseCase: GetPreferencesUseCase(
             repository: ProfileRepository(
                 remoteDataSource: ProfileRemoteDataSource()
             )
@@ -34,8 +32,13 @@ public struct ProfileView: View {
         )
     )
     
-    public init() {}
-    
+    @State private var showSubscription = false
+    private let subscriptionScreenFactory: () -> AnyView
+
+    public init(subscriptionScreenFactory: @escaping () -> AnyView = { AnyView(EmptyView()) }) {
+        self.subscriptionScreenFactory = subscriptionScreenFactory
+    }
+
     public var body: some View {
         ScrollView {
             VStack(spacing: AppTheme.Spacing.large) {
@@ -260,6 +263,38 @@ public struct ProfileView: View {
                         viewModel.openEditPreferences()
                     }
                     
+                    VStack(spacing: 0) {
+                        HStack(spacing: AppTheme.Spacing.small) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: AppTheme.Spacing.xxSmall)
+                                    .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.12))
+                                    .frame(width: 32, height: 32)
+
+                                Image(systemName: "crown.fill")
+                                    .font(.system(size: 15, weight: .semibold))
+                                    .foregroundColor(AppTheme.Colors.purple200)
+                            }
+
+                            Text("Manage Plan")
+                                .font(AppTheme.textStyle(size: 16, weight: .regular))
+                                .foregroundColor(AppTheme.Colors.black100)
+
+                            Spacer()
+
+                            Image(systemName: "chevron.right")
+                                .font(AppTheme.textStyle(size: 14, weight: .semibold))
+                                .foregroundColor(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.black100, opacity: 0.35))
+                        }
+                        .padding(.vertical, AppTheme.Spacing.small)
+
+                        Divider()
+                            .padding(.leading, 48)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        showSubscription = true
+                    }
+
                     SettingRow(
                         iconName: "logout",
                         iconColor: AppTheme.Colors.red100,
@@ -310,11 +345,26 @@ public struct ProfileView: View {
                     }
                 )
             }
+            if viewModel.isLoading {
+                ZStack {
+                    Color.black.opacity(0.3).ignoresSafeArea()
+                    ProgressView()
+                        .scaleEffect(1.5, anchor: .center)
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .padding()
+                        .background(Color.gray.opacity(0.8))
+                        .cornerRadius(10)
+                }
+            }
+        }
+        .sheet(isPresented: $showSubscription) {
+            subscriptionScreenFactory()
         }
         .sheet(isPresented: $viewModel.isEditPreferencesPresented) {
             EditPreferencesSheet(
-                initialHours: viewModel.dailyStudyHours,
-                initialDays: viewModel.availableDays,
+                hours: $viewModel.dailyStudyHours,
+                selectedDays: $viewModel.availableDays,
+                isLoading: $viewModel.isPreferencesLoading,
                 onSave: { hours, days in
                     viewModel.saveEditPreferences(hours: hours, days: days)
                 },
@@ -341,7 +391,7 @@ public struct ProfileView: View {
 }
 
 struct StatCard: View {
-    let title: String
+    let title: LocalizedStringKey
     let value: String
     
     var body: some View {
@@ -368,7 +418,7 @@ struct SettingRow<TrailingContent: View>: View {
     let iconName: String
     let iconColor: Color
     let bgOpacity: Double
-    let title: String
+    let title: LocalizedStringKey
     var titleColor: Color = AppTheme.Colors.black100
     var font: Font
     var showDivider: Bool = true

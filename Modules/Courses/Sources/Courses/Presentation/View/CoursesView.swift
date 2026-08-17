@@ -4,8 +4,16 @@ import Common
 public struct CoursesView: View {
     @ObservedObject public var viewModel: CoursesViewModel
 
-    public init(viewModel: CoursesViewModel) {
+    /// Builds the subscription screen shown when the free-tier course limit is hit.
+    /// Injected from the app shell so this module needn't depend on Payment.
+    private let upgradeScreenFactory: () -> AnyView
+
+    public init(
+        viewModel: CoursesViewModel,
+        upgradeScreenFactory: @escaping () -> AnyView = { AnyView(EmptyView()) }
+    ) {
         self.viewModel = viewModel
+        self.upgradeScreenFactory = upgradeScreenFactory
     }
 
     public var body: some View {
@@ -48,7 +56,7 @@ public struct CoursesView: View {
                     EmptyCoursesView(
                         isSearching: !viewModel.searchText.isEmpty,
                         onAddCourse: {
-                            viewModel.showAddCourseSheet = true
+                            Task { await viewModel.requestAddCourse() }
                         }
                     )
                 } else {
@@ -60,6 +68,9 @@ public struct CoursesView: View {
             AddCourseSheet(viewModel: viewModel)
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
+        }
+        .sheet(isPresented: $viewModel.showUpgradePrompt) {
+            upgradeScreenFactory()
         }
         .overlay {
             if viewModel.showDeleteConfirmation {
@@ -97,8 +108,7 @@ public struct CoursesView: View {
             Spacer()
 
             Button(action: {
-                viewModel.resetAddCourseForm()
-                viewModel.showAddCourseSheet = true
+                Task { await viewModel.requestAddCourse() }
             }) {
                 Image(systemName: "plus")
                     .font(.system(size: 18, weight: .semibold))
@@ -193,14 +203,23 @@ struct MockCoursesRepository: CoursesRepositoryProtocol {
         return Course(name: name, courseCode: courseCode, courseType: courseType, materialUrl: materialUrl)
     }
 
+    func createMaterialCourse(name: String, courseCode: String, imageUrl: String?, startDate: Date, examDate: Date) async throws -> Course {
+        return Course(name: name, courseCode: courseCode, hasMaterials: true)
+    }
+
     func updateCourse(id: String, name: String?, imageUrl: String?, isHidden: Bool?) async throws -> Course {
         return Course(name: name ?? "Updated Course")
     }
 
     func deleteCourse(id: String) async throws {}
 
-    func addMaterial(courseId: String, fileData: Data, fileName: String, contentType: String, dailyStudyMinutes: Int, preferredDays: String) async throws -> Material {
-        return Material(fileName: fileName, contentType: contentType, fileSizeBytes: fileData.count, courseId: courseId)
+    // MARK: - Fixed Method Signature
+    func createMaterial(courseId: String, fileName: String, contentType: String, fileSizeBytes: Int, pageCount: Int?, deviceFileUri: String) async throws -> Material {
+        return Material(fileName: fileName, contentType: contentType, fileSizeBytes: fileSizeBytes, courseId: courseId, deviceFileUri: deviceFileUri)
+    }
+
+    func uploadMaterialPDF(materialId: String, fileData: Data, fileName: String, contentType: String) async throws -> Material {
+        return Material(fileName: fileName, contentType: contentType, fileSizeBytes: fileData.count)
     }
 
     func listMaterials(courseId: String) async throws -> [Material] {
@@ -210,16 +229,16 @@ struct MockCoursesRepository: CoursesRepositoryProtocol {
     func deleteMaterial(courseId: String, materialId: String) async throws {}
 }
 
-struct MockCloudinaryService: CloudinaryServiceProtocol {
-    func uploadImage(imageData: Data) async throws -> String {
-        return "https://mock-image-url.com/image.jpg"
-    }
-}
+//struct MockCloudinaryService: CloudinaryServiceProtocol {
+//    func uploadImage(imageData: Data) async throws -> String {
+//        return "https://mock-image-url.com/image.jpg"
+//    }
+//}
 
 extension CoursesViewModel {
     static var preview: CoursesViewModel {
         let repo = MockCoursesRepository()
-        let cloudinary = MockCloudinaryService()
+        let cloudinary = CloudinaryService()
         return CoursesViewModel(
             fetchCoursesUseCase: FetchCoursesUseCase(repository: repo),
             addCourseUseCase: AddCourseUseCase(repository: repo, cloudinaryService: cloudinary),

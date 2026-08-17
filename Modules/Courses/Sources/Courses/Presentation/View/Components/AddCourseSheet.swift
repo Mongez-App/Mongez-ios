@@ -332,7 +332,7 @@ struct AddCourseSheet: View {
         Calendar.current.date(byAdding: .day, value: 1, to: viewModel.courseStartDate) ?? viewModel.courseStartDate
     }
 
-    private func datePicker(label: String, selection: Binding<Date>, minDate: Date? = nil) -> some View {
+    private func datePicker(label: LocalizedStringKey, selection: Binding<Date>, minDate: Date? = nil) -> some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.xxSmall) {
             formLabel(label)
 
@@ -371,13 +371,13 @@ struct AddCourseSheet: View {
         }
     }
 
-    private func formLabel(_ text: String) -> some View {
+    private func formLabel(_ text: LocalizedStringKey) -> some View {
         Text(text)
             .font(AppTheme.textStyle(size: 14, weight: .bold))
             .foregroundColor(AppTheme.Colors.black100)
     }
 
-    private func formTextField(_ placeholder: String, text: Binding<String>) -> some View {
+    private func formTextField(_ placeholder: LocalizedStringKey, text: Binding<String>) -> some View {
         TextField(placeholder, text: text)
             .font(AppTheme.textStyle(size: 14, weight: .regular))
             .foregroundColor(AppTheme.Colors.black100)
@@ -388,7 +388,7 @@ struct AddCourseSheet: View {
             )
     }
 
-    private func tabButton(title: String, icon: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
+    private func tabButton(title: LocalizedStringKey, icon: String, isSelected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack(spacing: AppTheme.Spacing.xxxSmall) {
                 Image(systemName: icon)

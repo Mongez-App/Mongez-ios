@@ -1,0 +1,2238 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "(at least 1 required)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(مطلوب واحد على الأقل)"
+          }
+        }
+      }
+    },
+    "(PDFs, slides, notes)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(ملفات PDF، شرائح، ملاحظات)"
+          }
+        }
+      }
+    },
+    "/" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "/"
+          }
+        }
+      }
+    },
+    "5 hours / day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 ساعات / يوم"
+          }
+        }
+      }
+    },
+    "Add Course" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إضافة دورة"
+          }
+        }
+      }
+    },
+    "Add Event" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إضافة حدث"
+          }
+        }
+      }
+    },
+    "Add Material" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إضافة مادة"
+          }
+        }
+      }
+    },
+    "Add New Course" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إضافة دورة جديدة"
+          }
+        }
+      }
+    },
+    "AI creates your perfect study schedule automatically." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يقوم الذكاء الاصطناعي بإنشاء جدول مذاكرة مثالي لك تلقائيًا."
+          }
+        }
+      }
+    },
+    "AI Suggestion" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اقتراح الذكاء الاصطناعي"
+          }
+        }
+      }
+    },
+    "Alert" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تنبيه"
+          }
+        }
+      }
+    },
+    "Already have an account?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لديك حساب بالفعل؟"
+          }
+        }
+      }
+    },
+    "Appearance" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المظهر"
+          }
+        }
+      }
+    },
+    "Are you sure you want to delete this course?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هل أنت متأكد أنك تريد حذف هذه الدورة؟"
+          }
+        }
+      }
+    },
+    "Are you sure you want to delete this material?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هل أنت متأكد أنك تريد حذف هذه المادة؟"
+          }
+        }
+      }
+    },
+    "Are you sure you want to log out?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هل أنت متأكد أنك تريد تسجيل الخروج؟"
+          }
+        }
+      }
+    },
+    "Ask your AI tutor" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اسأل معلمك الذكي"
+          }
+        }
+      }
+    },
+    "Calendar Sync" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مزامنة التقويم"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إلغاء"
+          }
+        }
+      }
+    },
+    "Choose an Avatar" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختر صورة رمزية"
+          }
+        }
+      }
+    },
+    "Completed\nTasks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المهام\nالمكتملة"
+          }
+        }
+      }
+    },
+    "Confirm Password" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تأكيد كلمة المرور"
+          }
+        }
+      }
+    },
+    "Confirmation" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تأكيد"
+          }
+        }
+      }
+    },
+    "Connect your Apple Calendar so AI can avoid conflicts and create the best schedule for you." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اربط تقويم Apple الخاص بك ليتمكن الذكاء الاصطناعي من تجنب التعارضات وإنشاء أفضل جدول دراسي لك."
+          }
+        }
+      }
+    },
+    "Continue with Google" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المتابعة باستخدام جوجل"
+          }
+        }
+      }
+    },
+    "Course" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المادة"
+          }
+        }
+      }
+    },
+    "Course Code (Optional)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رمز الدورة (اختياري)"
+          }
+        }
+      }
+    },
+    "Course Material" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مادة الدورة"
+          }
+        }
+      }
+    },
+    "Course Name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اسم الدورة"
+          }
+        }
+      }
+    },
+    "Course Progress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تقدم الدورة"
+          }
+        }
+      }
+    },
+    "Course URL" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رابط الدورة"
+          }
+        }
+      }
+    },
+    "Courses" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الدورات"
+          }
+        }
+      }
+    },
+    "Create account" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إنشاء حساب"
+          }
+        }
+      }
+    },
+    "Creating course..." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جارٍ إنشاء الدورة..."
+          }
+        }
+      }
+    },
+    "Creating..." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جارٍ الإنشاء..."
+          }
+        }
+      }
+    },
+    "Dark" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "داكن"
+          }
+        }
+      }
+    },
+    "Date & Time" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التاريخ والوقت"
+          }
+        }
+      }
+    },
+    "Day" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يوم"
+          }
+        }
+      }
+    },
+    "Deadline (Exam Date)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الموعد النهائي (تاريخ الامتحان)"
+          }
+        }
+      }
+    },
+    "Delete" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حذف"
+          }
+        }
+      }
+    },
+    "Delete Course" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حذف الدورة"
+          }
+        }
+      }
+    },
+    "Delete Course?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هل تريد حذف الدورة؟"
+          }
+        }
+      }
+    },
+    "Delete Material" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حذف المادة"
+          }
+        }
+      }
+    },
+    "Disconnect" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "قطع الاتصال"
+          }
+        }
+      }
+    },
+    "Discover" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استكشاف"
+          }
+        }
+      }
+    },
+    "Don't have an account?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ليس لديك حساب؟"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم"
+          }
+        }
+      }
+    },
+    "e.g. CS301" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مثال: CS301"
+          }
+        }
+      }
+    },
+    "e.g. Midterm Exam" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مثال: امتحان منتصف الفصل"
+          }
+        }
+      }
+    },
+    "e.g. Operating Systems" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مثال: أنظمة التشغيل"
+          }
+        }
+      }
+    },
+    "Edit Course" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعديل الدورة"
+          }
+        }
+      }
+    },
+    "Edit Preferences" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعديل التفضيلات"
+          }
+        }
+      }
+    },
+    "Edit Profile" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعديل الملف الشخصي"
+          }
+        }
+      }
+    },
+    "Email" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البريد الإلكتروني"
+          }
+        }
+      }
+    },
+    "End session" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إنهاء الجلسة"
+          }
+        }
+      }
+    },
+    "End this session?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هل تريد إنهاء هذه الجلسة؟"
+          }
+        }
+      }
+    },
+    "English" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الإنجليزية"
+          }
+        }
+      }
+    },
+    "Enter Invite Code or Team ID" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أدخل كود الدعوة أو معرّف الفريق"
+          }
+        }
+      }
+    },
+    "Enter Team name here" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أدخل اسم الفريق هنا"
+          }
+        }
+      }
+    },
+    "Enter your name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أدخل اسمك"
+          }
+        }
+      }
+    },
+    "Error" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خطأ"
+          }
+        }
+      }
+    },
+    "Event Type" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "نوع الحدث"
+          }
+        }
+      }
+    },
+    "Event Types" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أنواع الأحداث"
+          }
+        }
+      }
+    },
+    "Events" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الأحداث"
+          }
+        }
+      }
+    },
+    "F" : {
+      "comment" : "Friday, single-letter weekday abbreviation",
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ج"
+          }
+        }
+      }
+    },
+    "Failed to load PDF" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فشل تحميل ملف PDF"
+          }
+        }
+      }
+    },
+    "Filter Roadmap" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تصفية الخطة الدراسية"
+          }
+        }
+      }
+    },
+    "Full Name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الاسم الكامل"
+          }
+        }
+      }
+    },
+    "Get Started" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابدأ الآن"
+          }
+        }
+      }
+    },
+    "Go to Settings" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الذهاب إلى الإعدادات"
+          }
+        }
+      }
+    },
+    "Got It" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حسنًا"
+          }
+        }
+      }
+    },
+    "Hours" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الساعات"
+          }
+        }
+      }
+    },
+    "How many hours would you study daily ?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "كم عدد الساعات التي ستدرسها يوميًا؟"
+          }
+        }
+      }
+    },
+    "How many hours would you study daily?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "كم ساعة تريد أن تذاكر يوميًا؟"
+          }
+        }
+      }
+    },
+    "Image selected" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم اختيار الصورة"
+          }
+        }
+      }
+    },
+    "John Doe" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أحمد محمد"
+          }
+        }
+      }
+    },
+    "JohnDoe@gmail.com" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JohnDoe@gmail.com"
+          }
+        }
+      }
+    },
+    "Join Your First Team" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "انضم إلى أول فريق لك"
+          }
+        }
+      }
+    },
+    "Keep Studying" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "متابعة الدراسة"
+          }
+        }
+      }
+    },
+    "Language" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اللغة"
+          }
+        }
+      }
+    },
+    "Learn with your personal AI tutor" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تعلّم مع معلمك الخاص المدعوم بالذكاء الاصطناعي"
+          }
+        }
+      }
+    },
+    "Let's continue our study journey" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لنكمل رحلتنا الدراسية"
+          }
+        }
+      }
+    },
+    "Let's hit today's tasks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لننجز مهام اليوم"
+          }
+        }
+      }
+    },
+    "Let's Start" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لنبدأ"
+          }
+        }
+      }
+    },
+    "Light" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فاتح"
+          }
+        }
+      }
+    },
+    "Logout" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تسجيل الخروج"
+          }
+        }
+      }
+    },
+    "M" : {
+      "comment" : "Monday, single-letter weekday abbreviation",
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ن"
+          }
+        }
+      }
+    },
+    "Materials" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المواد"
+          }
+        }
+      }
+    },
+    "Mon" : {
+      "comment" : "Monday, three-letter weekday abbreviation",
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إثن"
+          }
+        }
+      }
+    },
+    "Monthly Progress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التقدم الشهري"
+          }
+        }
+      }
+    },
+    "My Courses" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دوراتي"
+          }
+        }
+      }
+    },
+    "My Teams" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فرقي"
+          }
+        }
+      }
+    },
+    "Name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الاسم"
+          }
+        }
+      }
+    },
+    "Next" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التالي"
+          }
+        }
+      }
+    },
+    "No completed tasks." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد مهام مكتملة."
+          }
+        }
+      }
+    },
+    "No courses added yet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لم تتم إضافة أي مواد بعد"
+          }
+        }
+      }
+    },
+    "No courses yet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد دورات بعد"
+          }
+        }
+      }
+    },
+    "No Courses Yet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد دورات بعد"
+          }
+        }
+      }
+    },
+    "No date range selected" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لم يتم تحديد نطاق تاريخ"
+          }
+        }
+      }
+    },
+    "No events scheduled for this block yet." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد أحداث مجدولة لهذه الفترة بعد."
+          }
+        }
+      }
+    },
+    "No Events Yet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد أحداث بعد"
+          }
+        }
+      }
+    },
+    "No high priority tasks." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد مهام ذات أولوية عالية."
+          }
+        }
+      }
+    },
+    "No low priority tasks." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد مهام ذات أولوية منخفضة."
+          }
+        }
+      }
+    },
+    "No materials have been uploaded yet." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لم يتم رفع أي مواد بعد."
+          }
+        }
+      }
+    },
+    "No medium priority tasks." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد مهام ذات أولوية متوسطة."
+          }
+        }
+      }
+    },
+    "No pending tasks found." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد مهام قيد الانتظار."
+          }
+        }
+      }
+    },
+    "No results found" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لم يتم العثور على نتائج"
+          }
+        }
+      }
+    },
+    "No study blocks generated yet \n Start by adding some courses and events!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لم يتم إنشاء أي خطة مذاكرة بعد \n ابدأ بإضافة بعض المواد والأحداث!"
+          }
+        }
+      }
+    },
+    "No study blocks yet. Add an event or task to get started!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد فترات مذاكرة بعد. أضف حدثًا أو مهمة للبدء!"
+          }
+        }
+      }
+    },
+    "No tasks for today!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد مهام لهذا اليوم!"
+          }
+        }
+      }
+    },
+    "No tasks found in this course." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد مهام في هذه الدورة."
+          }
+        }
+      }
+    },
+    "No tasks found." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد مهام."
+          }
+        }
+      }
+    },
+    "No tasks scheduled for this block yet." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد مهام مجدولة لهذه الفترة بعد."
+          }
+        }
+      }
+    },
+    "No Teams Found" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لم يتم العثور على فرق"
+          }
+        }
+      }
+    },
+    "No Teams Yet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد فرق بعد"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حسنًا"
+          }
+        }
+      }
+    },
+    "Online Course" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "دورة عبر الإنترنت"
+          }
+        }
+      }
+    },
+    "or" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أو"
+          }
+        }
+      }
+    },
+    "Organizations" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المؤسسات"
+          }
+        }
+      }
+    },
+    "Password" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "كلمة المرور"
+          }
+        }
+      }
+    },
+    "Pause session" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إيقاف الجلسة مؤقتًا"
+          }
+        }
+      }
+    },
+    "Pause this session?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هل تريد إيقاف هذه الجلسة مؤقتًا؟"
+          }
+        }
+      }
+    },
+    "PDF" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF"
+          }
+        }
+      }
+    },
+    "Pending Invitations" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الدعوات المعلّقة"
+          }
+        }
+      }
+    },
+    "PNG or JPG, up to 5 MB" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PNG أو JPG، حتى 5 ميجابايت"
+          }
+        }
+      }
+    },
+    "Previous" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "السابق"
+          }
+        }
+      }
+    },
+    "Progress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التقدم"
+          }
+        }
+      }
+    },
+    "Reset" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إعادة تعيين"
+          }
+        }
+      }
+    },
+    "Retry" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إعادة المحاولة"
+          }
+        }
+      }
+    },
+    "Roadmap" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الخطة الدراسية"
+          }
+        }
+      }
+    },
+    "S" : {
+      "comment" : "Shared key for Sunday AND Saturday in the source design (both use \"S\" in English) — translated to Sunday's initial; Saturday will display the same Arabic letter. Pre-existing ambiguity from the English source, not introduced by localization.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ح"
+          }
+        }
+      }
+    },
+    "Save" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حفظ"
+          }
+        }
+      }
+    },
+    "Save Changes" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حفظ التغييرات"
+          }
+        }
+      }
+    },
+    "Search courses..." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البحث عن الدورات..."
+          }
+        }
+      }
+    },
+    "Select all that apply" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اختر كل ما ينطبق"
+          }
+        }
+      }
+    },
+    "Selected:" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المحدد:"
+          }
+        }
+      }
+    },
+    "Sign In" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تسجيل الدخول"
+          }
+        }
+      }
+    },
+    "Sign up" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إنشاء حساب"
+          }
+        }
+      }
+    },
+    "Sign Up" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إنشاء حساب"
+          }
+        }
+      }
+    },
+    "Skip" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تخطي"
+          }
+        }
+      }
+    },
+    "Skip for now" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تخطي الآن"
+          }
+        }
+      }
+    },
+    "Start Date" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تاريخ البدء"
+          }
+        }
+      }
+    },
+    "Start your learning journey by\nadding your first course" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابدأ رحلتك التعليمية بـ\nإضافة أول دورة لك"
+          }
+        }
+      }
+    },
+    "Start your smart learning journey" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابدأ رحلتك التعليمية الذكية"
+          }
+        }
+      }
+    },
+    "Status" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الحالة"
+          }
+        }
+      }
+    },
+    "Streak" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المواظبة"
+          }
+        }
+      }
+    },
+    "Streak\nDays" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أيام\nالمواظبة"
+          }
+        }
+      }
+    },
+    "Study Days" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أيام المذاكرة"
+          }
+        }
+      }
+    },
+    "Study materials for online courses are managed externally." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يتم إدارة المواد الدراسية للدورات الإلكترونية خارجيًا."
+          }
+        }
+      }
+    },
+    "Study Time" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وقت المذاكرة"
+          }
+        }
+      }
+    },
+    "Study without the stress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المذاكرة بدون توتر"
+          }
+        }
+      }
+    },
+    "Studying\nHours" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ساعات\nالمذاكرة"
+          }
+        }
+      }
+    },
+    "Summaries, explanation and smart study sessions-all in one place." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ملخصات وشروحات وجلسات مذاكرة ذكية - كل ذلك في مكان واحد."
+          }
+        }
+      }
+    },
+    "Sun" : {
+      "comment" : "Sunday, three-letter weekday abbreviation",
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أحد"
+          }
+        }
+      }
+    },
+    "Sync Apple Calendar" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مزامنة تقويم Apple"
+          }
+        }
+      }
+    },
+    "Sync your Calendar" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مزامنة تقويمك"
+          }
+        }
+      }
+    },
+    "Sync your calender and let AI fit studying into your free time ." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "زامن تقويمك ودع الذكاء الاصطناعي يُدرج المذاكرة في أوقات فراغك."
+          }
+        }
+      }
+    },
+    "System" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النظام"
+          }
+        }
+      }
+    },
+    "T" : {
+      "comment" : "Shared key for Tuesday AND Thursday in the source design (both use \"T\" in English) — translated to Tuesday's initial; Thursday will display the same Arabic letter. Pre-existing ambiguity from the English source, not introduced by localization.",
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ث"
+          }
+        }
+      }
+    },
+    "Tap to browse files" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اضغط لتصفح الملفات"
+          }
+        }
+      }
+    },
+    "Tap to upload image" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اضغط لرفع صورة"
+          }
+        }
+      }
+    },
+    "Tasks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المهام"
+          }
+        }
+      }
+    },
+    "Team Progress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تقدّم الفريق"
+          }
+        }
+      }
+    },
+    "This team has no courses currently." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يحتوي هذا الفريق على أي دورات حاليًا."
+          }
+        }
+      }
+    },
+    "This team has no upcoming events." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد أحداث قادمة لهذا الفريق."
+          }
+        }
+      }
+    },
+    "Thu" : {
+      "comment" : "Thursday, three-letter weekday abbreviation",
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خمي"
+          }
+        }
+      }
+    },
+    "Thumbnail" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الصورة المصغرة"
+          }
+        }
+      }
+    },
+    "Title" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "العنوان"
+          }
+        }
+      }
+    },
+    "Today Tasks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مهام اليوم"
+          }
+        }
+      }
+    },
+    "Today's Focus" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تركيز اليوم"
+          }
+        }
+      }
+    },
+    "Today's Goal" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "هدف اليوم"
+          }
+        }
+      }
+    },
+    "Today's Tasks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مهام اليوم"
+          }
+        }
+      }
+    },
+    "Trending Teams" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الفرق الرائجة"
+          }
+        }
+      }
+    },
+    "Try a different search term" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جرّب مصطلح بحث مختلف"
+          }
+        }
+      }
+    },
+    "Try a different search term or\nadjust your filters" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جرّب مصطلح بحث مختلف أو\nعدّل عوامل التصفية"
+          }
+        }
+      }
+    },
+    "Tue" : {
+      "comment" : "Tuesday, three-letter weekday abbreviation",
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ثلا"
+          }
+        }
+      }
+    },
+    "Turn off Calendar Sync?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إيقاف مزامنة التقويم؟"
+          }
+        }
+      }
+    },
+    "Unfortunately no teams found with the\nentered name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "للأسف لم يتم العثور على فرق بالاسم\nالمدخل"
+          }
+        }
+      }
+    },
+    "Upcoming Deadlines" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المواعيد النهائية القادمة"
+          }
+        }
+      }
+    },
+    "Upcoming Tasks" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المهام القادمة"
+          }
+        }
+      }
+    },
+    "Upload cover image" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رفع صورة الغلاف"
+          }
+        }
+      }
+    },
+    "Upload material" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رفع مادة"
+          }
+        }
+      }
+    },
+    "Upload Material" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رفع مادة"
+          }
+        }
+      }
+    },
+    "Upload Materials (PDF, PPT, DOC)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رفع المواد (PDF، PPT، DOC)"
+          }
+        }
+      }
+    },
+    "Validation Error" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "خطأ في التحقق"
+          }
+        }
+      }
+    },
+    "View all" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عرض الكل"
+          }
+        }
+      }
+    },
+    "W" : {
+      "comment" : "Wednesday, single-letter weekday abbreviation",
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ر"
+          }
+        }
+      }
+    },
+    "We'll personalize your plan based on the time you have" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سنخصص خطتك بناءً على الوقت المتاح لديك"
+          }
+        }
+      }
+    },
+    "Wed" : {
+      "comment" : "Wednesday, three-letter weekday abbreviation",
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أرب"
+          }
+        }
+      }
+    },
+    "Weekly Progress" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التقدم الأسبوعي"
+          }
+        }
+      }
+    },
+    "Welcome back" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مرحبًا بعودتك"
+          }
+        }
+      }
+    },
+    "Which days are available ?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ما هي الأيام المتاحة؟"
+          }
+        }
+      }
+    },
+    "Which days are available?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ما الأيام المتاحة؟"
+          }
+        }
+      }
+    },
+    "Yaaay! you are done with this month's deadlines" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "رائع! أنهيت كل المواعيد النهائية لهذا الشهر"
+          }
+        }
+      }
+    },
+    "You haven't joined any teams yet. Search for\na code or browse public campus groups." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لم تنضم إلى أي فريق بعد. ابحث عن\nكود أو تصفّح مجموعات الحرم الجامعي العامة."
+          }
+        }
+      }
+    },
+    "You will need to enter your username and password to sign back in." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ستحتاج إلى إدخال اسم المستخدم وكلمة المرور لتسجيل الدخول مرة أخرى."
+          }
+        }
+      }
+    },
+    "You're most productive around 7 PM. Start Networking before Algorithms today." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أنت في أعلى إنتاجيتك حول الساعة 7 مساءً. ابدأ بمادة التواصل المهني قبل الخوارزميات اليوم."
+          }
+        }
+      }
+    },
+    "Your progress will be saved and this\ntask will be marked as complete." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سيتم حفظ تقدمك وسيتم تحديد\nهذه المهمة كمكتملة."
+          }
+        }
+      }
+    },
+    "Your progress will be saved but this\ntask will NOT be marked as complete." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "سيتم حفظ تقدمك ولكن لن يتم\nتحديد هذه المهمة كمكتملة."
+          }
+        }
+      }
+    },
+    "Your schedule is set to\ndefault" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم ضبط جدولك على\nالوضع الافتراضي"
+          }
+        }
+      }
+    },
+    "Your study sessions will stop syncing to your calendar. You can turn this back on anytime." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ستتوقف جلسات المذاكرة عن المزامنة مع تقويمك. يمكنك إعادة التفعيل في أي وقت."
+          }
+        }
+      }
+    },
+    "Your time, perfetcly optimized" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "وقتك، مُنظّم بعناية"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

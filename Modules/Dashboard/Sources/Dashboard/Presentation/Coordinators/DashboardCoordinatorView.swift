@@ -16,6 +16,7 @@ public struct DashboardCoordinatorView: View {
     private let courseDetailsFactory: (String, String, String) -> AnyView
     private let coursesFactory: () -> AnyView
     private let roadmapFactory: () -> AnyView
+    private let organizationsFactory: () -> AnyView
     private let profileFactory: () -> AnyView
 
     public init(
@@ -25,6 +26,7 @@ public struct DashboardCoordinatorView: View {
         courseDetailsFactory: @escaping (String, String, String) -> AnyView,
         coursesFactory: @escaping () -> AnyView,
         roadmapFactory: @escaping () -> AnyView,
+        organizationsFactory: @escaping () -> AnyView,
         profileFactory: @escaping () -> AnyView
     ) {
         self.coordinator = coordinator
@@ -33,6 +35,7 @@ public struct DashboardCoordinatorView: View {
         self.courseDetailsFactory = courseDetailsFactory
         self.coursesFactory = coursesFactory
         self.roadmapFactory = roadmapFactory
+        self.organizationsFactory = organizationsFactory
         self.profileFactory = profileFactory
     }
     
@@ -44,8 +47,8 @@ public struct DashboardCoordinatorView: View {
                 case .dashboard:
                     DashboardView(viewModel: viewModel)
                         .onAppear {
-                            viewModel.onTaskSelected = { [weak coordinator] courseId, taskTitle in
-                                coordinator?.push(.studyRoom(courseId: courseId, taskTitle: taskTitle))
+                            viewModel.onTaskSelected = { [weak coordinator] taskId, taskTitle in
+                                coordinator?.push(.studyRoom(taskId: taskId, taskTitle: taskTitle))
                             }
                             viewModel.onViewAllTodayTasks = { [weak coordinator] in
                                 coordinator?.push(.todayTasks)
@@ -64,14 +67,17 @@ public struct DashboardCoordinatorView: View {
                 case .roadmap:
                     roadmapFactory()
                     
+                case .organizations:
+                    organizationsFactory()
+                    
                 case .profile:
                     profileFactory()
                 }
             }
             .navigationDestination(for: DashboardRoute.self) { route in
                 switch route {
-                case .studyRoom(let courseId, let taskTitle):
-                    studyRoomFactory(courseId, taskTitle)
+                case .studyRoom(let taskId, let taskTitle):
+                    studyRoomFactory(taskId, taskTitle)
                 case .courseDetails(let courseId, let courseName, let courseType):
                     courseDetailsFactory(courseId, courseName, courseType)
                 case .todayTasks:

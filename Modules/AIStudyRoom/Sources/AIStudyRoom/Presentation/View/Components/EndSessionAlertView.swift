@@ -9,11 +9,18 @@ import Foundation
 import SwiftUI
 import Common
 
+public enum EndSessionAlertType {
+    case complete
+    case incomplete
+}
+
 public struct EndSessionAlertView: View {
+    public let type: EndSessionAlertType
     public let onEndSession: () -> Void
     public let onKeepStudying: () -> Void
     
-    public init(onEndSession: @escaping () -> Void, onKeepStudying: @escaping () -> Void) {
+    public init(type: EndSessionAlertType, onEndSession: @escaping () -> Void, onKeepStudying: @escaping () -> Void) {
+        self.type = type
         self.onEndSession = onEndSession
         self.onKeepStudying = onKeepStudying
     }
@@ -26,10 +33,10 @@ public struct EndSessionAlertView: View {
             VStack(spacing: AppTheme.Spacing.large) {
                 ZStack {
                     Circle()
-                        .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.green100, opacity: 0.15))
+                        .fill(AppTheme.Colors.changeOpacity(color: type == .complete ? AppTheme.Colors.green100 : AppTheme.Colors.red100, opacity: 0.15))
                         .frame(width: 64, height: 64)
                     
-                    Image("done_green")
+                    Image(type == .complete ? "done_green" : "warning")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 32, height: 32)
@@ -37,11 +44,11 @@ public struct EndSessionAlertView: View {
                 .padding(.top, AppTheme.Spacing.small)
                 
                 VStack(spacing: AppTheme.Spacing.xxSmall) {
-                    Text("End this session?")
+                    Text(type == .complete ? "End this session?" : "Pause this session?")
                         .font(AppTheme.textStyle(size: 20, weight: .bold))
                         .foregroundColor(AppTheme.Colors.black100)
                     
-                    Text("Your progress will be saved and this\ntask will be marked as complete.")
+                    Text(type == .complete ? "Your progress will be saved and this\ntask will be marked as complete." : "Your progress will be saved but this\ntask will NOT be marked as complete.")
                         .font(AppTheme.textStyle(size: 14, weight: .regular))
                         .foregroundColor(AppTheme.Colors.gray300)
                         .multilineTextAlignment(.center)
@@ -50,14 +57,14 @@ public struct EndSessionAlertView: View {
                 
                 VStack(spacing: AppTheme.Spacing.small) {
                     Button(action: onEndSession) {
-                        Text("End session")
+                        Text(type == .complete ? "End session" : "Pause session")
                             .font(AppTheme.textStyle(size: 16, weight: .medium))
                             .foregroundColor(AppTheme.Colors.white100)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 14)
                             .background(
                                 RoundedRectangle(cornerRadius: AppTheme.radius.small)
-                                    .fill(AppTheme.Colors.purple200)
+                                    .fill(type == .complete ? AppTheme.Colors.purple200 : AppTheme.Colors.red100)
                             )
                     }
                     

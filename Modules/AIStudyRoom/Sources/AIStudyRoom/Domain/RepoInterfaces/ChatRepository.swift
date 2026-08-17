@@ -8,6 +8,8 @@
 import Foundation
 
 public protocol ChatRepository {
-    func getHistory(courseId: String) async throws -> [ChatMessage]
-    func sendMessageStream(courseId: String, text: String) -> AsyncThrowingStream<String, Error>
+    func getTask(taskId: String) async throws -> TaskDetailsDTO
+    func updateTask(taskId: String, completed: Bool, activeSpentTime: Int) async throws
+    func sendMessage(taskId: String, message: String) async throws
+    func getChatMessages(taskId: String, page: Int, size: Int) async throws -> ChatHistoryResponseDTO
 }

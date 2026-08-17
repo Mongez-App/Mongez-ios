@@ -63,7 +63,7 @@ struct TodayTasksView: View {
                     ScrollView(.vertical, showsIndicators: false) {
                         TasksList(todayTasks: $viewModel.todayTasks, limit: nil) { selectedTask in
                             viewModel.selectTask(
-                                courseId: selectedTask.taskId,
+                                taskId: selectedTask.taskId,
                                 taskTitle: selectedTask.title,
                                 isCompleted: selectedTask.isCompleted
                             )

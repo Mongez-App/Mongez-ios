@@ -10,13 +10,13 @@ import SwiftUI
 import Common
 
 public struct WarningAlertView: View {
-    public let title: String
-    public let subtitle: String
-    public let primaryButtonText: String
+    public let title: LocalizedStringKey
+    public let subtitle: LocalizedStringKey
+    public let primaryButtonText: LocalizedStringKey
     public let onPrimaryAction: () -> Void
     public let onCancel: () -> Void
-    
-    public init(title: String, subtitle: String, primaryButtonText: String = "Delete", onPrimaryAction: @escaping () -> Void, onCancel: @escaping () -> Void) {
+
+    public init(title: LocalizedStringKey, subtitle: LocalizedStringKey, primaryButtonText: LocalizedStringKey = "Delete", onPrimaryAction: @escaping () -> Void, onCancel: @escaping () -> Void) {
         self.title = title
         self.subtitle = subtitle
         self.primaryButtonText = primaryButtonText

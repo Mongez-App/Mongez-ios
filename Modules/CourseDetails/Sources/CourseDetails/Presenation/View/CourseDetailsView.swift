@@ -32,9 +32,9 @@ public struct CourseDetailsView: View {
                 }
             )
             .sheet(isPresented: $showEditSheet) {
-                EditCourseSheetView(initialCourseName: viewModel.courseName) { name in
+                EditCourseSheetView(initialCourseName: viewModel.courseName) { name, imageData in
                     Task {
-                        await viewModel.updateCourse(name: name)
+                        await viewModel.updateCourse(name: name, imageData: imageData)
                     }
                 }
                     .presentationDetents([.fraction(0.85)])
@@ -46,6 +46,7 @@ public struct CourseDetailsView: View {
                 CourseMaterialsTabView(
                     materials: viewModel.materials,
                     courseType: viewModel.courseType,
+                    isLoading: viewModel.isLoading,
                     onUploadAction: {
                         viewModel.showFileImporter = true
                     },
@@ -57,6 +58,7 @@ public struct CourseDetailsView: View {
                 CourseTasksTabView(viewModel: viewModel)
             }
         }
+        .frame(maxHeight: .infinity, alignment: .top)
         .background(AppTheme.Colors.white100.ignoresSafeArea())
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
@@ -80,6 +82,14 @@ public struct CourseDetailsView: View {
             }
         }
         .overlay {
+            if viewModel.isLoading {
+                ZStack {
+                    Color.black.opacity(0.15).ignoresSafeArea()
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.Colors.purple200))
+                        .scaleEffect(1.5)
+                }
+            }
             if viewModel.isUploading {
                 ZStack {
                     Color.black.opacity(0.3).ignoresSafeArea()

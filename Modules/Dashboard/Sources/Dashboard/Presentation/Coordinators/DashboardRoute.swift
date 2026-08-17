@@ -7,7 +7,7 @@
 
 import Foundation
 public enum DashboardRoute: Hashable {
-    case studyRoom(courseId: String, taskTitle: String)
+    case studyRoom(taskId: String, taskTitle: String)
     case courseDetails(courseId: String, courseName: String, courseType: String)
     case todayTasks
 }

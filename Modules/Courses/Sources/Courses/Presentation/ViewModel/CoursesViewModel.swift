@@ -9,6 +9,7 @@ public struct SelectedMaterial: Identifiable, Equatable {
     public let fileData: Data
     public let contentType: String
     public let fileSizeBytes: Int
+    public let deviceFileUri: String
 
     public static func == (lhs: SelectedMaterial, rhs: SelectedMaterial) -> Bool {
         lhs.id == rhs.id
@@ -39,8 +40,6 @@ public class CoursesViewModel: ObservableObject {
     @Published public var isCreatingCourse: Bool = false
     @Published public var createError: String?
     @Published public var showFileImporter: Bool = false
-    @Published public var dailyStudyMinutes: Int = 30
-    @Published public var preferredDays: String = "Mon,Tue,Wed,Thu,Fri"
 
     public enum AddCourseTab {
         case onlineCourse
@@ -54,6 +53,12 @@ public class CoursesViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     public var onCourseSelected: ((String, String, String) -> Void)?
+
+    /// Injected from the app shell (Payment module can't be imported here — features only depend on Common).
+    /// When set, gates `addCourse()` behind the free-tier course limit.
+    public var isSubscribed: (() async -> Bool)?
+    @Published public var showUpgradePrompt: Bool = false
+    private static let freeCourseLimit = 2
 
     public var canAddCourse: Bool {
         switch addCourseTab {
@@ -134,6 +139,23 @@ public class CoursesViewModel: ObservableObject {
         showDeleteConfirmation = false
     }
 
+    /// Gates opening the Add Course sheet behind the free-tier limit. Must run *before* the sheet is
+    /// presented — checking inside addCourse() (after the sheet is already up) can't cleanly show the
+    /// upgrade prompt, since SwiftUI won't present a second sheet over an already-presented one.
+    @MainActor
+    public func requestAddCourse() async {
+        if let isSubscribed, courses.count >= Self.freeCourseLimit {
+            let subscribed = await isSubscribed()
+            if !subscribed {
+                showUpgradePrompt = true
+                return
+            }
+        }
+
+        resetAddCourseForm()
+        showAddCourseSheet = true
+    }
+
     @MainActor
     public func addCourse() async {
         guard canAddCourse else { return }
@@ -142,31 +164,43 @@ public class CoursesViewModel: ObservableObject {
         createError = nil
 
         do {
-            let courseType: CourseType = addCourseTab == .onlineCourse ? .urlCourse : .materialCourse
+            switch addCourseTab {
+            case .onlineCourse:
+                // Online Course tab: old format with course_type + material_url
+                let _ = try await addCourseUseCase.executeOnlineCourse(
+                    name: courseName,
+                    courseCode: courseCode,
+                    description: courseDescription.isEmpty ? nil : courseDescription,
+                    imageData: selectedImageData,
+                    startDate: courseStartDate,
+                    endDate: nil,
+                    examDate: courseDeadline,
+                    materialUrl: courseURL
+                )
 
-            let materialInfos = selectedMaterials.map { material in
-                MaterialFileInfo(
-                    fileName: material.fileName,
-                    contentType: material.contentType,
-                    fileSizeBytes: material.fileSizeBytes,
-                    fileData: material.fileData
+            case .uploadMaterial:
+                // Upload Material tab: new format with has_materials + two-step upload
+                let materialInfos = selectedMaterials.map { material in
+                    MaterialFileInfo(
+                        fileName: material.fileName,
+                        contentType: material.contentType,
+                        fileSizeBytes: material.fileSizeBytes,
+                        pageCount: nil,
+                        fileData: material.fileData,
+                        deviceFileUri: material.deviceFileUri
+                    )
+                }
+
+                let _ = try await addCourseUseCase.executeMaterialCourse(
+                    name: courseName,
+                    courseCode: courseCode,
+                    description: courseDescription.isEmpty ? nil : courseDescription,
+                    imageData: selectedImageData,
+                    startDate: courseStartDate,
+                    examDate: courseDeadline,
+                    materials: materialInfos
                 )
             }
-
-            let _ = try await addCourseUseCase.execute(
-                name: courseName,
-                courseCode: courseCode,
-                description: courseDescription.isEmpty ? nil : courseDescription,
-                imageData: selectedImageData,
-                startDate: courseStartDate,
-                endDate: nil,
-                examDate: courseDeadline,
-                courseType: courseType,
-                materialUrl: addCourseTab == .onlineCourse ? courseURL : nil,
-                materials: addCourseTab == .uploadMaterial ? materialInfos : [],
-                dailyStudyMinutes: dailyStudyMinutes,
-                preferredDays: preferredDays
-            )
 
             resetAddCourseForm()
             showAddCourseSheet = false
@@ -193,12 +227,14 @@ public class CoursesViewModel: ObservableObject {
             let fileName = url.lastPathComponent
             let contentType = contentType(for: url)
             let fileSizeBytes = fileData.count
+            let deviceFileUri = url.absoluteString
 
             let material = SelectedMaterial(
                 fileName: fileName,
                 fileData: fileData,
                 contentType: contentType,
-                fileSizeBytes: fileSizeBytes
+                fileSizeBytes: fileSizeBytes,
+                deviceFileUri: deviceFileUri
             )
 
             DispatchQueue.main.async {
@@ -221,8 +257,6 @@ public class CoursesViewModel: ObservableObject {
         selectedImageData = nil
         selectedMaterials = []
         createError = nil
-        dailyStudyMinutes = 30
-        preferredDays = "Mon,Tue,Wed,Thu,Fri"
     }
 
     private func setupSearchSubscription() {
@@ -285,4 +319,3 @@ public class CoursesViewModel: ObservableObject {
         }
     }
 }
-
