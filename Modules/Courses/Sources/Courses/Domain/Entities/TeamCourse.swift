@@ -5,11 +5,13 @@ public struct TeamCourse: Identifiable, Equatable {
     public let name: String
     public let progress: Double
     public let organizationId: String?
+    public let thumbnailUrl: String?
     
-    public init(id: String, name: String, progress: Double, organizationId: String? = nil) {
+    public init(id: String, name: String, progress: Double, organizationId: String? = nil, thumbnailUrl: String? = nil) {
         self.id = id
         self.name = name
         self.progress = progress
         self.organizationId = organizationId
+        self.thumbnailUrl = thumbnailUrl
     }
 }

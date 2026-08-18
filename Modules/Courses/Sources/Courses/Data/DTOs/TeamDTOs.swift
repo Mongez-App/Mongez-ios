@@ -42,8 +42,14 @@ struct TeamCourseDTO: Decodable {
         let rawName = name ?? "Untitled Course"
         var actualName = rawName
         var orgId: String? = nil
+        var thumbnailUrl: String? = nil
         
-        if let underscoreIndex = rawName.firstIndex(of: "_") {
+        let components = rawName.components(separatedBy: "|")
+        if components.count == 3 {
+            orgId = components[0]
+            actualName = components[1]
+            thumbnailUrl = components[2]
+        } else if let underscoreIndex = rawName.firstIndex(of: "_") {
             orgId = String(rawName[..<underscoreIndex])
             actualName = String(rawName[rawName.index(after: underscoreIndex)...])
         }
@@ -52,7 +58,8 @@ struct TeamCourseDTO: Decodable {
             id: id ?? UUID().uuidString,
             name: actualName,
             progress: progress ?? 0.0,
-            organizationId: orgId
+            organizationId: orgId,
+            thumbnailUrl: thumbnailUrl
         )
     }
 }

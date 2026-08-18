@@ -28,13 +28,33 @@ public struct TeamCourseCardView: View {
         HStack(spacing: AppTheme.Spacing.small) {
 
             ZStack {
-                RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
-                    .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.2))
-                    .frame(width: 135, height: 135)
-
-                Text(initials)
-                    .font(AppTheme.textStyle(size: 28, weight: .bold))
-                    .foregroundColor(AppTheme.Colors.purple200)
+                if let thumbnailUrl = course.thumbnailUrl, let url = URL(string: thumbnailUrl) {
+                    AsyncImage(url: url) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFill()
+                        case .failure:
+                            RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
+                                .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.2))
+                            Text(initials)
+                                .font(AppTheme.textStyle(size: 28, weight: .bold))
+                                .foregroundColor(AppTheme.Colors.purple200)
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
+                } else {
+                    RoundedRectangle(cornerRadius: AppTheme.radius.meduim)
+                        .fill(AppTheme.Colors.changeOpacity(color: AppTheme.Colors.purple200, opacity: 0.2))
+                        
+                    Text(initials)
+                        .font(AppTheme.textStyle(size: 28, weight: .bold))
+                        .foregroundColor(AppTheme.Colors.purple200)
+                }
             }
             .frame(width: 135, height: 135)
             .clipShape(RoundedRectangle(cornerRadius: AppTheme.radius.meduim))
